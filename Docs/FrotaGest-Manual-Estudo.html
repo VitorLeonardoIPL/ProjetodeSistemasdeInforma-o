@@ -1,0 +1,2284 @@
+<meta charset="utf-8">
+<title>FrotaGest - Manual de Estudo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* FrotaGest manual. Layout: coluna de leitura unica; indice no topo; barra de progresso fixa; cada passo abre e fecha; checklists com caixas guardadas no browser */
+:root{
+  --bg:#f6f7f4; --surface:#ffffff; --fg:#1d2420; --muted:#5c665f; --line:#dfe3dc;
+  --accent:#1f6f5b; --accent-soft:#e1f0ea; --accent-fg:#ffffff;
+  --code-bg:#14201b; --code-fg:#e4efe9; --warn:#9a5b00; --warn-soft:#fbf0dc;
+  --font-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101613; --surface:#18211c; --fg:#e6ede8; --muted:#9aa89f; --line:#2a362f;
+    --accent:#4fc2a0; --accent-soft:#183328; --accent-fg:#06231a;
+    --code-bg:#0b110e; --code-fg:#dcebe3; --warn:#f0b45c; --warn-soft:#35280f;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101613; --surface:#18211c; --fg:#e6ede8; --muted:#9aa89f; --line:#2a362f;
+  --accent:#4fc2a0; --accent-soft:#183328; --accent-fg:#06231a;
+  --code-bg:#0b110e; --code-fg:#dcebe3; --warn:#f0b45c; --warn-soft:#35280f;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.6;padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:780px;margin-inline:auto}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:clamp(1.9rem,5vw,2.6rem);font-weight:700}
+h2{font-size:1.5rem;margin-block:52px 16px;scroll-margin-top:60px}
+h3{font-size:1.1rem;margin-block:20px 8px}
+p{margin:0 0 12px;max-width:68ch}
+a{color:var(--accent)}
+code{font-family:var(--font-mono);font-size:.88em;background:var(--accent-soft);padding:1px 6px;border-radius:4px;overflow-wrap:anywhere}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-16px;padding:10px 16px}
+.top-in{max-width:780px;margin-inline:auto;display:flex;align-items:center;gap:12px;font-size:.85rem;color:var(--muted)}
+.bar{flex:1;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+.hero{padding-block:36px 8px}
+.hero p{color:var(--muted);font-size:1.05rem;margin-top:12px}
+.toc{display:flex;flex-wrap:wrap;gap:6px 14px;margin:20px 0 0;padding:0;list-style:none;font-size:.88rem}
+.toc a{text-decoration:none;border-bottom:1px solid var(--line)}
+.toc a:hover{border-color:var(--accent)}
+.er{display:flex;flex-wrap:wrap;gap:12px 40px;align-items:center;margin-block:20px}
+.tbl{border:1px solid var(--line);background:var(--surface);border-radius:6px;min-width:190px;font-family:var(--font-mono);font-size:.82rem}
+.tbl b{display:block;padding:6px 12px;background:var(--accent-soft);font-weight:500;border-bottom:1px solid var(--line)}
+.tbl span{display:block;padding:2px 12px}
+.tbl span:last-child{padding-bottom:8px}
+.rel{font-size:.85rem;color:var(--muted);max-width:22ch}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px;margin-bottom:12px}
+.order{display:grid;gap:8px;counter-reset:o;padding:0;list-style:none;margin:0}
+.order li{counter-increment:o;display:flex;gap:12px;align-items:baseline}
+.order li::before{content:counter(o);font-family:var(--font-mono);font-size:.8rem;min-width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--accent);color:var(--accent-fg);flex:none}
+details.step{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin-bottom:12px}
+details.step[open]{border-color:var(--accent)}
+details.step>summary{list-style:none;cursor:pointer;display:flex;gap:12px;align-items:center;padding:14px 16px}
+details.step>summary::-webkit-details-marker{display:none}
+details.step>summary:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-family:var(--font-mono);font-size:.78rem;color:var(--muted);min-width:2.2em}
+.ttl{flex:1;min-width:0;font-weight:600}
+.where{font-family:var(--font-mono);font-size:.75rem;color:var(--muted);display:none}
+@media (min-width:660px){.where{display:block}}
+.chk{width:20px;height:20px;accent-color:var(--accent);flex:none}
+.body{padding:4px 16px 18px;border-top:1px solid var(--line)}
+.lbl{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin:18px 0 6px}
+.body ul,.body ol{margin:0 0 12px;padding-left:22px}
+.body li{margin-bottom:5px}
+.codewrap{position:relative;margin:8px 0 14px}
+pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--font-mono);font-size:.82rem;line-height:1.55;padding:14px 16px;border-radius:6px;overflow-x:auto;white-space:pre}
+.cap{font-family:var(--font-mono);font-size:.75rem;color:var(--muted);margin-bottom:4px}
+.copy{position:absolute;top:8px;right:8px;font:inherit;font-size:.72rem;padding:3px 9px;border-radius:4px;border:1px solid #3a4a41;background:#1f2e26;color:#cfe3d9;cursor:pointer}
+.copy:hover{background:#2a3d33}
+.note{background:var(--warn-soft);color:var(--fg);border-left:3px solid var(--warn);padding:10px 14px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.92rem}
+.note b{color:var(--warn)}
+.check{background:var(--accent-soft);padding:10px 14px;border-radius:6px;font-size:.92rem;margin-top:12px}
+.flow{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-family:var(--font-mono);font-size:.78rem;margin:10px 0 16px}
+.flow span{background:var(--surface);border:1px solid var(--line);padding:4px 10px;border-radius:5px}
+.flow i{color:var(--muted);font-style:normal}
+.qa{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:10px}
+.qa b{display:block;margin-bottom:4px}
+.qa p{margin:0;color:var(--muted)}
+.cl{list-style:none;padding:0;margin:0 0 12px;display:grid;gap:2px}
+.cl li{display:flex;gap:10px;align-items:flex-start;padding:6px 10px;border-radius:6px}
+.cl li:hover{background:var(--accent-soft)}
+.cl label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;width:100%}
+.cl .chk{margin-top:3px}
+.reset{margin-top:20px;font:inherit;font-size:.85rem;background:none;border:1px solid var(--line);color:var(--muted);padding:6px 12px;border-radius:6px;cursor:pointer}
+</style>
+
+<div class="top"><div class="top-in"><span id="pt">0 de 0 itens</span><div class="bar"><i id="pb"></i></div></div></div>
+
+<div class="wrap">
+
+<header class="hero">
+  <h1>FrotaGest: manual passo a passo do projeto de PSI (Yii2 Advanced)</h1>
+  <p>Tudo o que fazemos para construir a parte Web do FrotaGest (front-office e back-office), do primeiro comando até ao último teste, pela ordem certa e com o porquê de cada coisa. Serve para estudares e para saberes sempre o que fazer a seguir. Marca cada passo quando o tiveres feito.</p>
+  <ul class="toc">
+    <li><a href="#projeto">O projeto</a></li>
+    <li><a href="#conceitos">Conceitos</a></li>
+    <li><a href="#decisoes">Decisões</a></li>
+    <li><a href="#passos">Os passos</a></li>
+    <li><a href="#uses">Os use</a></li>
+    <li><a href="#testes">Testes</a></li>
+    <li><a href="#nova">Funcionalidade nova</a></li>
+    <li><a href="#duvidas">Perguntas</a></li>
+    <li><a href="#erros">Erros</a></li>
+    <li><a href="#aberto">Em aberto</a></li>
+  </ul>
+</header>
+
+<h2 id="projeto">O projeto em resumo</h2>
+<p>O <b>FrotaGest</b> digitaliza o processo de requisição, aprovação e utilização de viaturas de uma empresa. Em vez de pedidos por telefone ou papel, há um fluxo estruturado: o colaborador pede, o coordenador de frota aprova e atribui uma viatura e um condutor, e tudo o que acontece durante a utilização (quilómetros, fotografias, faturas, localização) fica registado.</p>
+<p>O projeto tem três componentes que partilham <b>uma só base de dados MySQL</b>. Este manual cobre só a primeira, a que fazemos em PSI:</p>
+<div class="scroll"><table><tr><th>Componente</th><th>UC</th><th>O que é</th><th>Neste manual?</th></tr><tr><td>Aplicação Web (front-office e back-office)</td><td>PSI</td><td>Yii2 Advanced: <code>frontend</code> para o colaborador, <code>backend</code> para coordenador, técnico e administrador</td><td><b>Sim</b></td></tr><tr><td>API de serviços REST</td><td>SIS</td><td>27 serviços em JSON, usados pela app</td><td>Não (vai reaproveitar os modelos de <code>common/</code>)</td></tr><tr><td>Aplicação móvel Android</td><td>AMSI</td><td>Check-in/out, QR, offline, notificações</td><td>Não</td></tr></table></div>
+<h3>Os quatro roles</h3>
+<div class="scroll"><table><tr><th>Role</th><th>O que faz</th><th>Onde trabalha</th></tr><tr><td><b>colaborador</b></td><td>Pede viaturas, regista quilómetros, anexa faturas, confirma receção e entrega</td><td>front-office (e app)</td></tr><tr><td><b>coordenador</b></td><td>Aprova ou recusa pedidos, atribui viatura e condutor, gere frota, condutores, documentos, alertas e orçamentos</td><td>back-office (e app)</td></tr><tr><td><b>tecnico</b></td><td>Regista manutenções, peças e custos, conclui manutenções, vê o histórico por viatura</td><td>só back-office</td></tr><tr><td><b>administrador</b></td><td>Gere utilizadores, permissões por role, parâmetros, serviços externos e logs</td><td>back-office (e app)</td></tr></table></div>
+<p>Os nomes em minúsculas são os que ficam no RBAC (<code>auth_item</code>). Vêm do PDF <code>FrotaGest_Permissoes_RBAC.pdf</code>.</p>
+<h3>O caminho de um pedido, do início ao fim</h3>
+<div class="flow"><span>Colaborador pede (<code>requisicao</code>, estado pendente)</span><i>→</i><span>Coordenador aprova e atribui (<code>atribuicao</code>)</span><i>→</i><span>Check-in (<code>checklist</code> + fotos + km)</span><i>→</i><span>Viagem (<code>localizacao</code>, <code>fatura_combustivel</code>)</span><i>→</i><span>Check-out (<code>checklist</code>)</span><i>→</i><span>Coordenador compara fotos e assinala risco (<code>anexo.risco</code>)</span></div>
+<p>Se uma viatura precisa de reparação, entra o segundo circuito:</p>
+<div class="flow"><span>Necessidade (<code>necessidade_manutencao</code>)</span><i>→</i><span>Orçamento (<code>orcamento_compra</code> + <code>item_orcamento</code>)</span><i>→</i><span>Orçamento aceite gera <code>manutencao</code></span><i>→</i><span>Técnico regista peças (<code>peca</code>) e conclui</span><i>→</i><span>Viatura volta a ficar disponível</span></div>
+<h3>As tabelas, por grupos</h3>
+<p>O relatório tem 24 tabelas. Com o RBAC do Yii (o da Ficha 5) quatro delas deixam de ser precisas, porque o Yii já tem as suas (ver a secção Decisões). Ficamos com estas, que vamos criar uma a uma:</p>
+<div class="scroll"><table><tr><th>Grupo</th><th>Tabelas</th><th>Para quê</th></tr><tr><td>Catálogo</td><td><code>categoria</code>, <code>viatura</code></td><td>a frota e as suas categorias</td></tr><tr><td>Condutores</td><td><code>condutor</code>, <code>ausencia_condutor</code></td><td>quem conduz e quando está indisponível</td></tr><tr><td>O pedido</td><td><code>requisicao</code>, <code>atribuicao</code></td><td>o pedido do colaborador e a aprovação (viatura + condutor)</td></tr><tr><td>Durante a utilização</td><td><code>checklist</code>, <code>anexo</code>, <code>fatura_combustivel</code>, <code>localizacao</code></td><td>receção, entrega, fotos, faturas e rota</td></tr><tr><td>Alertas</td><td><code>alerta</code>, <code>notificacao</code></td><td>documentos a expirar e avisos aos utilizadores</td></tr><tr><td>Manutenção</td><td><code>necessidade_manutencao</code>, <code>orcamento_compra</code>, <code>item_orcamento</code>, <code>manutencao</code>, <code>peca</code></td><td>orçamentos tipo carrinho e intervenções</td></tr><tr><td>Administração</td><td><code>perfil</code>, <code>log_auditoria</code>, <code>parametro</code>, <code>servico_externo</code></td><td>dados extra do utilizador, logs, parâmetros e serviços externos</td></tr></table></div>
+<p>Já existem (criadas pelas migrações do template e do RBAC): <code>user</code>, <code>migration</code>, <code>auth_item</code>, <code>auth_item_child</code>, <code>auth_assignment</code> e <code>auth_rule</code>.</p>
+<h3>Como isto liga ao que aprendemos nas fichas</h3>
+<div class="scroll"><table><tr><th>Ficha</th><th>O que aprendemos</th><th>Onde se usa no FrotaGest</th></tr><tr><td>2 e 3</td><td>modelo, formulário, ActiveRecord, validação</td><td>cada tabela vira um modelo; os formulários de pedido e de registo</td></tr><tr><td>4</td><td>migrações com chave estrangeira, Gii (modelo e CRUD), master-detail (post e comentários), ACF</td><td>as 21 migrações; os CRUD; lista de requisições com detalhe, histórico de manutenções, orçamentos com itens</td></tr><tr><td>5</td><td>template advanced, <code>php init</code>, RBAC com <code>DbManager</code>, <code>can()</code></td><td>a estrutura toda e os 4 roles com 39 permissões</td></tr></table></div>
+<h2 id="conceitos">Antes de começar: conceitos</h2>
+<h3>Onde vai cada coisa (advanced)</h3>
+<div class="scroll"><table><tr><th>Pasta</th><th>No FrotaGest</th></tr><tr><td><code>common/models/</code></td><td>todos os modelos de dados (<code>Viatura</code>, <code>Requisicao</code>...), porque a API e a app vão usá-los também</td></tr><tr><td><code>common/rbac/</code></td><td>a regra do dono (<code>IsRequisicaoOwnerRule</code>)</td></tr><tr><td><code>console/migrations/</code></td><td>as migrações (uma por tabela)</td></tr><tr><td><code>console/controllers/</code></td><td>o <code>RbacController</code> e, mais tarde, o comando que gera os alertas</td></tr><tr><td><code>backend/</code></td><td>back-office: coordenador, técnico e administrador</td></tr><tr><td><code>frontend/</code></td><td>front-office: colaborador (catálogo, pedidos, check-in/out)</td></tr></table></div>
+<p>Os URLs (as pretty URLs estão desligadas, por isso as rotas escrevem-se com <code>?r=</code>):</p>
+<div class="codewrap"><pre data-src="c1"></pre></div>
+<h3>Autenticação, ACF e RBAC, em uma frase cada</h3>
+<ul><li><b>Autenticação</b>: provar quem és (login). O <code>Yii::$app-&gt;user</code> guarda quem fez o pedido; <code>-&gt;isGuest</code>, <code>-&gt;id</code> e <code>-&gt;identity</code> dizem-te quem é.</li><li><b>ACF</b> (<code>AccessControl</code> no <code>behaviors()</code> do controlador): barra ou deixa passar <b>antes</b> de a action correr. Aqui os <code>roles</code> das regras são permissões do RBAC.</li><li><b>RBAC</b>: roles agrupam permissões. No código pergunta-se <code>Yii::$app-&gt;user-&gt;can('aprovarRequisicao')</code>. Se as regras mudarem, mexe-se na configuração e não no código.</li><li><b>Regra (rule)</b>: lógica extra numa permissão. Aqui só uma: o colaborador só mexe nos <b>seus</b> pedidos.</li></ul>
+<h3>Como se faz uma tabela nova (o ciclo que se repete 21 vezes)</h3>
+<div class="flow"><span>Migração (<code>migrate/create</code>)</span><i>→</i><span>Preencher <code>safeUp</code> e <code>safeDown</code></span><i>→</i><span><code>php yii migrate</code></span><i>→</i><span>Gii: modelo em <code>common\models</code></span><i>→</i><span>Gii: CRUD no backend</span><i>→</i><span>ACF + menu</span></div>
+<p>Este ciclo é o da Ficha 4 e da Ficha 5. Quase tudo o que vem a seguir é repeti-lo, com as tabelas pela <b>ordem das dependências</b>: uma tabela com chave estrangeira só se cria depois da que ela referencia.</p>
+<h2 id="decisoes">Três decisões antes de começar</h2>
+<p>A especificação e o que aprendemos nas aulas não coincidem em tudo. Estas são as decisões que o manual assume. Se o grupo ou o professor decidir de outra forma, só mudam os passos indicados.</p>
+<h3>1. Utilizadores: a tabela <code>user</code> do template mais uma tabela <code>perfil</code></h3>
+<ul><li>O diagrama tem uma tabela <code>utilizador</code> com login e dados pessoais, e as tabelas <code>role</code>, <code>permissao</code> e <code>role_permissao</code>.</li><li>Nós usamos o RBAC do Yii (o da Ficha 5 e o do PDF das permissões). Por isso os roles e as permissões ficam em <code>auth_item</code>, <code>auth_item_child</code> e <code>auth_assignment</code>, e **<code>role</code>, <code>permissao</code> e <code>role_permissao</code> não se criam**.</li><li>A tabela <code>user</code> do template serve o login e <b>não se mexe</b> (Ficha 5). Os dados extra do diagrama (<code>nome</code>, <code>telemovel</code>, <code>departamento</code>, <code>n_carta</code>, <code>validade_carta</code>, <code>token_push</code>) vão para uma tabela nova, <code>perfil</code>, ligada por chave estrangeira (relação 1 para 1). É o que a Ficha 5 diz para fazer.</li><li>Onde o diagrama tem <code>utilizador_id</code>, mantemos o nome da coluna, mas a chave estrangeira aponta para <code>user.id</code>.</li><li>Alternativa: acrescentar essas colunas à própria <code>user</code> com uma migração. É mais simples, mas contraria o que a ficha diz.</li></ul>
+<h3>2. Estados e tipos como texto</h3>
+<p>O relatório diz que ainda não está decidido se os estados são texto ou enumerados. Usamos <code>string</code> (por exemplo <code>pendente</code>, <code>aprovada</code>). Os valores possíveis ficam em comentário em cada migração, e podem passar a constantes do modelo mais tarde.</p>
+<h3>3. Colunas que podem ficar vazias</h3>
+<p>O diagrama não diz o que é obrigatório. Deduzimos pela especificação: ficam vazias, por exemplo, <code>requisicao.motivo_recusa</code> (só nos pedidos recusados), <code>anexo.checklist_id</code> (só nas fotos) e <code>anexo.data_validade</code> (só nos documentos), <code>manutencao.orcamento_id</code> (nem toda a manutenção nasce de um orçamento). Está tudo comentado nas migrações.</p>
+<h2 id="passos">Os passos</h2>
+<div class="note"><b>Atenção:</b> o código deste manual foi <b>testado</b> numa base de dados temporária: as 21 migrações aplicam-se e desfazem-se sem erros, o <code>rbac/init</code> cria 43 itens (4 roles e 39 permissões), 47 ligações e 1 regra, a regra do dono devolve o esperado, e os métodos <code>estaLivre</code> e <code>podeConduzir</code> passam em 13 cenários. Os esqueletos das actions (controladores) só foram verificados quanto à sintaxe, por isso testa-os no browser.</div>
+<p>Os passos 1 a 7 já estão feitos no teu projeto. Estão aqui para perceberes o que cada um fez, e para repetires noutra máquina. O que falta fazer começa no <b>passo 8</b>.</p>
+<h3>Fase 1: o ambiente (feito)</h3>
+<details class="step" open>
+<summary><input class="chk" type="checkbox" id="k1" aria-label="Passo 1 feito"><span class="num">1</span><span class="ttl">Repositório, pasta e GitKraken</span><span class="where">GitKraken, FrotaGest/</span></summary>
+<div class="body">
+<div class="lbl">O que está feito</div>
+<ul><li>O repositório local está em <code>C:\wamp64\www\2AnoProjeto\ProjetodeSistemasdeInformacao</code>, com o remote <code>origin</code> apontado para o GitHub. O projeto Yii está na pasta <code>FrotaGest/</code> lá dentro.</li><li>O repositório do GitHub estava vazio, por isso o primeiro passo é um <b>push</b> da <code>main</code> no GitKraken.</li></ul>
+<div class="lbl">Como trabalhar com Git a partir daqui</div>
+<ul><li>Faz um commit no fim de <b>cada passo</b> deste manual, com uma mensagem curta (por exemplo <code>Migracao da tabela viatura</code>). Assim, se algo correr mal, voltas ao passo anterior.</li><li>Antes de cada commit, no GitKraken, olha para a lista de ficheiros alterados: não devem aparecer <code>vendor/</code>, <code>*-local.php</code> nem <code>runtime/</code>. O template já os ignora.</li><li>Em trabalho de grupo, cada funcionalidade numa <b>branch</b> (por exemplo <code>feature/viaturas</code>) e junta-se à <code>main</code> no fim. O relatório pede commits regulares de todos os elementos (RNF-20).</li></ul>
+<div class="lbl">Porquê</div>
+<p>O código é versionado no GitHub (RNF-20) e o grupo tem três elementos a mexer nos mesmos ficheiros. Sem commits pequenos e regulares, os conflitos tornam-se difíceis de resolver.</p>
+<div class="check">Verifica: o GitKraken mostra a <code>main</code> com os teus commits e o remote <code>origin</code> sem commits por enviar.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k2" aria-label="Passo 2 feito"><span class="num">2</span><span class="ttl">Criar a base de dados e ligar o projeto</span><span class="where">phpMyAdmin, common/config/main-local.php</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<ol><li>Liga o WAMP e abre <code>http://localhost/phpmyadmin</code>.</li><li>Cria a base <code>frotagest</code> (agrupamento utf8, o que o projeto usa), vazia.</li><li>No <code>dsn</code> do componente <code>db</code> o nome tem de ser esse. Está em <code>environments/dev/common/config/main-local.php</code> (a fonte) e em <code>common/config/main-local.php</code> (a cópia gerada pelo <code>php init</code>).</li></ol>
+<div class="codewrap"><div class="cap">common/config/main-local.php</div><pre data-src="c2"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>As migrações e o Gii trabalham sobre uma base que já existe: o Yii cria as tabelas, não a base.</li><li>No advanced a ligação à BD não está em <code>config/db.php</code> como no basic. Está em <code>environments/</code> e é copiada pelo <code>php init</code>.</li><li>No WAMP o utilizador é <code>root</code> e a palavra-passe está vazia.</li></ul>
+<div class="check">Verifica: a base <code>frotagest</code> aparece no phpMyAdmin.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k3" aria-label="Passo 3 feito"><span class="num">3</span><span class="ttl">Inicializar com php init</span><span class="where">terminal, pasta FrotaGest</span></summary>
+<div class="body">
+<div class="codewrap"><div class="cap">dentro da pasta FrotaGest</div><pre data-src="c3"></pre></div>
+<ol><li>Escolhe <code>0</code> (Development) e responde <code>yes</code>.</li><li>Aparece "initialization completed".</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>O <code>init</code> copia a configuração de <code>environments/dev</code> para as aplicações e cria os ficheiros <code>*-local.php</code>. Gera também a <code>cookieValidationKey</code> do frontend e do backend.</li><li>Em Development ficam ligados o <b>Gii</b> e a barra de debug. Em Production não.</li><li>Sem o <code>init</code> as aplicações nem arrancam.</li><li>Se voltares a correr o <code>init</code>, ele pergunta se sobrescreve os ficheiros que já existem. Respondendo <code>yes</code>, perdes alterações feitas à mão nos <code>*-local.php</code>.</li></ul>
+<div class="check">Verifica: existem <code>common/config/main-local.php</code> e <code>backend/config/main-local.php</code>.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k4" aria-label="Passo 4 feito"><span class="num">4</span><span class="ttl">Aplicar as migrações do template</span><span class="where">terminal</span></summary>
+<div class="body">
+<div class="codewrap"><pre data-src="c4"></pre></div>
+<p>São aplicadas duas migrações: <code>m130524_201442_init</code> (cria a tabela <code>user</code>) e <code>m190124_110200_add_verification_token...</code> (coluna para a verificação do email). A tabela <code>migration</code> é criada pelo Yii e regista as migrações já aplicadas.</p>
+<div class="lbl">Porquê</div>
+<ul><li>A tabela <code>user</code> tem <code>username</code>, <code>email</code>, <code>password_hash</code> (a palavra-passe nunca se guarda em texto), <code>auth_key</code> (cookie de login) e <code>status</code> (10 ativo, 9 inativo, 0 apagado).</li><li>Não se mexe nesta tabela: ela suporta o login. Os dados extra ficam na tabela <code>perfil</code> (decisão 1).</li></ul>
+<div class="check">Verifica: a tabela <code>user</code> existe e está vazia.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k5" aria-label="Passo 5 feito"><span class="num">5</span><span class="ttl">Ler o que já está feito: User, LoginForm e ACF</span><span class="where">common/models, backend/controllers</span></summary>
+<div class="body">
+<p>Este passo não escreve código. É perceber o que já vem pronto, porque vais escrever coisas parecidas.</p>
+<div class="lbl">O que ver</div>
+<ol><li><code>common/models/User.php</code>: <code>class User extends ActiveRecord implements IdentityInterface</code>. Procura as constantes <code>STATUS_ACTIVE</code> (10), <code>STATUS_INACTIVE</code> (9) e <code>STATUS_DELETED</code> (0), e o <code>findByUsername</code>, que só procura utilizadores <b>ativos</b>.</li><li><code>common/models/LoginForm.php</code>: o <code>login()</code> chama <code>Yii::$app-&gt;user-&gt;login(...)</code>.</li><li><code>backend/controllers/SiteController.php</code>: o <code>behaviors()</code> com o <code>AccessControl</code>.</li></ol>
+<div class="codewrap"><div class="cap">o ACF do backend, como vem no template</div><pre data-src="c5"></pre></div>
+<ul><li>1.ª regra: <code>login</code> e <code>error</code> abertos a toda a gente (sem <code>roles</code>).</li><li>2.ª regra: <code>logout</code> e <code>index</code> só para <code>@</code> (autenticado). <code>?</code> seria o convidado.</li><li>Se nenhuma regra servir ao pedido, o acesso é negado.</li><li>Mais à frente trocamos o <code>@</code> por <code>acederBackoffice</code>: é o que separa quem pode entrar no back-office.</li></ul>
+<div class="note"><b>Atenção:</b> o <code>User</code> já inativa o login: como o <code>findByUsername</code> só encontra <code>status</code> 10, uma conta desativada (9) não consegue entrar. É o requisito RF-BO-03.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k6" aria-label="Passo 6 feito"><span class="num">6</span><span class="ttl">Configurar o authManager (DbManager)</span><span class="where">common/config/main.php</span></summary>
+<div class="body">
+<div class="codewrap"><div class="cap">common/config/main.php, dentro de 'components', ao lado do 'cache'</div><pre data-src="c6"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li><code>Yii::$app-&gt;authManager</code> é o ponto de acesso ao RBAC. Com <code>DbManager</code> os roles e as permissões ficam em tabelas.</li><li>Fica em <code>common</code> porque o console (cria os roles), o backend (verifica) e o frontend (verifica) precisam dele.</li></ul>
+<div class="check">Verifica: <code>php -l common/config/main.php</code> diz "No syntax errors detected".</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k7" aria-label="Passo 7 feito"><span class="num">7</span><span class="ttl">Criar as 4 tabelas do RBAC</span><span class="where">terminal</span></summary>
+<div class="body">
+<div class="codewrap"><pre data-src="c7"></pre></div>
+<ul><li><code>--migrationPath=@yii/rbac/migrations</code> manda o <code>migrate</code> buscar as migrações à pasta do próprio Yii, e não à tua <code>console/migrations</code>.</li><li>Aparecem <code>auth_item</code> (roles e permissões, a coluna <code>type</code> distingue: 1 role, 2 permissão), <code>auth_item_child</code> (quem tem o quê), <code>auth_assignment</code> (utilizador-role) e <code>auth_rule</code> (regras).</li><li>Estas tabelas são geridas pelo Yii. Não se mexem à mão (exceto para testar, como se vê mais à frente).</li></ul>
+<div class="check">Verifica: as 4 tabelas existem e estão vazias.</div>
+</div></details>
+
+<h3>Fase 2: o RBAC do FrotaGest</h3>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k8" aria-label="Passo 8 feito"><span class="num">8</span><span class="ttl">Perceber a tabela de permissões do PDF</span><span class="where">Docs/FrotaGest_Permissoes_RBAC.pdf</span></summary>
+<div class="body">
+<p>O PDF é o equivalente à tabela que o professor desenhou no quadro na Ficha 5, mas com <b>39 permissões</b> e <b>4 roles</b>. Cada permissão é uma coisa concreta que se pode fazer. Resumo, por role:</p>
+<div class="scroll"><table><tr><th>Role</th><th>Permissões (nº)</th><th>Quais</th></tr><tr><td><b>colaborador</b> (10)</td><td>canais, catálogo e os seus pedidos</td><td><code>acederFrontoffice</code>, <code>acederApp</code>, <code>verCatalogo</code>, <code>criarRequisicao</code>, <code>verPropriaRequisicao</code>*, <code>cancelarRequisicao</code>*, <code>registarChecklist</code>*, <code>anexarFatura</code>*, <code>enviarLocalizacao</code>*, <code>verNotificacoes</code></td></tr><tr><td><b>coordenador</b> (20)</td><td>gestão da frota e dos pedidos</td><td><code>acederBackoffice</code>, <code>acederApp</code>, <code>verRequisicao</code>, <code>aprovarRequisicao</code>, <code>recusarRequisicao</code>, <code>atribuirViatura</code>, <code>assinalarRisco</code>, <code>gerirViaturas</code>, <code>gerirCondutores</code>, <code>gerirIndisponibilidades</code>, <code>verCondutoresDisponiveis</code>, <code>gerirDocumentos</code>, <code>configurarAlertas</code>, <code>gerirOrcamentos</code>, <code>verFaturas</code>, <code>verDashboard</code>, <code>verTrilhaAprovacoes</code>, <code>verMapa</code>, <code>registarNecessidade</code>, <code>verNotificacoes</code></td></tr><tr><td><b>tecnico</b> (7)</td><td>manutenção</td><td><code>acederBackoffice</code>, <code>registarNecessidade</code>, <code>registarManutencao</code>, <code>editarManutencao</code>, <code>concluirManutencao</code>, <code>verHistoricoManutencoes</code>, <code>verNotificacoes</code></td></tr><tr><td><b>administrador</b> (10)</td><td>sistema e utilizadores</td><td><code>acederBackoffice</code>, <code>acederApp</code>, <code>gerirUtilizadores</code>, <code>redefinirPassword</code>, <code>gerirPermissoes</code>, <code>configurarParametros</code>, <code>gerirServicosExternos</code>, <code>verLogs</code>, <code>verEstadoSistema</code>, <code>verNotificacoes</code></td></tr></table></div>
+<p>As marcadas com * são as do <b>dono</b> (<code>[dono]</code> no PDF). Repara em três coisas:</p>
+<ul><li><b>O administrador não herda os outros roles.</b> No PDF está escrito. O admin gere o sistema, não aprova pedidos. É diferente da Ficha 5, onde o admin tinha tudo.</li><li><code>registarNecessidade</code> é partilhada pelo coordenador e pelo técnico.</li><li><code>acederBackoffice</code> e <code>acederApp</code> decidem <b>por onde</b> cada role entra. O colaborador não tem <code>acederBackoffice</code>, por isso não entra no back-office.</li></ul>
+<p>No PDF, no fim, ainda diz o que <b>não</b> precisa de permissão: login e recuperar palavra-passe (visitante); logout, perfil, alterar palavra-passe, token FCM e POST /logs (qualquer utilizador autenticado). Para esses usa-se <code>@</code> no ACF, como no template.</p>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k9" aria-label="Passo 9 feito"><span class="num">9</span><span class="ttl">A regra do dono: IsRequisicaoOwnerRule</span><span class="where">common/rbac/IsRequisicaoOwnerRule.php</span></summary>
+<div class="body">
+<p>Cinco permissões do colaborador só valem para os <b>seus</b> pedidos. Para isso o RBAC tem as <b>regras</b> (a tabela <code>auth_rule</code> que ficou vazia na Ficha 5). Já criaste o ficheiro:</p>
+<div class="codewrap"><div class="cap">common/rbac/IsRequisicaoOwnerRule.php</div><pre data-src="c8"></pre></div>
+<div class="lbl">Porquê, por partes</div>
+<ul><li>Uma regra é uma classe que estende <code>yii\rbac\Rule</code> e tem o método <code>execute()</code>. Devolve <code>true</code> (a permissão vale neste caso) ou <code>false</code>.</li><li><code>$user</code> é o ID de quem está a pedir. <code>$params</code> é o array que passaste ao <code>can()</code>. O PDF diz a forma: <code>can('cancelarRequisicao', ['requisicao' =&gt; $model])</code>.</li><li>A regra compara <code>utilizador_id</code> da requisição (a coluna do diagrama) com o utilizador. Se o pedido não é dele, devolve <code>false</code> e o acesso é negado.</li><li>No <code>RbacController</code> as cinco permissões <code>[dono]</code> têm <code>$permissao-&gt;ruleName = $rule-&gt;name</code>. É assim que o Yii sabe que tem de chamar esta regra.</li><li>Atenção ao <code>can()</code> <b>sem</b> o segundo argumento: a regra recebe <code>$params</code> vazio, devolve <code>false</code> e a permissão falha. Para estas cinco o <code>can()</code> leva sempre o <code>['requisicao' =&gt; $model]</code>.</li></ul>
+<div class="note"><b>Atenção:</b> o ficheiro usa a coluna <code>utilizador_id</code>, que só existe depois de criares a migração da <code>requisicao</code> (passo 15). Até lá a regra não é chamada, por isso não dá erro.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k10" aria-label="Passo 10 feito"><span class="num">10</span><span class="ttl">RbacController: criar roles e permissões</span><span class="where">console/controllers/RbacController.php</span></summary>
+<div class="body">
+<p>O <code>RbacController</code> está feito. Não o copio aqui (são 250 linhas, repetitivas). Percebe a estrutura, que se repete 39 vezes:</p>
+<div class="codewrap"><div class="cap">a estrutura do RbacController</div><pre data-src="c9"></pre></div>
+<div class="lbl">O que fazer</div>
+<ol><li>No terminal, dentro de <code>FrotaGest</code>, corre o comando abaixo, <b>uma só vez</b>.</li><li>Aparece "RBAC criado: 4 roles e 39 permissoes."</li></ol>
+<div class="codewrap"><pre data-src="c10"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li><code>createPermission</code> cria o objeto, <code>add</code> grava-o em <code>auth_item</code>. Só depois de gravado se pode usar no <code>addChild</code>.</li><li><code>addChild($role, $permissao)</code> liga-os em <code>auth_item_child</code>. As linhas seguem a tabela do PDF, role a role.</li><li>A regra tem de ser gravada <b>antes</b> das permissões que a usam, senão o <code>ruleName</code> aponta para uma regra que ainda não existe.</li><li>Os nomes das permissões são texto e têm de ser <b>iguais</b> aos que escreveres depois nos <code>roles</code> do ACF e nos <code>can()</code>. Um erro de maiúsculas nega o acesso sem avisar.</li><li>Se precisares de repetir: no phpMyAdmin apaga todas as linhas de <code>auth_item</code> e depois as de <code>auth_rule</code>, e corre outra vez. Se não, dá "Duplicate entry".</li></ul>
+<div class="check">Verifica: <code>auth_item</code> tem 43 linhas (4 roles com type 1 e 39 permissões com type 2), <code>auth_item_child</code> tem 47 e <code>auth_rule</code> tem 1 (<code>isRequisicaoOwner</code>).</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k11" aria-label="Passo 11 feito"><span class="num">11</span><span class="ttl">Criar um utilizador de teste por role</span><span class="where">frontend signup, phpMyAdmin</span></summary>
+<div class="body">
+<p>Precisas de pelo menos um utilizador por role para testar. O relatório diz que as contas as cria o administrador, mas essa parte ainda não existe. Por agora usa o registo do template e atribui os roles à mão.</p>
+<div class="lbl">O que fazer</div>
+<ol><li>Abre o <b>frontend</b> (<code>?r=site/signup</code>) e cria quatro utilizadores. Sugestão de nomes: <code>colab1</code>, <code>coord1</code>, <code>tec1</code> e <code>admin1</code>, com palavra-passe de pelo menos 8 caracteres.</li><li>Ficam com <code>status</code> 9 (inativos), à espera de verificar o email. O mailer está em modo ficheiro: os emails ficam em <code>frontend/runtime/mail/</code>. Abre o <code>.eml</code> de cada um e copia o link <code>?r=site/verify-email&amp;token=...</code> para o browser.</li><li><b>Atalho só para testes:</b> no phpMyAdmin, na tabela <code>user</code>, muda o <code>status</code> para 10 em cada um.</li><li>Vê os IDs na tabela <code>user</code> e, em <code>auth_assignment</code>, clica em <b>Inserir</b> e cria uma linha por utilizador: <code>item_name</code> = o role (<code>colaborador</code>, <code>coordenador</code>, <code>tecnico</code>, <code>administrador</code>) e <code>user_id</code> = o ID. O <code>created_at</code> pode ficar vazio.</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li><code>auth_assignment</code> liga utilizadores a roles. O <code>$auth-&gt;assign($role, $id)</code> do código só insere uma linha ali. Aqui inserimos à mão para não escrever código que não vamos manter.</li><li>Mais tarde, o <b>administrador</b> faz isto por uma página do back-office (permissão <code>gerirUtilizadores</code>, passo 42).</li><li>Sem login possível (<code>status</code> 9) o <code>findByUsername</code> não encontra o utilizador e aparece "Incorrect username or password".</li></ul>
+<div class="check">Verifica: <code>auth_assignment</code> tem 4 linhas, uma para cada role.</div>
+</div></details>
+
+<!-- PARTE B -->
+<h3>Fase 3: as migrações (21 tabelas)</h3>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k12" aria-label="Passo 12 feito"><span class="num">12</span><span class="ttl">Como se escreve uma migração com chave estrangeira</span><span class="where">console/migrations/</span></summary>
+<div class="body">
+<p>É o que fizemos na Ficha 4 com <code>post</code> e <code>comment</code>. Cada tabela do FrotaGest segue o mesmo molde:</p>
+<ul><li><code>createTable('{{%viatura}}', [...])</code>: o <code>{{%...}}</code> é o prefixo de tabelas do Yii (vazio no nosso caso). A coluna <code>id</code> é <code>$this-&gt;primaryKey()</code>, com auto increment.</li><li><code>$this-&gt;string()</code>, <code>text()</code>, <code>integer()</code>, <code>date()</code>, <code>dateTime()</code>, <code>float()</code> e <code>boolean()</code> são os tipos. <code>-&gt;notNull()</code> torna a coluna obrigatória, <code>-&gt;defaultValue(...)</code> dá um valor por omissão, <code>-&gt;unique()</code> impede repetidos.</li><li>Uma <b>chave estrangeira</b> (FK) é uma coluna que guarda o <code>id</code> de outra tabela. Precisa de <code>createIndex</code> (índice) e <code>addForeignKey</code> (a ligação). Os nomes seguem o padrão <code>idx-tabela-coluna</code> e <code>fk-tabela-coluna</code>.</li><li><code>CASCADE</code> no fim do <code>addForeignKey</code> significa que, se o registo pai for apagado, os filhos também. Usamos só onde faz sentido: as ausências de um condutor, os itens de um orçamento, as peças de uma manutenção e o perfil de um utilizador.</li><li>Sem <code>CASCADE</code> (o normal), o MySQL <b>recusa</b> apagar um registo que ainda tem filhos. É o que queremos: não se apaga uma viatura que tem requisições.</li><li>O <code>safeDown()</code> desfaz o <code>safeUp()</code> pela ordem inversa: primeiro a chave estrangeira, depois o índice, depois a tabela.</li></ul>
+<div class="note"><b>Atenção:</b> <b>a ordem importa.</b> Uma tabela com FK só se cria depois da que ela referencia. O Yii aplica as migrações pela ordem do nome (que começa pela data e hora de criação). Por isso cria <b>uma migração de cada vez</b>, esperando ao menos um segundo entre elas. Se duas tiverem o mesmo segundo, ficam por ordem alfabética e a FK pode falhar.</div>
+<p>Os passos seguintes dão-te, tabela a tabela, o comando e o código já com as colunas do diagrama ER. Cada coluna que vem do diagrama tem a sua explicação em comentário.</p>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k13" aria-label="Passo 13 feito"><span class="num">13</span><span class="ttl">Migrações: categoria e viatura</span><span class="where">console/migrations/</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c11"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_categoria_table.php</div><pre data-src="c12"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c13"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_viatura_table.php</div><pre data-src="c14"></pre></div>
+<div class="codewrap"><div class="cap">terminal: aplica as migrações novas</div><pre data-src="c15"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li><code>categoria</code> não tem FK, por isso vem primeiro. A <code>viatura</code> aponta para ela (<code>categoria_id</code>).</li><li><code>matricula</code> é <code>unique()</code>: duas viaturas não podem ter a mesma.</li><li><code>estado</code> tem valor por omissão <code>disponivel</code>. Os valores previstos são <code>disponivel</code>, <code>em manutencao</code> e <code>indisponivel</code>. Ao concluir uma manutenção a viatura volta a <code>disponivel</code> (é por isso que não há campo "reparada").</li><li><code>qr_code</code> guarda o código que será afixado na viatura e lido pela app (RF-BO-23). <code>foto</code> guarda só o caminho do ficheiro, não a imagem.</li></ul>
+<div class="check">Verifica: no phpMyAdmin existem <code>categoria</code> e <code>viatura</code>, e a <code>viatura</code> tem a coluna <code>categoria_id</code> com chave estrangeira.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k14" aria-label="Passo 14 feito"><span class="num">14</span><span class="ttl">Migrações: condutor e ausencia_condutor</span><span class="where">console/migrations/</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c16"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_condutor_table.php</div><pre data-src="c17"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c18"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_ausencia_condutor_table.php</div><pre data-src="c19"></pre></div>
+<div class="codewrap"><div class="cap">terminal: aplica as migrações novas</div><pre data-src="c20"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>Os condutores da frota são uma tabela própria, não são utilizadores do sistema: um condutor pode nem ter conta.</li><li><code>ativo</code> e <code>validade_carta</code> servem para impedir a atribuição de condutores inativos ou com a carta expirada (RF-BO-20).</li><li><code>ausencia_condutor</code> guarda férias e baixas. Com <code>CASCADE</code>: se o condutor for apagado, as ausências dele desaparecem.</li><li>Com as ausências, as atribuições já feitas e o <code>ativo</code>, calcula-se mais tarde quais condutores estão disponíveis num período (RF-BO-22).</li></ul>
+<div class="check">Verifica: existem <code>condutor</code> e <code>ausencia_condutor</code>.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k15" aria-label="Passo 15 feito"><span class="num">15</span><span class="ttl">Migrações: requisicao e atribuicao</span><span class="where">console/migrations/</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c21"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_requisicao_table.php</div><pre data-src="c22"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c23"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_atribuicao_table.php</div><pre data-src="c24"></pre></div>
+<div class="codewrap"><div class="cap">terminal: aplica as migrações novas</div><pre data-src="c25"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>O relatório separou o pedido em <b>duas tabelas</b> para não haver registos meio vazios. A <code>requisicao</code> só tem o que o colaborador preenche. A <code>atribuicao</code> só nasce quando o coordenador aprova e escolhe viatura e condutor.</li><li><code>requisicao.utilizador_id</code> aponta para <code>user.id</code> (decisão 1). É esta coluna que a regra <code>IsRequisicaoOwnerRule</code> compara.</li><li><code>estado</code> começa em <code>pendente</code> (RF-FO-06). Os valores previstos: <code>pendente</code>, <code>aprovada</code>, <code>recusada</code>, <code>em curso</code>, <code>concluida</code> e <code>cancelada</code>.</li><li><code>motivo_recusa</code> fica vazio, a não ser nos pedidos recusados.</li><li><code>atribuicao.aprovada_por</code> guarda o coordenador que aprovou. É a base da trilha de auditoria (RF-BO-36).</li><li>Os quilómetros <b>não</b> estão aqui: ficam na <code>checklist</code>, porque são lidos no check-in e no check-out.</li></ul>
+<div class="check">Verifica: existem <code>requisicao</code> e <code>atribuicao</code>, esta com quatro chaves estrangeiras.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k16" aria-label="Passo 16 feito"><span class="num">16</span><span class="ttl">Migrações: checklist, anexo, fatura_combustivel e localizacao</span><span class="where">console/migrations/</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c26"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_checklist_table.php</div><pre data-src="c27"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c28"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_anexo_table.php</div><pre data-src="c29"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c30"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_fatura_combustivel_table.php</div><pre data-src="c31"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c32"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_localizacao_table.php</div><pre data-src="c33"></pre></div>
+<div class="codewrap"><div class="cap">terminal: aplica as migrações novas</div><pre data-src="c34"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>Tudo o que se regista <b>durante</b> a utilização liga à <code>atribuicao</code>.</li><li><code>checklist.tipo</code> distingue a receção (<code>rececao</code>, check-in) da entrega (<code>entrega</code>, check-out). Os quilómetros ficam aqui.</li><li><code>anexo</code> guarda <b>todos os ficheiros</b>: as quatro fotografias de cada checklist (frente, trás, esquerda, direita) e os documentos legais da viatura (seguro, inspeção, IUC). <code>categoria</code> distingue uns dos outros, <code>checklist_id</code> só se preenche nas fotografias e <code>data_validade</code> só nos documentos.</li><li><code>anexo.risco</code> é o que o coordenador assinala ao comparar as fotos de check-in e check-out (RF-BO-15).</li><li><code>fatura_combustivel.litros</code> e <code>valor</code> podem ficar vazios: o colaborador pode corrigir à mão (RF-FO-14).</li><li><code>localizacao</code> guarda os pontos que a app envia. Juntos, formam a rota no mapa.</li></ul>
+<div class="check">Verifica: existem as quatro tabelas e <code>anexo</code> tem duas chaves estrangeiras.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k17" aria-label="Passo 17 feito"><span class="num">17</span><span class="ttl">Migrações: alerta e notificacao</span><span class="where">console/migrations/</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c35"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_alerta_table.php</div><pre data-src="c36"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c37"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_notificacao_table.php</div><pre data-src="c38"></pre></div>
+<div class="codewrap"><div class="cap">terminal: aplica as migrações novas</div><pre data-src="c39"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>Um <b>alerta</b> é gerado pelo sistema sobre uma viatura (documento a expirar, revisão, inspeção). Uma <b>notificação</b> é mais abrangente: tem sempre um destinatário e pode vir de um alerta <b>ou</b> de uma requisição.</li><li>Por isso <code>notificacao.requisicao_id</code> e <code>alerta_id</code> ficam vazios um ou outro.</li><li>O número de dias de antecedência dos alertas <b>não</b> está no alerta. É um parâmetro do sistema, por tipo (tabela <code>parametro</code>).</li></ul>
+<div class="check">Verifica: existem <code>alerta</code> e <code>notificacao</code>.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k18" aria-label="Passo 18 feito"><span class="num">18</span><span class="ttl">Migrações: o circuito da manutenção</span><span class="where">console/migrations/</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c40"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_orcamento_compra_table.php</div><pre data-src="c41"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c42"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_item_orcamento_table.php</div><pre data-src="c43"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c44"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_necessidade_manutencao_table.php</div><pre data-src="c45"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c46"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_manutencao_table.php</div><pre data-src="c47"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c48"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_peca_table.php</div><pre data-src="c49"></pre></div>
+<div class="codewrap"><div class="cap">terminal: aplica as migrações novas</div><pre data-src="c50"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>O <code>orcamento_compra</code> funciona como um <b>carrinho</b>: tem o fornecedor, o estado (<code>rascunho</code>, <code>pendente</code>, <code>aceite</code>, <code>recusado</code>) e vários <code>item_orcamento</code>. É o terceiro master-detail do projeto.</li><li><code>necessidade_manutencao</code> regista item a item o que precisa de ser feito. Quando se agrupa num orçamento, preenche-se <code>orcamento_id</code>.</li><li><code>manutencao</code> pertence a uma viatura. <code>orcamento_id</code> só se preenche se a manutenção nasceu de um orçamento aceite. <code>tecnico_id</code> pode ficar vazio até um técnico assumir uma manutenção gerada automaticamente (ver "Em aberto").</li><li><code>peca</code> tem as peças e custos de cada manutenção, com <code>CASCADE</code>. O conjunto das manutenções de uma viatura é o histórico (segundo master-detail).</li><li>Ordem: o orçamento vem antes da necessidade e da manutenção, porque estas duas o referenciam.</li></ul>
+<div class="check">Verifica: existem as cinco tabelas.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k19" aria-label="Passo 19 feito"><span class="num">19</span><span class="ttl">Migrações: perfil, log_auditoria, parametro e servico_externo</span><span class="where">console/migrations/</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c51"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_perfil_table.php</div><pre data-src="c52"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c53"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_log_auditoria_table.php</div><pre data-src="c54"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c55"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_parametro_table.php</div><pre data-src="c56"></pre></div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c57"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._create_servico_externo_table.php</div><pre data-src="c58"></pre></div>
+<div class="codewrap"><div class="cap">terminal: aplica as migrações novas</div><pre data-src="c59"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li><code>perfil</code> guarda os dados extra do utilizador (decisão 1). <code>user_id</code> é <code>unique()</code> e tem <code>CASCADE</code>: cada utilizador tem no máximo um perfil, e apagar o utilizador apaga o perfil.</li><li><code>log_auditoria</code> regista ações e erros de todos os canais (<code>canal</code>, <code>nivel</code>). <code>utilizador_id</code> pode ficar vazio, porque um erro pode acontecer sem login. É onde ficam também a trilha de quem aprovou o quê e as falhas dos serviços externos.</li><li><code>parametro</code> guarda os parâmetros gerais em pares chave/valor. <code>chave</code> é <code>unique()</code>.</li><li><code>servico_externo</code> guarda a ligação ao Google Calendar e ao Firebase Cloud Messaging. Em <code>parametro</code> e <code>servico_externo</code>, <code>atualizado_por</code> fica vazio nos valores iniciais.</li></ul>
+<div class="check">Verifica: depois deste passo a base <code>frotagest</code> tem as 21 tabelas novas, mais <code>user</code>, <code>migration</code> e as 4 do RBAC. No total, 28 tabelas.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k20" aria-label="Passo 20 feito"><span class="num">20</span><span class="ttl">Parâmetros iniciais (opcional, mas útil)</span><span class="where">console/migrations/</span></summary>
+<div class="body">
+<p>Os parâmetros do sistema (RF-BO-49) e os dias de antecedência dos alertas (RF-BO-26) vivem na tabela <code>parametro</code>. Para o sistema funcionar logo, convém ter valores por omissão. Uma migração só de dados resolve:</p>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c60"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m..._seed_parametro.php</div><pre data-src="c61"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li><code>batchInsert</code> insere várias linhas de uma vez: nome da tabela, lista de colunas, lista de linhas.</li><li>O relatório fala destes parâmetros (antecedência mínima e duração máxima da requisição, dias para considerar uma viatura parada, intervalo de envio da localização, expiração da sessão, retenção de logs) mas <b>não diz os nomes nem os valores</b>. Os nomes das chaves e os valores acima são uma sugestão. Combina-os com o grupo.</li><li>Isto não contradiz o aviso da Ficha 5 sobre não fixar nas migrações: aquele era sobre atribuir <b>roles</b>. Aqui são valores iniciais de configuração, que o administrador pode mudar.</li></ul>
+<div class="check">Verifica: a tabela <code>parametro</code> tem 10 linhas depois do <code>php yii migrate</code>.</div>
+</div></details>
+
+<h3>Fase 4: os modelos (Gii)</h3>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k21" aria-label="Passo 21 feito"><span class="num">21</span><span class="ttl">Gerar os modelos</span><span class="where">terminal ou backend ?r=gii</span></summary>
+<div class="body">
+<p>Gera os modelos <b>só depois de todas as tabelas existirem</b>. O Gii escreve as relações (<code>getCategoria()</code>, <code>getViaturas()</code>...) olhando para as chaves estrangeiras. Se gerares o <code>Viatura</code> antes de existir a <code>requisicao</code>, não fica a relação para ela.</p>
+<div class="lbl">O que fazer, pela interface (a da Ficha 5)</div>
+<ol><li>Abre <code>http://localhost/2AnoProjeto/ProjetodeSistemasdeInformacao/FrotaGest/backend/web/index.php?r=gii</code> e clica em <b>Start</b> no <b>Model Generator</b>.</li><li>Table Name: <code>categoria</code>. Model Class Name: <code>Categoria</code> (preenche-se sozinho). **Namespace: <code>common\models</code>** (por defeito vem <code>app\models</code>).</li><li><b>Preview</b> e <b>Generate</b>.</li></ol>
+<div class="lbl">O atalho: o mesmo Gii na linha de comandos</div>
+<p>São 21 modelos. Se preferires, o Gii também corre no terminal, com os mesmos campos. Cola uma linha de cada vez (ou todas):</p>
+<div class="codewrap"><div class="cap">terminal, dentro de FrotaGest</div><pre data-src="c62"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>Os modelos vão para <code>common/models</code>, porque o backend, o frontend, o console e a futura API vão usá-los.</li><li>**Não geres o modelo da <code>user</code>**: ela já tem o <code>common/models/User.php</code> do template, com o login e a verificação. O Gii sobrescrevia-o. O mesmo para <code>auth_*</code> e <code>migration</code>, que não precisam de modelo.</li><li>No Gii gráfico, se um ficheiro já existir, o Preview mostra-o com uma caixa para sobrescrever. Deixa-a desmarcada.</li></ul>
+<div class="check">Verifica: existem 21 ficheiros novos em <code>common/models/</code> (e o <code>User.php</code> e o <code>LoginForm.php</code> continuam lá).</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k22" aria-label="Passo 22 feito"><span class="num">22</span><span class="ttl">Ler um modelo gerado e perceber as relações</span><span class="where">common/models/Viatura.php</span></summary>
+<div class="body">
+<p>Abre o <code>Viatura.php</code>. O Gii escreveu isto por ti, a partir da tabela e das chaves estrangeiras:</p>
+<ul><li><code>tableName()</code> liga a classe à tabela <code>viatura</code>.</li><li><code>rules()</code> vem das colunas: <code>categoria_id</code> e <code>matricula</code> obrigatórios, <code>matricula</code> único, <code>caracteristicas</code> texto, etc. É aqui que acrescentas validações próprias.</li><li><code>attributeLabels()</code> dá os nomes que aparecem nos formulários. Podes pô-los em português (RNF-03 pede mensagens em português).</li><li><code>getCategoria()</code> devolve <code>$this-&gt;hasOne(Categoria::class, ['id' =&gt; 'categoria_id'])</code>: o lado 'um' da relação. Uma viatura tem <b>uma</b> categoria.</li><li><code>getRequisicaos()</code>, <code>getAtribuicaos()</code>, <code>getManutencaos()</code>: o lado "muitos". O Gii junta um <code>s</code> ao nome da tabela, por isso saem nomes estranhos como <code>getAtribuicaos</code>. Confirma sempre o nome no ficheiro gerado antes de o usares.</li><li>As chaves estrangeiras para <code>user</code> também geram relações: <code>Requisicao::getUtilizador()</code> (o colaborador) e <code>Atribuicao::getAprovadaPor()</code> (o coordenador). Dão-te o objeto <code>User</code>, de onde tiras <code>username</code> e, via <code>perfil</code>, o nome.</li></ul>
+<div class="codewrap"><div class="cap">como se usa uma relação</div><pre data-src="c63"></pre></div>
+<p>É assim que se faz o <b>master-detail</b> da especificação: a lista de viaturas (master) e, dentro de cada uma, as suas manutenções (detail). Tudo o que o Gii não resolver, acrescentas tu nos modelos.</p>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k23" aria-label="Passo 23 feito"><span class="num">23</span><span class="ttl">Ligar o User ao Perfil</span><span class="where">common/models/User.php</span></summary>
+<div class="body">
+<p>O <code>Perfil</code> tem <code>user_id</code>. Para ires do utilizador ao perfil, acrescenta <b>só um método</b> ao <code>User</code> (não mexe na tabela):</p>
+<div class="codewrap"><div class="cap">common/models/User.php, junto dos outros métodos</div><pre data-src="c64"></pre></div>
+<div class="codewrap"><div class="cap">common/models/Perfil.php (confirma que já existe)</div><pre data-src="c65"></pre></div>
+<ul><li>Se o <code>Perfil.php</code> gerado referenciar <code>User</code> sem <code>use</code>, acrescenta <code>use common\models\User;</code> ou escreve o nome completo. Como estão os dois em <code>common\models</code>, normalmente não é preciso.</li><li>Agora <code>Yii::$app-&gt;user-&gt;identity-&gt;perfil-&gt;nome</code> dá o nome do utilizador autenticado (se tiver perfil).</li></ul>
+<div class="check">Verifica: <code>php -l common/models/User.php</code> sem erros.</div>
+</div></details>
+
+<h3>Fase 5: o acesso por role (ACF + menu)</h3>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k24" aria-label="Passo 24 feito"><span class="num">24</span><span class="ttl">Mapa: onde se usa cada uma das 39 permissões</span><span class="where">o desenho dos controladores</span></summary>
+<div class="body">
+<p>Antes de gerar controladores, decide <b>onde</b> cada permissão vai ser verificada. É uma <b>sugestão de organização</b> (a especificação não fixa os nomes dos controladores). Tem o mesmo espírito do quadro da Ficha 5: cada action liga a uma permissão.</p>
+<div class="scroll"><table><tr><th>Permissão</th><th>Onde se verifica</th><th>Role</th></tr><tr><td><code>acederBackoffice</code></td><td>backend, <code>SiteController</code> (index)</td><td>coord., téc., admin</td></tr><tr><td><code>acederFrontoffice</code></td><td>frontend, controladores do colaborador</td><td>colab.</td></tr><tr><td><code>acederApp</code></td><td>só a API e a app (SIS e AMSI), não se usa na web</td><td>colab., coord., admin</td></tr><tr><td><code>verCatalogo</code></td><td>frontend <code>ViaturaController</code> (index, view)</td><td>colab.</td></tr><tr><td><code>criarRequisicao</code></td><td>frontend <code>RequisicaoController</code> create</td><td>colab.</td></tr><tr><td><code>verPropriaRequisicao</code>*</td><td>frontend <code>RequisicaoController</code> index, view</td><td>colab.</td></tr><tr><td><code>cancelarRequisicao</code>*</td><td>frontend <code>RequisicaoController</code> cancelar</td><td>colab.</td></tr><tr><td><code>registarChecklist</code>*</td><td>frontend <code>RequisicaoController</code> checklist (check-in e check-out, km, fotos)</td><td>colab.</td></tr><tr><td><code>anexarFatura</code>*</td><td>frontend <code>RequisicaoController</code> fatura</td><td>colab.</td></tr><tr><td><code>enviarLocalizacao</code>*</td><td>só a app (API)</td><td>colab.</td></tr><tr><td><code>verRequisicao</code></td><td>backend <code>RequisicaoController</code> index, view</td><td>coord.</td></tr><tr><td><code>aprovarRequisicao</code></td><td>backend <code>RequisicaoController</code> pendentes, aprovar</td><td>coord.</td></tr><tr><td><code>recusarRequisicao</code></td><td>backend <code>RequisicaoController</code> recusar</td><td>coord.</td></tr><tr><td><code>atribuirViatura</code></td><td>backend <code>RequisicaoController</code> aprovar (escolher viatura e condutor)</td><td>coord.</td></tr><tr><td><code>assinalarRisco</code></td><td>backend <code>RequisicaoController</code> risco (fotos do check-in e check-out)</td><td>coord.</td></tr><tr><td><code>gerirViaturas</code></td><td>backend <code>ViaturaController</code> e <code>CategoriaController</code></td><td>coord.</td></tr><tr><td><code>gerirCondutores</code></td><td>backend <code>CondutorController</code></td><td>coord.</td></tr><tr><td><code>gerirIndisponibilidades</code></td><td>backend <code>AusenciaCondutorController</code></td><td>coord.</td></tr><tr><td><code>verCondutoresDisponiveis</code></td><td>backend <code>CondutorController</code> disponiveis</td><td>coord.</td></tr><tr><td><code>gerirDocumentos</code></td><td>backend <code>DocumentoController</code> (anexos de categoria documento)</td><td>coord.</td></tr><tr><td><code>configurarAlertas</code></td><td>backend <code>AlertaController</code> (os dias de antecedência, em <code>parametro</code>)</td><td>coord.</td></tr><tr><td><code>gerirOrcamentos</code></td><td>backend <code>OrcamentoCompraController</code></td><td>coord.</td></tr><tr><td><code>verFaturas</code></td><td>backend <code>FaturaCombustivelController</code> index</td><td>coord.</td></tr><tr><td><code>verDashboard</code></td><td>backend <code>DashboardController</code></td><td>coord.</td></tr><tr><td><code>verTrilhaAprovacoes</code></td><td>backend <code>LogAuditoriaController</code> trilha</td><td>coord.</td></tr><tr><td><code>verMapa</code></td><td>backend <code>MapaController</code></td><td>coord.</td></tr><tr><td><code>registarNecessidade</code></td><td>backend <code>NecessidadeManutencaoController</code></td><td>coord., téc.</td></tr><tr><td><code>registarManutencao</code></td><td>backend <code>ManutencaoController</code> create</td><td>téc.</td></tr><tr><td><code>editarManutencao</code></td><td>backend <code>ManutencaoController</code> update e <code>PecaController</code></td><td>téc.</td></tr><tr><td><code>concluirManutencao</code></td><td>backend <code>ManutencaoController</code> concluir</td><td>téc.</td></tr><tr><td><code>verHistoricoManutencoes</code></td><td>backend <code>ManutencaoController</code> historico</td><td>téc.</td></tr><tr><td><code>gerirUtilizadores</code></td><td>backend <code>UserController</code></td><td>admin</td></tr><tr><td><code>redefinirPassword</code></td><td>backend <code>UserController</code> redefinir-password</td><td>admin</td></tr><tr><td><code>gerirPermissoes</code></td><td>backend <code>PermissaoController</code></td><td>admin</td></tr><tr><td><code>configurarParametros</code></td><td>backend <code>ParametroController</code></td><td>admin</td></tr><tr><td><code>gerirServicosExternos</code></td><td>backend <code>ServicoExternoController</code></td><td>admin</td></tr><tr><td><code>verLogs</code></td><td>backend <code>LogAuditoriaController</code> index</td><td>admin</td></tr><tr><td><code>verEstadoSistema</code></td><td>backend <code>SistemaController</code> estado (e a app)</td><td>admin</td></tr><tr><td><code>verNotificacoes</code></td><td>backend e frontend, <code>NotificacaoController</code></td><td>todos</td></tr></table></div>
+<p>As marcadas com * são as do dono. No ACF não se consegue passar o pedido ao <code>can()</code>, por isso essas verificam-se <b>dentro da action</b>, com <code>can('x', ['requisicao' =&gt; $model])</code>. O resto verifica-se no <code>behaviors()</code>.</p>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k25" aria-label="Passo 25 feito"><span class="num">25</span><span class="ttl">Gerar o CRUD de uma tabela (o exemplo da viatura)</span><span class="where">backend, ?r=gii</span></summary>
+<div class="body">
+<p>O Gii escreve o controlador, a pesquisa e as vistas. Fazemo-lo na **<code>Viatura</code>** e repete-se para as outras tabelas do mapa anterior.</p>
+<ol><li>Gii, <b>CRUD Generator</b>, <b>Start</b>.</li><li>Preenche os campos da tabela abaixo. <b>Preview</b> e <b>Generate</b>.</li></ol>
+<div class="scroll"><table><tr><th>Campo</th><th>Valor</th></tr><tr><td>Model Class</td><td><code>common\models\Viatura</code></td></tr><tr><td>Search Model Class</td><td><code>backend\models\ViaturaSearch</code></td></tr><tr><td>Controller Class</td><td><code>backend\controllers\ViaturaController</code></td></tr><tr><td>View Path</td><td><code>@backend/views/viatura</code></td></tr></table></div>
+<div class="lbl">Ou na linha de comandos</div>
+<div class="codewrap"><div class="cap">terminal</div><pre data-src="c66"></pre></div>
+<div class="lbl">O que o Gii criou</div>
+<ul><li><code>backend/controllers/ViaturaController.php</code> com <code>index</code>, <code>view</code>, <code>create</code>, <code>update</code> e <code>delete</code>.</li><li><code>backend/models/ViaturaSearch.php</code>, para os filtros da lista.</li><li><code>backend/views/viatura/</code> com <code>index</code>, <code>view</code>, <code>create</code>, <code>update</code>, <code>_form</code> e <code>_search</code>.</li></ul>
+<div class="lbl">Quais CRUD gerar no backend</div>
+<p>Segue o mapa do passo anterior. Gera estes e adapta-os: <code>Categoria</code>, <code>Viatura</code>, <code>Condutor</code>, <code>AusenciaCondutor</code>, <code>OrcamentoCompra</code>, <code>NecessidadeManutencao</code>, <code>Manutencao</code>, <code>Peca</code>, <code>Parametro</code>, <code>ServicoExterno</code>, <code>LogAuditoria</code>, <code>Notificacao</code> e <code>FaturaCombustivel</code>. A <code>Requisicao</code> e a <code>Atribuicao</code> também, mas serão muito alteradas (passos das funcionalidades). Para o <code>User</code> (gerir utilizadores) vê o passo do administrador.</p>
+<div class="note"><b>Atenção:</b> o CRUD acabado de gerar <b>está aberto a toda a gente</b>. Não o deixes assim: o passo seguinte põe as regras de acesso, e tem de ser feito logo em cada controlador.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k26" aria-label="Passo 26 feito"><span class="num">26</span><span class="ttl">ACF: proteger um controlador com a permissão</span><span class="where">backend/controllers/ViaturaController.php</span></summary>
+<div class="body">
+<p>É o mesmo do passo 11 da Ficha 5. Em cada controlador gerado, acrescenta o <code>use</code> e o bloco <code>access</code> no <code>behaviors()</code>, <b>antes</b> do <code>verbs</code>:</p>
+<div class="codewrap"><div class="cap">use, no topo do ficheiro</div><pre data-src="c67"></pre></div>
+<div class="codewrap"><div class="cap">behaviors() do ViaturaController (adapta ao que o Gii gerou)</div><pre data-src="c68"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>A regra **sem <code>actions</code>** vale para todas as actions do controlador. Como no <code>ViaturaController</code> só o coordenador entra, uma regra chega.</li><li>Quando um controlador serve vários roles, divides em regras por action, como na Ficha 5. Por exemplo no <code>ManutencaoController</code>: <code>create</code> para <code>registarManutencao</code>, <code>update</code> para <code>editarManutencao</code>, <code>concluir</code> para <code>concluirManutencao</code>, <code>historico</code> para <code>verHistoricoManutencoes</code>.</li><li>O Gii pode ter escrito o <code>behaviors()</code> de outra forma. Mantém o que ele escreveu e <b>acrescenta</b> o bloco <code>access</code>.</li><li>Sem login, o Yii manda para o login. Com login mas sem a permissão, aparece "403 Forbidden".</li><li>O nome em <code>roles</code> tem de ser <b>igual</b> ao do <code>RbacController</code>. Aqui o valor <code>gerirViaturas</code> é uma permissão, não um role. O ACF aceita as duas coisas.</li></ul>
+<div class="check">Verifica: <code>php -l backend/controllers/ViaturaController.php</code>. Repete este passo em cada controlador gerado, com a permissão do mapa.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k27" aria-label="Passo 27 feito"><span class="num">27</span><span class="ttl">Entrada no back-office só com acederBackoffice</span><span class="where">backend/controllers/SiteController.php</span></summary>
+<div class="body">
+<p>Hoje qualquer utilizador autenticado entra no back-office, incluindo o colaborador. Vamos separar. No <code>behaviors()</code> do <code>SiteController</code>, troca a segunda regra por duas:</p>
+<div class="codewrap"><div class="cap">SiteController do backend, no lugar da regra de logout e index</div><pre data-src="c69"></pre></div>
+<ul><li>O colaborador consegue fazer login no backend (a conta é a mesma), mas ao abrir <code>?r=site/index</code> recebe 403. Fica barrado à entrada.</li><li>Isto cumpre o RF-BO-01 (só estes três roles autenticam no back-office) e o RF-BO-04.</li><li>No <b>frontend</b> faz o mesmo para a área do colaborador: nos controladores <code>ViaturaController</code> e <code>RequisicaoController</code> do frontend, uma regra com <code>'roles' =&gt; ['acederFrontoffice']</code>.</li></ul>
+<div class="note"><b>Atenção:</b> o relatório pede <b>uma única entrada de login</b> para o front e o back-office, que encaminhe por role (RF-FO-01). Com o Advanced há duas aplicações, logo dois logins. Para já mantém os dois. Fica nos pontos "Em aberto".</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k28" aria-label="Passo 28 feito"><span class="num">28</span><span class="ttl">Menu do backend com can()</span><span class="where">backend/views/layouts/_header.php</span></summary>
+<div class="body">
+<p>No array <code>$items</code>, acrescenta um item por área, <b>depois</b> do <code>Home</code> e antes do <code>Login</code>. Cada um só aparece a quem tem a permissão:</p>
+<div class="codewrap"><div class="cap">backend/views/layouts/_header.php</div><pre data-src="c70"></pre></div>
+<ul><li><code>Yii::$app-&gt;user-&gt;can(...)</code> devolve <code>true</code> ou <code>false</code>. <code>visible</code> esconde o item se for <code>false</code>.</li><li>Isto <b>só esconde</b> o link. Quem escrever o URL à mão continua barrado pelo ACF. A segurança está no controlador, o menu é comodidade.</li><li>Acrescenta os outros itens do mesmo modo, um por área do mapa. O menu do frontend está em <code>frontend/views/layouts/_header.php</code>.</li><li>Não mexas no resto do ficheiro, a partir do <code>?&gt;</code>.</li></ul>
+</div></details>
+
+<h3>Fase 6: as funcionalidades, por ordem de prioridade</h3>
+<p>Daqui para a frente já não é copiar e colar: é programar a lógica de cada requisito. Para cada passo tens o que fazer, onde, e um <b>esqueleto</b> em código simples (o do guia do Yii). Adapta os nomes ao que o Gii gerou no teu projeto e confirma tudo com o professor, porque são ideias de implementação e não código oficial.</p>
+<div class="scroll"><table><tr><th>Prioridade</th><th>Funcionalidades</th><th>Passos</th></tr><tr><td><b>Alta</b></td><td>catálogo e disponibilidade, pedir, aprovar e atribuir, check-in/out, manutenção, utilizadores e permissões</td><td>29 a 33, 35, 39, 42</td></tr><tr><td><b>Média</b></td><td>cancelar, recusar, faturas, documentos e alertas, orçamentos, notificações, parâmetros, logs</td><td>restantes</td></tr><tr><td><b>Baixa</b></td><td>dashboard, mapa, QR</td><td>últimos</td></tr></table></div>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k29" aria-label="Passo 29 feito"><span class="num">29</span><span class="ttl">Catálogo e disponibilidade das viaturas</span><span class="where">frontend ViaturaController, common/models/Viatura.php</span></summary>
+<div class="body">
+<p><b>O que é:</b> o colaborador vê as viaturas, filtra por categoria, combustível ou texto, e vê quais estão livres num período. Requisitos RF-FO-04 e RF-FO-05, US1.</p>
+<div class="lbl">O que fazer</div>
+<ol><li>Gera o CRUD da <code>Viatura</code> no <b>frontend</b> (como no passo do CRUD, com <code>frontend\controllers\ViaturaController</code> e <code>@frontend/views/viatura</code>) e apaga o <code>create</code>, <code>update</code> e <code>delete</code>: o colaborador só vê.</li><li>Põe o ACF com <code>acederFrontoffice</code> e <code>verCatalogo</code> (duas regras, ou a regra com <code>'roles' =&gt; ['verCatalogo']</code>, que o colaborador tem).</li><li>Acrescenta ao modelo <code>Viatura</code> o método da disponibilidade, abaixo. É o coração do projeto: vai ser usado no pedido e na atribuição.</li></ol>
+<div class="codewrap"><div class="cap">common/models/Viatura.php</div><pre data-src="c71"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li><code>joinWith('requisicao')</code> usa a relação <code>getRequisicao()</code> da <code>Atribuicao</code> e faz o JOIN, para filtrar pelas datas do pedido. Confirma que essa relação existe no <code>Atribuicao.php</code> gerado.</li><li>A condição <code>inicio1 &lt;= fim2 e fim1 &gt;= inicio2</code> apanha <b>todas</b> as formas de sobreposição. É o que garante o RNF-04: uma viatura nunca é atribuída a dois pedidos com períodos sobrepostos.</li><li>As datas em texto <code>AAAA-MM-DD</code> comparam-se bem como texto, e o MySQL também as compara como datas.</li><li><code>exists()</code> devolve só <code>true</code> ou <code>false</code>, sem trazer registos. É mais rápido do que <code>count()</code>.</li><li>O filtro do catálogo (pesquisa, categoria, combustível, período) faz-se no <code>ViaturaSearch</code>. Para o período, percorre as viaturas e mostra as que dão <code>estaLivre($inicio, $fim)</code>.</li></ul>
+<div class="check">Verifica: o colaborador vê o catálogo, e uma viatura com um pedido aprovado nesse período deixa de aparecer como livre.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k30" aria-label="Passo 30 feito"><span class="num">30</span><span class="ttl">Pedir uma viatura</span><span class="where">frontend RequisicaoController, common/models/Requisicao.php</span></summary>
+<div class="body">
+<p><b>O que é:</b> o colaborador submete o pedido (datas, categoria, destino, motivo), que fica <code>pendente</code>. RF-FO-06, US2.</p>
+<div class="lbl">O que fazer</div>
+<ol><li>Gera o CRUD da <code>Requisicao</code> no frontend e fica só com <code>index</code>, <code>view</code>, <code>create</code> e <code>cancelar</code> (o Gii traz <code>delete</code>; troca-o por <code>cancelar</code> no passo seguinte).</li><li>No <code>_form.php</code> deixa só os campos que o colaborador preenche: <code>categoria_id</code>, <code>data_inicio</code>, <code>data_fim</code>, <code>destino</code>, <code>motivo</code>. Os outros são do sistema.</li><li>Escreve a action <code>create</code>:</li></ol>
+<div class="codewrap"><div class="cap">frontend/controllers/RequisicaoController.php</div><pre data-src="c72"></pre></div>
+<div class="codewrap"><div class="cap">common/models/Requisicao.php, dentro de rules()</div><pre data-src="c73"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>É o padrão da Ficha 2 (<code>load</code>, <code>validate</code>, <code>render</code>), com um acrescento: os campos do sistema preenchem-se <b>antes</b> do <code>save()</code>. Como <code>utilizador_id</code> e <code>data_pedido</code> são obrigatórios nas <code>rules()</code>, têm de estar preenchidos quando o <code>save()</code> valida.</li><li><code>Yii::$app-&gt;user-&gt;id</code> é o utilizador autenticado: nunca se confia num <code>utilizador_id</code> vindo do formulário.</li><li><code>compare</code> é um validador do Yii (guia, "Validating Input"). Mensagens em português, como pede o RNF-03.</li><li>O RF-FO-07 (sugerir o período livre mais próximo quando não há viaturas) deixa-se para depois de a aprovação funcionar. Usa o <code>estaLivre()</code> num ciclo pelas datas seguintes.</li></ul>
+<div class="note"><b>Atenção:</b> para a verificação de acesso, o ACF do <code>RequisicaoController</code> do frontend exige <code>acederFrontoffice</code> em todas as actions, e <code>criarRequisicao</code> na <code>create</code>.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k31" aria-label="Passo 31 feito"><span class="num">31</span><span class="ttl">Os meus pedidos e o detalhe (master-detail)</span><span class="where">frontend RequisicaoController</span></summary>
+<div class="body">
+<p><b>O que é:</b> o colaborador vê só os <b>seus</b> pedidos e, em cada um, o detalhe (viatura, quilómetros, faturas, fotografias). RF-FO-08, RF-FO-09, US3.</p>
+<div class="codewrap"><div class="cap">frontend/controllers/RequisicaoController.php</div><pre data-src="c74"></pre></div>
+<ul><li>Precisas dos <code>use</code> <code>yii\data\ActiveDataProvider</code> e <code>yii\web\ForbiddenHttpException</code>.</li><li>O filtro <code>where(...)</code> na lista é a <b>primeira</b> defesa: o utilizador nem vê pedidos alheios. O <code>can()</code> com a regra do dono é a <b>segunda</b>: mesmo que escreva o ID de outro pedido no URL, recebe 403.</li><li>O Gii só gerou <code>getAtribuicaos()</code> (plural, uma lista). Como um pedido tem no máximo uma atribuição, acrescenta ao <code>Requisicao</code> o método <code>getAtribuicao()</code>: <code>return $this-&gt;hasOne(Atribuicao::class, ['requisicao_id' =&gt; 'id']);</code>. Na vista <code>view.php</code> já podes usar <code>$model-&gt;atribuicao</code>, <code>$model-&gt;atribuicao-&gt;viatura</code> e <code>$model-&gt;atribuicao-&gt;checklists</code>. É o master-detail.</li><li>O estado em linha temporal (RF-FO-08) é uma lista ordenada com o <code>estado</code> e, nos recusados, o <code>motivo_recusa</code>.</li></ul>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k32" aria-label="Passo 32 feito"><span class="num">32</span><span class="ttl">Cancelar um pedido (a regra do dono)</span><span class="where">frontend RequisicaoController</span></summary>
+<div class="body">
+<p><b>O que é:</b> o colaborador cancela um pedido seu que ainda está <code>pendente</code>. RF-FO-10. É o caso de livro da regra <code>isRequisicaoOwner</code>.</p>
+<div class="codewrap"><div class="cap">frontend/controllers/RequisicaoController.php</div><pre data-src="c75"></pre></div>
+<div class="codewrap"><div class="cap">VerbFilter</div><pre data-src="c76"></pre></div>
+<ul><li>O que acontece: o <code>can()</code> chama a regra, que compara <code>utilizador_id</code> do pedido com o utilizador. Se não é dele, <code>false</code>, e lançamos 403.</li><li>Para testar a regra (passo de testes): entra com o <code>colab1</code>, copia o ID de um pedido de <b>outro</b> colaborador e tenta cancelá-lo. Tem de dar 403.</li><li>No botão da vista, só o mostras se o pedido for dele e estiver pendente: <code>Yii::$app-&gt;user-&gt;can('cancelarRequisicao', ['requisicao' =&gt; $model])</code>.</li></ul>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k33" aria-label="Passo 33 feito"><span class="num">33</span><span class="ttl">Pedidos pendentes, aprovar e atribuir viatura e condutor</span><span class="where">backend RequisicaoController, Viatura, Condutor</span></summary>
+<div class="body">
+<p><b>O que é:</b> o coordenador vê os pedidos pendentes, aprova um e escolhe a viatura e o condutor. É a funcionalidade mais importante e a mais cheia de regras. RF-BO-05 a RF-BO-12, RF-BO-20, RF-BO-22, US7, US8, US31.</p>
+<div class="lbl">O que fazer</div>
+<ol><li>No backend, <code>RequisicaoController</code>: a <code>index</code> já lista tudo (<code>verRequisicao</code>). Acrescenta uma action <code>pendentes</code> (os pedidos com <code>estado</code> <code>pendente</code>) com <code>aprovarRequisicao</code>.</li><li>Acrescenta ao <code>Condutor</code> o método que diz se pode conduzir num período.</li><li>Escreve a action <code>aprovar</code>, que cria a <code>Atribuicao</code>.</li></ol>
+<div class="codewrap"><div class="cap">common/models/Condutor.php</div><pre data-src="c77"></pre></div>
+<div class="codewrap"><div class="cap">backend/controllers/RequisicaoController.php</div><pre data-src="c78"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>O pedido guarda a <b>categoria</b> pretendida. Na lista de viaturas do formulário, mostra só as dessa categoria e que estejam livres (RF-BO-09 e RF-BO-11). Na dos condutores, só os que <code>podeConduzir()</code> (RF-BO-22).</li><li>Se não há nenhuma viatura livre na categoria, desativa o botão de aprovar (RF-BO-05).</li><li>Os <code>addError</code> mostram a mensagem junto ao campo no formulário. O <code>save()</code> limpa os erros ao validar, por isso o <code>addError</code> tem de ser a última coisa antes de reapresentar a vista, como aqui (nunca antes de um <code>save()</code> que se segue).</li><li><b>Transação</b> (<code>beginTransaction</code>, do guia, "Transactions"): se a gravação da atribuição funcionar e a do pedido falhar, desfaz-se tudo. Sem isto ficavas com uma atribuição de um pedido ainda "pendente".</li><li>Bloquear o período da viatura (RF-BO-12) não precisa de código à parte: o <code>estaLivre()</code> já considera as atribuições existentes.</li><li>Aprovar é <code>aprovarRequisicao</code>, e escolher a viatura é <code>atribuirViatura</code>. Como as duas são do coordenador, uma action chega. Se as quiseres separar, são duas actions, cada uma com a sua permissão.</li></ul>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k34" aria-label="Passo 34 feito"><span class="num">34</span><span class="ttl">Recusar um pedido com motivo</span><span class="where">backend RequisicaoController</span></summary>
+<div class="body">
+<p><b>O que é:</b> recusar exige um motivo. RF-BO-07, US7. Permissão <code>recusarRequisicao</code>.</p>
+<div class="codewrap"><div class="cap">backend/controllers/RequisicaoController.php</div><pre data-src="c79"></pre></div>
+<ul><li>O motivo da lista (com "Outro" e detalhe) pode ser um <code>dropDownList</code> na vista. Aqui fica o texto escolhido.</li><li><code>setFlash</code> guarda uma mensagem que aparece uma vez na página seguinte. O widget <code>Alert</code> do template já a mostra.</li><li>Depois de recusar, o colaborador é notificado (passo das notificações). O motivo aparece-lhe na linha temporal.</li></ul>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k35" aria-label="Passo 35 feito"><span class="num">35</span><span class="ttl">Check-in e check-out: checklist, quilómetros e fotografias</span><span class="where">frontend RequisicaoController</span></summary>
+<div class="body">
+<p><b>O que é:</b> na receção e na entrega da viatura, o colaborador regista os quilómetros, o estado, os documentos a bordo e as quatro fotografias. RF-FO-11, RF-FO-12, RF-FO-13, US4. Permissão <code>registarChecklist</code> (do dono).</p>
+<div class="codewrap"><div class="cap">frontend/controllers/RequisicaoController.php (use yii\web\UploadedFile)</div><pre data-src="c80"></pre></div>
+<div class="codewrap"><div class="cap">frontend/views/requisicao/checklist.php</div><pre data-src="c81"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>O upload de ficheiros segue o guia do Yii ("Uploading Files"): o formulário precisa de <code>enctype =&gt; multipart/form-data</code>, e no controlador <code>UploadedFile::getInstanceByName</code> e <code>saveAs</code>.</li><li>Cada fotografia vira uma linha na tabela <code>anexo</code> com <code>categoria</code> <code>foto</code> e <code>tipo</code> a posição. O que fica na base de dados é o <b>caminho</b>, não a imagem.</li><li>Cria a pasta <code>frontend/web/uploads/</code>. Se o backend precisar de mostrar as fotos (comparação lado a lado, RF-BO-14), usa o URL do frontend.</li><li>A mesma action serve o check-in e o check-out: só muda o <code>tipo</code>. Valida no início que <code>$tipo</code> é <code>rececao</code> ou <code>entrega</code>.</li><li>O <code>viatura-&gt;km_atual</code> só se atualiza no check-out (RF-FO-11).</li><li>A leitura do conta-quilómetros por fotografia (RF-AM-12) e a de faturas por OCR são <b>da app</b> (AMSI). Na web o colaborador escreve os valores.</li></ul>
+<div class="check">Verifica: depois de um check-in o pedido fica <code>em curso</code>, aparecem 4 linhas em <code>anexo</code> e os ficheiros estão em <code>frontend/web/uploads/</code>.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k36" aria-label="Passo 36 feito"><span class="num">36</span><span class="ttl">Anexar a fatura de combustível</span><span class="where">frontend RequisicaoController</span></summary>
+<div class="body">
+<p><b>O que é:</b> o colaborador anexa o ficheiro (PDF, JPG ou PNG) e escreve os litros e o valor. RF-FO-14, US5. Permissão <code>anexarFatura</code> (do dono).</p>
+<ul><li>Mesmo padrão do passo anterior: action <code>fatura($id)</code>, <code>can('anexarFatura', ['requisicao' =&gt; $requisicao])</code>, formulário multipart, <code>UploadedFile</code>, e uma linha em <code>fatura_combustivel</code> com o <code>atribuicao_id</code>, o <code>fotografia</code> (caminho), <code>litros</code>, <code>valor</code> e <code>data_registo</code>.</li><li>Para limitar os tipos de ficheiro, usa o validador <code>file</code> do Yii num modelo de formulário: <code>[['ficheiro'], 'file', 'extensions' =&gt; 'pdf, jpg, png']</code> (guia, "Uploading Files").</li><li>O coordenador vê estas faturas no back-office (<code>verFaturas</code>, RF-BO-33): é um CRUD só de leitura (<code>index</code> e <code>view</code>) do <code>FaturaCombustivel</code>.</li></ul>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k37" aria-label="Passo 37 feito"><span class="num">37</span><span class="ttl">Condutores disponíveis e indisponibilidades</span><span class="where">backend CondutorController, AusenciaCondutorController</span></summary>
+<div class="body">
+<p><b>O que é:</b> o coordenador regista férias e baixas, e consulta quais condutores estão livres num período. RF-BO-18 a RF-BO-22, US10, US28, US29.</p>
+<ul><li>CRUD do <code>Condutor</code> (<code>gerirCondutores</code>) e da <code>AusenciaCondutor</code> (<code>gerirIndisponibilidades</code>), gerados pelo Gii como no exemplo da viatura.</li><li>Na lista de condutores, destaca as cartas expiradas ou a expirar (RF-BO-19) com uma classe CSS quando <code>validade_carta</code> é anterior a hoje.</li><li>A action <code>disponiveis</code> (<code>verCondutoresDisponiveis</code>) recebe <code>data_inicio</code> e <code>data_fim</code> e devolve os condutores para os quais <code>podeConduzir()</code> é <code>true</code>: <code>array_filter(Condutor::find()-&gt;all(), function ($c) use ($i, $f) { return $c-&gt;podeConduzir($i, $f); })</code>.</li><li>O método <code>podeConduzir()</code> é o do passo de aprovar: é aí que os requisitos RF-BO-20 e RF-BO-22 ficam todos cumpridos.</li></ul>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k38" aria-label="Passo 38 feito"><span class="num">38</span><span class="ttl">Documentos legais e alertas</span><span class="where">backend DocumentoController, console AlertaController</span></summary>
+<div class="body">
+<p><b>O que é:</b> o coordenador regista seguro, inspeção e IUC com a data de validade, e o sistema avisa quando estão a expirar. RF-BO-24, RF-BO-25, RF-BO-26, US11.</p>
+<ul><li>Os documentos são linhas da tabela <code>anexo</code> com <code>categoria</code> <code>documento</code>, <code>tipo</code> <code>seguro</code>, <code>inspecao</code> ou <code>iuc</code>, e <code>data_validade</code>. Cria um <code>DocumentoController</code> (<code>gerirDocumentos</code>) que lista e cria só esses anexos (<code>where(['categoria' =&gt; 'documento'])</code>), com upload como no check-in.</li><li>A lista de "a expirar" (RF-BO-25) filtra <code>data_validade</code> até hoje mais o número de dias do parâmetro.</li><li>Os <b>alertas</b> são gerados pelo sistema, não pelo utilizador: um comando de consola que se corre todos os dias. Está no esqueleto abaixo.</li><li>Os dias de antecedência por tipo (RF-BO-26) são os parâmetros <code>alerta_dias_seguro</code>, etc. O coordenador edita-os num ecrã (<code>configurarAlertas</code>).</li></ul>
+<div class="codewrap"><div class="cap">console/controllers/AlertaController.php</div><pre data-src="c82"></pre></div>
+<ul><li>É o mesmo tipo de controlador que o <code>RbacController</code>: <code>php yii alerta/gerar</code>. No Windows podes agendá-lo no Agendador de Tarefas para correr todos os dias.</li><li>Para cada alerta novo cria-se também uma notificação para os coordenadores (passo das notificações).</li><li>O mesmo esquema serve as revisões e inspeções (RF-AM-23), com outras datas.</li></ul>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k39" aria-label="Passo 39 feito"><span class="num">39</span><span class="ttl">Manutenção: registar, peças e concluir</span><span class="where">backend ManutencaoController</span></summary>
+<div class="body">
+<p><b>O que é:</b> o técnico regista uma intervenção, associa peças e custos, e marca-a como concluída: a viatura volta a ficar disponível. RF-BO-39 a RF-BO-44, US16 a US19.</p>
+<div class="lbl">O que fazer</div>
+<ol><li>Gera os CRUD da <code>Manutencao</code> e da <code>Peca</code>, e acrescenta o ACF por action: <code>create</code> (<code>registarManutencao</code>), <code>update</code> (<code>editarManutencao</code>), <code>concluir</code> (<code>concluirManutencao</code>), <code>historico</code> (<code>verHistoricoManutencoes</code>).</li><li>Ao criar uma manutenção, a viatura passa a <code>em manutencao</code> e deixa de estar livre.</li><li>Escreve a action <code>concluir</code>:</li></ol>
+<div class="codewrap"><div class="cap">backend/controllers/ManutencaoController.php</div><pre data-src="c83"></pre></div>
+<div class="codewrap"><div class="cap">o histórico por viatura (segundo master-detail)</div><pre data-src="c84"></pre></div>
+<ul><li>Na vista <code>historico-viatura.php</code> percorres <code>$viatura-&gt;manutencaos</code> e, em cada uma, <code>$manutencao-&gt;pecas</code>. É o mesmo padrão do <code>post</code> e <code>comment</code> da Ficha 4.</li><li><code>concluir</code> deve ser por POST (<code>VerbFilter</code>), porque altera dados.</li><li>O custo total de uma manutenção é a soma <code>quantidade * custo</code> das suas peças (RF-BO-41). Calcula-o num método <code>getCustoTotal()</code> do modelo.</li><li>A edição de peças e custos (RF-BO-44) é o <code>update</code> da <code>Peca</code>, e reflete-se logo no histórico porque este lê da base de dados.</li></ul>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k40" aria-label="Passo 40 feito"><span class="num">40</span><span class="ttl">Necessidades, orçamentos e a manutenção que nasce deles</span><span class="where">backend OrcamentoCompraController</span></summary>
+<div class="body">
+<p><b>O que é:</b> o coordenador e o técnico registam necessidades. O coordenador agrupa-as num orçamento (como um carrinho), submete-o a um fornecedor, e quando é aceite nasce uma manutenção. RF-BO-27 a RF-BO-32, US12, US13.</p>
+<ul><li>CRUD da <code>NecessidadeManutencao</code> (<code>registarNecessidade</code>, coordenador e técnico) e do <code>OrcamentoCompra</code> (<code>gerirOrcamentos</code>, só o coordenador).</li><li>O <b>detalhe</b> do orçamento (a vista <code>view.php</code>) mostra os seus <code>item_orcamento</code> e permite acrescentar itens. É o terceiro master-detail.</li><li>Agrupar necessidades num orçamento = preencher <code>necessidade_manutencao.orcamento_id</code>.</li><li>O estado muda entre <code>rascunho</code>, <code>pendente</code>, <code>aceite</code> e <code>recusado</code>. Quando passa a <code>aceite</code>, gera-se a manutenção:</li></ul>
+<div class="codewrap"><div class="cap">backend/controllers/OrcamentoCompraController.php</div><pre data-src="c85"></pre></div>
+<ul><li>Como a manutenção é gerada sem técnico, o <code>tecnico_id</code> ficou <b>opcional</b> na migração. O técnico assume-a quando a abrir (preenche o seu <code>id</code>).</li><li>O valor <code>orcamento</code> em <code>tipo</code> é provisório: o relatório não define os tipos de manutenção. Decide com o grupo.</li><li>O RF-BO-32 diz que o técnico também agrupa necessidades num orçamento, mas a Tabela 9 só marca o coordenador, e o PDF das permissões confirma "orçamentos só Coordenador". Segue o PDF.</li></ul>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k41" aria-label="Passo 41 feito"><span class="num">41</span><span class="ttl">Notificações e registo de auditoria</span><span class="where">common/models/Notificacao.php, LogAuditoria.php</span></summary>
+<div class="body">
+<p><b>O que é:</b> avisos aos utilizadores (decisão sobre um pedido, novo pedido, documento a expirar) e o registo de ações para o administrador. RF-BO-08, RF-BO-36, RF-BO-55, RF-FO-15, US27.</p>
+<p>Em vez de repetires o código em cada action, cria um método estático em cada modelo e chama-o onde for preciso:</p>
+<div class="codewrap"><div class="cap">common/models/Notificacao.php</div><pre data-src="c86"></pre></div>
+<div class="codewrap"><div class="cap">common/models/LogAuditoria.php (use Yii;)</div><pre data-src="c87"></pre></div>
+<div class="codewrap"><div class="cap">onde se usa</div><pre data-src="c88"></pre></div>
+<ul><li>Faz o mesmo na <code>recusar</code> (<code>Pedido recusado</code>), na <code>create</code> do frontend (notificar os coordenadores de um novo pedido) e no comando dos alertas.</li><li>A <b>trilha de aprovações</b> (RF-BO-36) é o <code>LogAuditoria</code> filtrado pelas ações <code>aprovar_requisicao</code> e <code>recusar_requisicao</code>.</li><li>A lista de notificações do utilizador (<code>verNotificacoes</code>) mostra só as suas (<code>where(['utilizador_id' =&gt; Yii::$app-&gt;user-&gt;id])</code>), distingue lidas e por ler, e tem a ação de marcar como lida (RF-BO-55).</li><li>O contador de por ler no menu: <code>Notificacao::find()-&gt;where(['utilizador_id' =&gt; Yii::$app-&gt;user-&gt;id, 'lida' =&gt; 0])-&gt;count()</code>.</li><li>O envio <b>push</b> (Firebase) é da app e da API. Na web ficam as notificações na base de dados.</li></ul>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k42" aria-label="Passo 42 feito"><span class="num">42</span><span class="ttl">Administração: utilizadores, roles e permissões</span><span class="where">backend UserController, PermissaoController</span></summary>
+<div class="body">
+<p><b>O que é:</b> o administrador cria e desativa contas, atribui o role e configura as permissões de cada role. RF-BO-45 a RF-BO-48, US20.</p>
+<div class="lbl">Criar um utilizador com perfil e role</div>
+<div class="codewrap"><div class="cap">backend/controllers/UserController.php</div><pre data-src="c89"></pre></div>
+<ul><li><code>setPassword</code> e <code>generateAuthKey</code> já existem no <code>User</code> do template. A palavra-passe nunca se guarda em texto: <code>setPassword</code> guarda o hash.</li><li><b>Trocar o role:</b> <code>$auth-&gt;revokeAll($user-&gt;id)</code> apaga os roles atuais e depois <code>assign</code> o novo. Assim cada utilizador tem exatamente um role, como o relatório diz.</li><li><b>Desativar e reativar</b> (RF-BO-47): muda o <code>status</code> para <code>User::STATUS_INACTIVE</code> (9) e <code>User::STATUS_ACTIVE</code> (10). Sem apagar. Uma conta com <code>status</code> 9 não consegue fazer login (RF-BO-03).</li><li><b>Redefinir palavra-passe</b> (RF-BO-46): o <code>User</code> tem <code>generatePasswordResetToken()</code>. Copia a lógica do <code>PasswordResetRequestForm</code> do frontend para o backend e envia o email.</li></ul>
+<div class="lbl">Permissões por role (RF-BO-48)</div>
+<p>É uma página onde o administrador escolhe um role e marca as permissões que ele tem. É escrever em <code>auth_item_child</code>, que é o que o <code>RbacController</code> fez, mas agora por uma interface:</p>
+<div class="codewrap"><div class="cap">backend/controllers/PermissaoController.php (permissao gerirPermissoes)</div><pre data-src="c90"></pre></div>
+<ul><li><code>getPermissions()</code> devolve todas, <code>getPermissionsByRole($nome)</code> as que o role já tem. Na vista, uma caixa por permissão, marcada se estiver em <code>$atuais</code>.</li><li><code>removeChildren</code> + <code>addChild</code> é a forma direta de gravar. É a vantagem do <code>DbManager</code>: mudar o RBAC sem tocar no código dos controladores.</li><li>Cuidado: não deixes o administrador tirar a si próprio a permissão <code>gerirPermissoes</code>, senão perde o acesso a esta página.</li></ul>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k43" aria-label="Passo 43 feito"><span class="num">43</span><span class="ttl">Parâmetros, serviços externos, logs e estado do sistema</span><span class="where">backend ParametroController e outros</span></summary>
+<div class="body">
+<p><b>O que é:</b> o resto da administração. RF-BO-49 a RF-BO-54, RF-AM-27, US21, US22, US23, US34.</p>
+<ul><li><b>Parâmetros</b> (<code>configurarParametros</code>): CRUD do <code>Parametro</code> (só editar o <code>valor</code>). Ao gravar, preenche <code>atualizado_por</code> com <code>Yii::$app-&gt;user-&gt;id</code> e <code>atualizado_em</code> com a data. Aplicam-se de imediato porque o código lê sempre da tabela.</li><li><b>Serviços externos</b> (<code>gerirServicosExternos</code>): CRUD do <code>ServicoExterno</code> para guardar as credenciais do Google Calendar e do Firebase Cloud Messaging. O "testar ligação" (RF-BO-53) faz um pedido simples ao serviço e mostra ligado ou falhou. As falhas gravam-se com <code>LogAuditoria::registar(...)</code> (RF-BO-54). É das últimas coisas a fazer.</li><li><b>Logs</b> (<code>verLogs</code>): CRUD só de leitura do <code>LogAuditoria</code>, com filtro por utilizador e por intervalo de datas (RF-BO-51). O Gii gera o <code>LogAuditoriaSearch</code> com o filtro por colunas, e acrescentas o intervalo.</li><li><b>Estado do sistema</b> (<code>verEstadoSistema</code>): uma página que verifica se a base de dados responde (<code>Yii::$app-&gt;db-&gt;open()</code> dentro de <code>try</code>) e mostra o estado dos serviços externos.</li></ul>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k44" aria-label="Passo 44 feito"><span class="num">44</span><span class="ttl">Dashboard, mapa e código QR (prioridade baixa)</span><span class="where">backend DashboardController, MapaController</span></summary>
+<div class="body">
+<p><b>O que é:</b> indicadores e mapa para o coordenador. RF-BO-23, RF-BO-34, RF-BO-35, RF-BO-37, RF-BO-38. Faz-se por último, quando tudo o resto funciona.</p>
+<ul><li><b>Taxa de ocupação</b> (<code>verDashboard</code>): por viatura, dias atribuídos no período a dividir pelos dias do período. Por departamento, agrupa pelo <code>perfil.departamento</code> do colaborador do pedido.</li><li><b>Viaturas paradas:</b> viaturas sem atribuição há mais de <code>viatura_parada_dias</code> dias (parâmetro).</li><li><b>Mapa</b> (<code>verMapa</code>): a última <code>localizacao</code> de cada atribuição em curso e, para a rota, todos os pontos ordenados por <code>data_hora</code>. Usa uma biblioteca de mapas em JavaScript.</li><li><b>Código QR</b> (RF-BO-23): gera-se um texto único por viatura (por exemplo <code>FG-0003</code>, o formato dos exemplos da API) e guarda-se em <code>viatura.qr_code</code>. Desenhar a imagem do QR pede uma biblioteca.</li></ul>
+</div></details>
+
+<!-- PARTE C -->
+<h2 id="uses">Os use (imports)</h2>
+<p>O <code>use</code> diz ao PHP a que classe se refere um nome curto. Cada classe vive num namespace, por exemplo <code>yii\filters\AccessControl</code>. Sem o <code>use</code>, o PHP procura o nome curto no namespace do próprio ficheiro e não o encontra. **Classes no mesmo namespace não precisam de <code>use</code>**: por isso, dentro de <code>common\models</code>, o <code>Viatura</code> chama <code>Atribuicao</code> sem <code>use</code>.</p>
+<div class="scroll"><table><tr><th>Ficheiro</th><th>O que acrescentar</th><th>Para quê</th></tr><tr><td>qualquer controlador com ACF</td><td><code>use yii\filters\AccessControl;</code></td><td>o <code>AccessControl::class</code> do <code>behaviors()</code></td></tr><tr><td>controladores com upload</td><td><code>use yii\web\UploadedFile;</code></td><td><code>UploadedFile::getInstanceByName</code></td></tr><tr><td>controladores com <code>can()</code> e regra do dono</td><td><code>use yii\web\ForbiddenHttpException;</code></td><td>lançar o 403</td></tr><tr><td><code>RequisicaoController</code> (frontend)</td><td><code>use yii\data\ActiveDataProvider;</code>, <code>use common\models\Requisicao;</code>, <code>Atribuicao</code>, <code>Checklist</code>, <code>Anexo</code></td><td>a lista e as classes de dados</td></tr><tr><td><code>RbacController</code></td><td><code>use Yii;</code>, <code>use yii\console\Controller;</code>, <code>use common\rbac\IsRequisicaoOwnerRule;</code></td><td>o <code>authManager</code>, o <code>extends</code> e a regra</td></tr><tr><td><code>AlertaController</code> (console)</td><td><code>use yii\console\Controller;</code>, <code>use common\models\Alerta;</code>, <code>Anexo</code>, <code>Parametro</code></td><td>o comando dos alertas</td></tr><tr><td><code>LogAuditoria.php</code></td><td><code>use Yii;</code></td><td><code>Yii::$app-&gt;user</code></td></tr><tr><td><code>_header.php</code></td><td>nada (<code>Yii</code> é global nas vistas)</td><td><code>Yii::$app-&gt;user-&gt;can(...)</code></td></tr></table></div>
+<ul><li>**Cuidado com o <code>Controller</code>:** nos controladores web é <code>yii\web\Controller</code>. No <code>RbacController</code> e no <code>AlertaController</code> é <code>yii\console\Controller</code>. São classes diferentes com o mesmo nome.</li><li><b>"Class ... not found":</b> falta o <code>use</code> ou está mal escrito. Por exemplo <code>Class "backend\controllers\AccessControl" not found</code>.</li><li>No PHPStorm, quando a classe aparece a vermelho, Alt+Enter acrescenta o <code>use</code> por ti.</li></ul>
+<h2 id="testes">Checklist de testes</h2>
+<p>Faz estes testes no browser, com um utilizador de cada role (os do passo dos utilizadores de teste). Faz <b>logout</b> entre cada um, ou usa uma janela privada por utilizador. Quando algo falhar, a nota à direita aponta para o passo onde ver.</p>
+<h3>Acesso e RBAC</h3>
+<ul class="cl"><li><label><input class="chk" type="checkbox" id="t45"><span><b>Sem login:</b> abrir <code>?r=viatura/index</code> no backend manda para o login.</span></label></li><li><label><input class="chk" type="checkbox" id="t46"><span><b>colaborador:</b> o login no backend dá 403 ao abrir <code>?r=site/index</code> (não tem <code>acederBackoffice</code>).</span></label></li><li><label><input class="chk" type="checkbox" id="t47"><span><b>colaborador:</b> no frontend vê o catálogo e consegue criar um pedido.</span></label></li><li><label><input class="chk" type="checkbox" id="t48"><span><b>coordenador:</b> entra no backend e o menu mostra Viaturas, Condutores e Requisições, mas <b>não</b> Utilizadores.</span></label></li><li><label><input class="chk" type="checkbox" id="t49"><span><b>coordenador:</b> <code>?r=user/index</code> e <code>?r=permissao/role&amp;nome=tecnico</code> dão 403.</span></label></li><li><label><input class="chk" type="checkbox" id="t50"><span><b>tecnico:</b> o menu mostra só Manutenções e as necessidades. <code>?r=viatura/create</code> dá 403.</span></label></li><li><label><input class="chk" type="checkbox" id="t51"><span><b>administrador:</b> o menu mostra Utilizadores e Permissões, mas <code>?r=requisicao/aprovar&amp;id=1</code> dá 403 (o admin não herda o coordenador).</span></label></li><li><label><input class="chk" type="checkbox" id="t52"><span><b>Base de dados:</b> <code>auth_assignment</code> tem o role certo para cada utilizador. <code>auth_item</code> tem 43 linhas.</span></label></li><li><label><input class="chk" type="checkbox" id="t53"><span><b>Alterar o RBAC:</b> na página de permissões, tira <code>gerirCondutores</code> ao coordenador. O menu e o acesso a Condutores desaparecem, sem mexer em código.</span></label></li></ul>
+<h3>A regra do dono</h3>
+<ul class="cl"><li><label><input class="chk" type="checkbox" id="t54"><span><b>colab1</b> cria um pedido e consegue vê-lo e cancelá-lo.</span></label></li><li><label><input class="chk" type="checkbox" id="t55"><span><b>colab2</b> (outro colaborador) tenta abrir o pedido do colab1 pelo URL (<code>?r=requisicao/view&amp;id=...</code>) e recebe 403.</span></label></li><li><label><input class="chk" type="checkbox" id="t56"><span><b>colab2</b> tenta cancelar o pedido do colab1 e recebe 403.</span></label></li><li><label><input class="chk" type="checkbox" id="t57"><span>O pedido do colab1 <b>só</b> aparece na lista do colab1.</span></label></li></ul>
+<h3>O circuito do pedido</h3>
+<ul class="cl"><li><label><input class="chk" type="checkbox" id="t58"><span><b>colab1</b> pede uma viatura de uma categoria, para datas válidas. O estado é <code>pendente</code>.</span></label></li><li><label><input class="chk" type="checkbox" id="t59"><span><b>Datas erradas:</b> data de fim antes da de início dá a mensagem em português.</span></label></li><li><label><input class="chk" type="checkbox" id="t60"><span><b>coordenador</b> vê o pedido em pendentes e aprova com uma viatura e um condutor livres. O estado passa a <code>aprovada</code> e existe uma linha em <code>atribuicao</code>.</span></label></li><li><label><input class="chk" type="checkbox" id="t61"><span><b>Sobreposição:</b> um segundo pedido com datas a sobrepor-se, para a mesma viatura, é recusado com "A viatura não está livre".</span></label></li><li><label><input class="chk" type="checkbox" id="t62"><span><b>Condutor:</b> não se consegue atribuir um condutor inativo, com carta expirada ou com ausência registada nesse período.</span></label></li><li><label><input class="chk" type="checkbox" id="t63"><span><b>Recusar:</b> sem motivo não deixa. Com motivo, o pedido fica <code>recusada</code> e o motivo aparece ao colaborador.</span></label></li><li><label><input class="chk" type="checkbox" id="t64"><span><b>Check-in:</b> o colab1 regista km, estado e 4 fotos. O pedido passa a <code>em curso</code> e há 4 linhas em <code>anexo</code>.</span></label></li><li><label><input class="chk" type="checkbox" id="t65"><span><b>Check-out:</b> o pedido passa a <code>concluida</code> e o <code>km_atual</code> da viatura é atualizado.</span></label></li></ul>
+<h3>Manutenção e administração</h3>
+<ul class="cl"><li><label><input class="chk" type="checkbox" id="t66"><span><b>tecnico</b> regista uma manutenção: a viatura deixa de estar livre. Conclui-a: a viatura fica <code>disponivel</code>.</span></label></li><li><label><input class="chk" type="checkbox" id="t67"><span><b>Histórico:</b> a lista de viaturas abre o detalhe com as manutenções e as peças.</span></label></li><li><label><input class="chk" type="checkbox" id="t68"><span><b>Orçamento:</b> o coordenador aceita um orçamento e aparece uma manutenção <code>pendente</code> ligada a ele.</span></label></li><li><label><input class="chk" type="checkbox" id="t69"><span><b>admin</b> cria um utilizador: aparecem linhas em <code>user</code>, <code>perfil</code> e <code>auth_assignment</code>.</span></label></li><li><label><input class="chk" type="checkbox" id="t70"><span><b>admin</b> desativa uma conta (status 9): essa conta já não consegue fazer login.</span></label></li><li><label><input class="chk" type="checkbox" id="t71"><span><b>Alertas:</b> <code>php yii alerta/gerar</code> cria alertas para documentos a expirar e não repete os que já existem.</span></label></li></ul>
+<div class="note"><b>Atenção:</b> as colunas <code>created_at</code> do <code>user</code> e do RBAC guardam um número (timestamp Unix), não uma data legível. Não é erro.</div>
+<h2 id="nova">Checklist para cada tabela ou funcionalidade nova</h2>
+<p>O mesmo caminho serve para qualquer tabela ou funcionalidade que o grupo acrescente depois:</p>
+<ul class="cl"><li><label><input class="chk" type="checkbox" id="t72"><span>Ler o requisito e a user story no relatório. Perguntar: quem faz isto, em que canal (front ou back), e que permissão do PDF cobre?</span></label></li><li><label><input class="chk" type="checkbox" id="t73"><span>Ver o que já existe antes de mexer em qualquer coisa (<code>git status</code>, modelos e controladores já gerados).</span></label></li><li><label><input class="chk" type="checkbox" id="t74"><span>Migração, uma por tabela, com as dependências por ordem. <code>php yii migrate</code>.</span></label></li><li><label><input class="chk" type="checkbox" id="t75"><span>Gii: Model Generator com namespace <code>common\models</code>. <b>Gerar depois de todas as tabelas relacionadas existirem.</b></span></label></li><li><label><input class="chk" type="checkbox" id="t76"><span>Gii: CRUD Generator na aplicação certa (<code>backend\...</code> ou <code>frontend\...</code>).</span></label></li><li><label><input class="chk" type="checkbox" id="t77"><span>Adaptar o código gerado ao requisito (tirar actions que não fazem falta, campos do sistema, mensagens em português).</span></label></li><li><label><input class="chk" type="checkbox" id="t78"><span>Acesso: ACF com a permissão no <code>behaviors()</code>; <code>can()</code> com <code>['requisicao' =&gt; $model]</code> dentro da action quando a permissão é do dono.</span></label></li><li><label><input class="chk" type="checkbox" id="t79"><span>Menu em <code>views/layouts/_header.php</code> da aplicação certa, com <code>visible</code> e <code>can()</code>.</span></label></li><li><label><input class="chk" type="checkbox" id="t80"><span>Confirmar os <code>use</code> e correr <code>php -l</code> nos ficheiros editados.</span></label></li><li><label><input class="chk" type="checkbox" id="t81"><span>Testar com um utilizador de cada role, e fazer commit no GitKraken com uma mensagem curta.</span></label></li></ul>
+<button class="reset" id="reset" type="button">Limpar todo o progresso</button>
+<h2 id="duvidas">Perguntas para o estudo</h2>
+<div class="qa"><b>Porque é que o FrotaGest usa o RBAC do Yii e não as tabelas role, permissao e role_permissao do diagrama?</b><p>Porque o Yii já traz o <code>DbManager</code>, que guarda roles, permissões e a ligação entre eles em <code>auth_item</code>, <code>auth_item_child</code> e <code>auth_assignment</code>. Reinventar três tabelas obrigava a escrever o código que verifica as permissões. Com o RBAC do Yii usa-se <code>can()</code> e o ACF.</p></div>
+<div class="qa"><b>Para que serve a regra <code>isRequisicaoOwner</code>?</b><p>Faz com que cinco permissões do colaborador valham só para os <b>seus</b> pedidos. A regra recebe o utilizador e o pedido (<code>['requisicao' =&gt; $model]</code>), compara <code>utilizador_id</code> e devolve <code>true</code> ou <code>false</code>.</p></div>
+<div class="qa"><b>Porque é que as permissões do dono se verificam dentro da action e não no ACF?</b><p>Porque no ACF não há forma de passar o pedido concreto ao <code>can()</code>: o ACF corre antes da action, sem ter carregado o modelo. Dentro da action já tens o <code>$model</code> e passas <code>['requisicao' =&gt; $model]</code>.</p></div>
+<div class="qa"><b>Porque é que a <code>requisicao</code> e a <code>atribuicao</code> são duas tabelas?</b><p>Para não haver registos meio vazios. A <code>requisicao</code> só tem o que o colaborador preenche. A <code>atribuicao</code> só é criada quando o coordenador aprova e escolhe viatura e condutor.</p></div>
+<div class="qa"><b>Porque se gera os modelos só depois de todas as tabelas existirem?</b><p>O Gii escreve as relações (<code>getCategoria()</code>, <code>getRequisicaos()</code>...) lendo as chaves estrangeiras que existem nesse momento. Um modelo gerado cedo não fica com as relações para tabelas criadas depois.</p></div>
+<div class="qa"><b>O que é uma chave estrangeira e o que faz o CASCADE?</b><p>É uma coluna que guarda o <code>id</code> de outra tabela e obriga o valor a existir lá. Com <code>CASCADE</code>, apagar o registo pai apaga os filhos (por exemplo as peças de uma manutenção). Sem <code>CASCADE</code>, o MySQL recusa apagar um pai que ainda tem filhos.</p></div>
+<div class="qa"><b>Como se garante que uma viatura não é atribuída a duas requisições ao mesmo tempo?</b><p>Antes de gravar a atribuição, <code>estaLivre()</code> procura atribuições dessa viatura cujo pedido se sobrepõe ao período (<code>inicio1 &lt;= fim2</code> e <code>fim1 &gt;= inicio2</code>). É o RNF-04. A gravação do pedido e da atribuição fica numa transação.</p></div>
+<div class="qa"><b>Para que serve uma transação?</b><p>Para que um conjunto de gravações seja feito por inteiro ou não seja feito de todo. Se a atribuição grava e o pedido falha, o <code>rollBack()</code> desfaz tudo.</p></div>
+<div class="qa"><b>Porque é que o administrador não vê o menu de Requisições?</b><p>Porque não tem <code>verRequisicao</code>. O PDF diz que o administrador não herda os outros roles: gere o sistema, não os pedidos.</p></div>
+<div class="qa"><b>Qual a diferença entre <code>acederBackoffice</code> e <code>gerirViaturas</code>?</b><p>A primeira decide se o utilizador <b>entra</b> no back-office. A segunda decide se pode <b>gerir viaturas</b> lá dentro. Um técnico entra (<code>acederBackoffice</code>) mas não gere viaturas.</p></div>
+<div class="qa"><b>Como se desativa uma conta sem a apagar?</b><p>Muda-se o <code>status</code> para 9 (<code>User::STATUS_INACTIVE</code>). O <code>findByUsername</code> só encontra utilizadores com <code>status</code> 10, por isso essa conta deixa de poder fazer login. Reativa-se voltando a pôr 10.</p></div>
+<div class="qa"><b>Onde ficam guardadas as fotografias das checklists?</b><p>Os ficheiros ficam numa pasta no disco (<code>frontend/web/uploads/</code>) e a tabela <code>anexo</code> guarda só o caminho, a posição (<code>tipo</code>) e o <code>checklist_id</code>.</p></div>
+<div class="qa"><b>O que é um alerta e o que é uma notificação?</b><p>O alerta é gerado pelo sistema sobre uma viatura (um documento a expirar). A notificação tem sempre um destinatário e pode vir de um alerta ou de uma requisição. É a notificação que se mostra na lista e se envia por push.</p></div>
+<div class="qa"><b>Porque é que o RbacController só se corre uma vez?</b><p>Porque cria linhas em <code>auth_item</code>, que tem chave primária. Correr outra vez dá "Duplicate entry". Para refazer, apagam-se as linhas de <code>auth_item</code> e depois as de <code>auth_rule</code>.</p></div>
+<h2 id="erros">Erros que podem acontecer</h2>
+<div class="scroll"><table><tr><th>Erro</th><th>Causa e solução</th></tr><tr><td><code>Call to a member function createPermission() on null</code></td><td>O <code>authManager</code> não está configurado ou está dentro do array do <code>cache</code>. Deve estar ao lado do <code>cache</code>, dentro de <code>'components'</code>.</td></tr><tr><td><code>Unknown database</code></td><td>O nome no <code>dsn</code> não existe no MySQL. Tem de ser <code>frotagest</code>.</td></tr><tr><td><code>Duplicate entry</code> ao correr <code>rbac/init</code></td><td>Já o correste antes. Apaga as linhas de <code>auth_item</code> e depois as de <code>auth_rule</code>, e corre outra vez.</td></tr><tr><td><code>Integrity constraint violation ... foreign key</code> ao migrar</td><td>Criaste uma tabela antes da que ela referencia. Faz <code>php yii migrate/down</code> e confirma a ordem das migrações (o nome começa pela data e hora).</td></tr><tr><td><code>Table ... doesn't exist</code> no Gii ou no browser</td><td>A migração dessa tabela não foi aplicada. Corre <code>php yii migrate</code> e confirma no phpMyAdmin.</td></tr><tr><td><code>Class "common\models\X" not found</code></td><td>Falta gerar o modelo no Gii, ou o namespace ficou <code>app\models</code>. Tem de ser <code>common\models</code>.</td></tr><tr><td><code>Class "backend\controllers\AccessControl" not found</code></td><td>Falta o <code>use yii\filters\AccessControl;</code> no controlador.</td></tr><tr><td><code>Call to undefined method ...::getRequisicao()</code></td><td>O nome da relação gerada é outro (por exemplo <code>getRequisicaos</code>) ou o modelo foi gerado antes de existir a tabela. Confirma no ficheiro e, se preciso, volta a gerar o modelo.</td></tr><tr><td>403 Forbidden num utilizador que devia poder</td><td>O role não está atribuído (<code>auth_assignment</code>), ou o nome da permissão no ACF difere do <code>RbacController</code> (maiúsculas), ou a permissão do role foi removida em <code>auth_item_child</code>.</td></tr><tr><td>403 numa permissão do dono mesmo sendo o dono</td><td>Chamaste o <code>can()</code> <b>sem</b> o segundo argumento <code>['requisicao' =&gt; $model]</code>, ou a coluna da regra não é <code>utilizador_id</code>.</td></tr><tr><td>"Incorrect username or password" logo depois de registar</td><td>O utilizador está inativo (<code>status</code> 9). Falta abrir o link do email em <code>frontend/runtime/mail/</code>, ou pôr o <code>status</code> a 10.</td></tr><tr><td>O menu não mostra uma entrada</td><td>O utilizador não tem a permissão do <code>visible</code>, ou editaste o <code>_header.php</code> do frontend em vez do do backend.</td></tr><tr><td><code>Getting unknown property</code> ao gravar</td><td>Escreveste uma coluna que não existe no modelo. Confirma o nome no diagrama (por exemplo <code>utilizador_id</code>, não <code>user_id</code>).</td></tr><tr><td>Os ficheiros enviados não aparecem</td><td>Falta a pasta <code>frontend/web/uploads/</code>, ou o formulário não tem <code>enctype =&gt; multipart/form-data</code>.</td></tr><tr><td>O Gii sobrescreveu o <code>User.php</code></td><td>Geraste o modelo da tabela <code>user</code>. Recupera o ficheiro do GitKraken (descartar alterações) e nunca geres a <code>user</code>.</td></tr><tr><td>Duas migrações apareceram pela ordem errada</td><td>Foram criadas no mesmo segundo e o Yii ordenou por nome. Cria as migrações uma de cada vez.</td></tr></table></div>
+<h2 id="aberto">Pontos em aberto na especificação</h2>
+<p>Ao ler o relatório e o PDF para este manual encontrei coisas que convém <b>decidir com o grupo e com o professor</b>, ou corrigir antes da entrega (2027-02-06). O manual assume o que está indicado em cada ponto.</p>
+<div class="scroll"><table><tr><th>Assunto</th><th>O que se passa</th><th>O que o manual assume</th></tr><tr><td>Utilizadores</td><td>O diagrama tem <code>utilizador</code>, <code>role</code>, <code>permissao</code> e <code>role_permissao</code>; as aulas usam <code>user</code> e o RBAC do Yii.</td><td><code>user</code> do template, <code>perfil</code> para os dados extra e RBAC do Yii (decisão 1).</td></tr><tr><td>N.º de tabelas</td><td>O relatório diz 24 tabelas. Com o RBAC do Yii ficam 21 tabelas nossas mais as 4 <code>auth_*</code>.</td><td>Convém atualizar o texto e o diagrama (Figura 1).</td></tr><tr><td>Login por email</td><td>RF-FO-01 diz "email e palavra-passe". O template faz o login por <code>username</code>.</td><td>Mantém-se o <code>username</code>. Para mudar, o <code>LoginForm</code> e o <code>User::findByUsername</code> passam a procurar por <code>email</code>.</td></tr><tr><td>Um login só</td><td>RF-FO-01 pede uma entrada única para front e back-office, a encaminhar por role. O Advanced tem duas aplicações.</td><td>Dois logins por agora; o back-office barra quem não tem <code>acederBackoffice</code>.</td></tr><tr><td>Tabela 9, RF-BO-32</td><td>O PDF diz que os orçamentos são só do coordenador e "corrigir BO-32 na Tabela 9". Na Tabela 9 o técnico está marcado em BO-32.</td><td>Segue-se o PDF. Falta corrigir o relatório.</td></tr><tr><td>Tabela 9, RF-FO-02</td><td>Terminar sessão só está marcado para o colaborador.</td><td>Todos os roles podem terminar sessão. Corrigir a tabela.</td></tr><tr><td>"MACOLIS"</td><td>No relatório, a análise do Samsara fala no "núcleo do MACOLIS", que parece resto de outro projeto.</td><td>Trocar por FrotaGest.</td></tr><tr><td>Estados</td><td>A API fala em <code>atribuida</code>; o front-office em <code>em curso</code>. O diagrama não fixa os estados.</td><td>Texto: <code>pendente</code>, <code>aprovada</code>, <code>recusada</code>, <code>em curso</code>, <code>concluida</code>, <code>cancelada</code>. Decidir os da manutenção.</td></tr><tr><td>Técnico numa manutenção gerada</td><td>RF-BO-30 gera a manutenção para o técnico executar, mas o diagrama tem <code>tecnico_id</code> como chave estrangeira sem dizer se é obrigatória.</td><td><code>tecnico_id</code> opcional até um técnico assumir.</td></tr><tr><td>Parâmetros do sistema</td><td>RF-BO-49 lista os parâmetros mas não os nomes nem os valores.</td><td>Os 10 nomes do passo "Parâmetros iniciais", como sugestão.</td></tr><tr><td><code>orcamento_compra.viatura_id</code></td><td>O diagrama liga o orçamento a uma viatura, mas o texto fala em agrupar necessidades (que são de viaturas).</td><td>Mantém-se obrigatório. Se um orçamento puder abranger várias viaturas, passa a ser opcional.</td></tr></table></div>
+
+</div>
+
+
+<script type="text/plain" id="c1">Frontend: http://localhost/2AnoProjeto/ProjetodeSistemasdeInformacao/FrotaGest/frontend/web/index.php?r=site/index
+Backend:  http://localhost/2AnoProjeto/ProjetodeSistemasdeInformacao/FrotaGest/backend/web/index.php?r=site/index
+Gii:      http://localhost/2AnoProjeto/ProjetodeSistemasdeInformacao/FrotaGest/backend/web/index.php?r=gii</script>
+
+<script type="text/plain" id="c2">'db' => [
+    'class' => \yii\db\Connection::class,
+    'dsn' => 'mysql:host=localhost;dbname=frotagest',
+    'username' => 'root',
+    'password' => '',
+    'charset' => 'utf8',
+],</script>
+
+<script type="text/plain" id="c3">php init</script>
+
+<script type="text/plain" id="c4">php yii migrate</script>
+
+<script type="text/plain" id="c5">'access' => [
+    'class' => AccessControl::class,
+    'rules' => [
+        [
+            'actions' => ['login', 'error'],
+            'allow' => true,
+        ],
+        [
+            'actions' => ['logout', 'index'],
+            'allow' => true,
+            'roles' => ['@'],
+        ],
+    ],
+],</script>
+
+<script type="text/plain" id="c6">'authManager' => [
+    'class' => \yii\rbac\DbManager::class,
+],</script>
+
+<script type="text/plain" id="c7">php yii migrate --migrationPath=@yii/rbac/migrations</script>
+
+<script type="text/plain" id="c8"><?php
+
+namespace common\rbac;
+
+use yii\rbac\Rule;
+
+/**
+ * Verifica se a requisicao pertence ao utilizador autenticado
+ */
+class IsRequisicaoOwnerRule extends Rule
+{
+    public $name = 'isRequisicaoOwner';
+
+    //$user: id do utilizador, $params: o que vai em can('x', ['requisicao' => $model])
+    public function execute($user, $item, $params)
+    {
+        return isset($params['requisicao']) ? $params['requisicao']->utilizador_id == $user : false;
+    }
+}</script>
+
+<script type="text/plain" id="c9">//ponto de acesso ao RBAC: o componente authManager (common/config/main.php)
+$auth = Yii::$app->authManager;
+
+//regra do dono
+$rule = new IsRequisicaoOwnerRule();
+$auth->add($rule);
+
+//uma permissao normal
+$verCatalogo = $auth->createPermission('verCatalogo');
+$verCatalogo->description = 'Catalogo e calendario de disponibilidade';
+$auth->add($verCatalogo);
+
+//uma permissao do dono: leva a regra
+$cancelarRequisicao = $auth->createPermission('cancelarRequisicao');
+$cancelarRequisicao->description = 'Cancelar um pedido proprio pendente';
+$cancelarRequisicao->ruleName = $rule->name;
+$auth->add($cancelarRequisicao);
+
+//um role e as suas permissoes
+$colaborador = $auth->createRole('colaborador');
+$auth->add($colaborador);
+$auth->addChild($colaborador, $verCatalogo);
+$auth->addChild($colaborador, $cancelarRequisicao);</script>
+
+<script type="text/plain" id="c10">php yii rbac/init</script>
+
+<script type="text/plain" id="c11">php yii migrate/create create_categoria_table</script>
+
+<script type="text/plain" id="c12">public function safeUp()
+{
+    //criar a tabela categoria
+    $this->createTable('{{%categoria}}', [
+        'id' => $this->primaryKey(),
+        //nome da categoria (ex.: ligeiro)
+        'nome' => $this->string()->notNull(),
+        //descricao, pode ficar vazia
+        'descricao' => $this->string(),
+    ], 'ENGINE=InnoDB');
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropTable('{{%categoria}}');
+}</script>
+
+<script type="text/plain" id="c13">php yii migrate/create create_viatura_table</script>
+
+<script type="text/plain" id="c14">public function safeUp()
+{
+    //criar a tabela viatura
+    $this->createTable('{{%viatura}}', [
+        'id' => $this->primaryKey(),
+        //FK: categoria da viatura
+        'categoria_id' => $this->integer()->notNull(),
+        //matricula, nao se repete
+        'matricula' => $this->string()->notNull()->unique(),
+        'marca' => $this->string()->notNull(),
+        'modelo' => $this->string()->notNull(),
+        //gasolina, gasoleo, eletrico...
+        'combustivel' => $this->string()->notNull(),
+        //texto livre com as caracteristicas
+        'caracteristicas' => $this->text(),
+        //caminho da fotografia
+        'foto' => $this->string(),
+        //codigo que identifica a viatura na app
+        'qr_code' => $this->string(),
+        //disponivel, em manutencao ou indisponivel
+        'estado' => $this->string()->notNull()->defaultValue('disponivel'),
+        //quilometros atuais
+        'km_atual' => $this->integer()->notNull()->defaultValue(0),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: viatura.categoria_id -> categoria.id
+    $this->createIndex('idx-viatura-categoria_id', '{{%viatura}}', 'categoria_id');
+    $this->addForeignKey(
+        'fk-viatura-categoria_id',
+        '{{%viatura}}',
+        'categoria_id',
+        '{{%categoria}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-viatura-categoria_id', '{{%viatura}}');
+    $this->dropIndex('idx-viatura-categoria_id', '{{%viatura}}');
+    $this->dropTable('{{%viatura}}');
+}</script>
+
+<script type="text/plain" id="c15">php yii migrate</script>
+
+<script type="text/plain" id="c16">php yii migrate/create create_condutor_table</script>
+
+<script type="text/plain" id="c17">public function safeUp()
+{
+    //criar a tabela condutor
+    $this->createTable('{{%condutor}}', [
+        'id' => $this->primaryKey(),
+        'nome' => $this->string()->notNull(),
+        //numero da carta de conducao
+        'n_carta' => $this->string()->notNull(),
+        //validade da carta (nao se atribui com a carta expirada)
+        'validade_carta' => $this->date()->notNull(),
+        'telefone' => $this->string(),
+        //1 ativo, 0 inativo (os inativos nao se atribuem)
+        'ativo' => $this->boolean()->notNull()->defaultValue(1),
+    ], 'ENGINE=InnoDB');
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropTable('{{%condutor}}');
+}</script>
+
+<script type="text/plain" id="c18">php yii migrate/create create_ausencia_condutor_table</script>
+
+<script type="text/plain" id="c19">public function safeUp()
+{
+    //criar a tabela ausencia_condutor
+    $this->createTable('{{%ausencia_condutor}}', [
+        'id' => $this->primaryKey(),
+        //FK: condutor ausente
+        'condutor_id' => $this->integer()->notNull(),
+        'data_inicio' => $this->date()->notNull(),
+        'data_fim' => $this->date()->notNull(),
+        //ferias, baixa...
+        'motivo' => $this->string(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: ausencia_condutor.condutor_id -> condutor.id
+    $this->createIndex('idx-ausencia_condutor-condutor_id', '{{%ausencia_condutor}}', 'condutor_id');
+    $this->addForeignKey(
+        'fk-ausencia_condutor-condutor_id',
+        '{{%ausencia_condutor}}',
+        'condutor_id',
+        '{{%condutor}}',
+        'id',
+        'CASCADE'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-ausencia_condutor-condutor_id', '{{%ausencia_condutor}}');
+    $this->dropIndex('idx-ausencia_condutor-condutor_id', '{{%ausencia_condutor}}');
+    $this->dropTable('{{%ausencia_condutor}}');
+}</script>
+
+<script type="text/plain" id="c20">php yii migrate</script>
+
+<script type="text/plain" id="c21">php yii migrate/create create_requisicao_table</script>
+
+<script type="text/plain" id="c22">public function safeUp()
+{
+    //criar a tabela requisicao
+    $this->createTable('{{%requisicao}}', [
+        'id' => $this->primaryKey(),
+        //FK: colaborador que fez o pedido (tabela user)
+        'utilizador_id' => $this->integer()->notNull(),
+        //FK: categoria de viatura pretendida
+        'categoria_id' => $this->integer()->notNull(),
+        'data_inicio' => $this->date()->notNull(),
+        'data_fim' => $this->date()->notNull(),
+        //opcional
+        'destino' => $this->string(),
+        'motivo' => $this->string()->notNull(),
+        //pendente, aprovada, recusada, em curso, concluida, cancelada
+        'estado' => $this->string()->notNull()->defaultValue('pendente'),
+        //so preenchido nos pedidos recusados
+        'motivo_recusa' => $this->string(),
+        //quando o pedido foi feito
+        'data_pedido' => $this->dateTime()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: requisicao.utilizador_id -> user.id
+    $this->createIndex('idx-requisicao-utilizador_id', '{{%requisicao}}', 'utilizador_id');
+    $this->addForeignKey(
+        'fk-requisicao-utilizador_id',
+        '{{%requisicao}}',
+        'utilizador_id',
+        '{{%user}}',
+        'id'
+    );
+
+    //indice e chave estrangeira: requisicao.categoria_id -> categoria.id
+    $this->createIndex('idx-requisicao-categoria_id', '{{%requisicao}}', 'categoria_id');
+    $this->addForeignKey(
+        'fk-requisicao-categoria_id',
+        '{{%requisicao}}',
+        'categoria_id',
+        '{{%categoria}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-requisicao-categoria_id', '{{%requisicao}}');
+    $this->dropIndex('idx-requisicao-categoria_id', '{{%requisicao}}');
+    $this->dropForeignKey('fk-requisicao-utilizador_id', '{{%requisicao}}');
+    $this->dropIndex('idx-requisicao-utilizador_id', '{{%requisicao}}');
+    $this->dropTable('{{%requisicao}}');
+}</script>
+
+<script type="text/plain" id="c23">php yii migrate/create create_atribuicao_table</script>
+
+<script type="text/plain" id="c24">public function safeUp()
+{
+    //criar a tabela atribuicao
+    $this->createTable('{{%atribuicao}}', [
+        'id' => $this->primaryKey(),
+        //FK: pedido aprovado
+        'requisicao_id' => $this->integer()->notNull(),
+        //FK: viatura atribuida
+        'viatura_id' => $this->integer()->notNull(),
+        //FK: condutor atribuido
+        'condutor_id' => $this->integer()->notNull(),
+        //FK: coordenador que aprovou (tabela user)
+        'aprovada_por' => $this->integer()->notNull(),
+        'data_atribuicao' => $this->dateTime()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: atribuicao.requisicao_id -> requisicao.id
+    $this->createIndex('idx-atribuicao-requisicao_id', '{{%atribuicao}}', 'requisicao_id');
+    $this->addForeignKey(
+        'fk-atribuicao-requisicao_id',
+        '{{%atribuicao}}',
+        'requisicao_id',
+        '{{%requisicao}}',
+        'id'
+    );
+
+    //indice e chave estrangeira: atribuicao.viatura_id -> viatura.id
+    $this->createIndex('idx-atribuicao-viatura_id', '{{%atribuicao}}', 'viatura_id');
+    $this->addForeignKey(
+        'fk-atribuicao-viatura_id',
+        '{{%atribuicao}}',
+        'viatura_id',
+        '{{%viatura}}',
+        'id'
+    );
+
+    //indice e chave estrangeira: atribuicao.condutor_id -> condutor.id
+    $this->createIndex('idx-atribuicao-condutor_id', '{{%atribuicao}}', 'condutor_id');
+    $this->addForeignKey(
+        'fk-atribuicao-condutor_id',
+        '{{%atribuicao}}',
+        'condutor_id',
+        '{{%condutor}}',
+        'id'
+    );
+
+    //indice e chave estrangeira: atribuicao.aprovada_por -> user.id
+    $this->createIndex('idx-atribuicao-aprovada_por', '{{%atribuicao}}', 'aprovada_por');
+    $this->addForeignKey(
+        'fk-atribuicao-aprovada_por',
+        '{{%atribuicao}}',
+        'aprovada_por',
+        '{{%user}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-atribuicao-aprovada_por', '{{%atribuicao}}');
+    $this->dropIndex('idx-atribuicao-aprovada_por', '{{%atribuicao}}');
+    $this->dropForeignKey('fk-atribuicao-condutor_id', '{{%atribuicao}}');
+    $this->dropIndex('idx-atribuicao-condutor_id', '{{%atribuicao}}');
+    $this->dropForeignKey('fk-atribuicao-viatura_id', '{{%atribuicao}}');
+    $this->dropIndex('idx-atribuicao-viatura_id', '{{%atribuicao}}');
+    $this->dropForeignKey('fk-atribuicao-requisicao_id', '{{%atribuicao}}');
+    $this->dropIndex('idx-atribuicao-requisicao_id', '{{%atribuicao}}');
+    $this->dropTable('{{%atribuicao}}');
+}</script>
+
+<script type="text/plain" id="c25">php yii migrate</script>
+
+<script type="text/plain" id="c26">php yii migrate/create create_checklist_table</script>
+
+<script type="text/plain" id="c27">public function safeUp()
+{
+    //criar a tabela checklist
+    $this->createTable('{{%checklist}}', [
+        'id' => $this->primaryKey(),
+        //FK: atribuicao a que pertence
+        'atribuicao_id' => $this->integer()->notNull(),
+        //rececao (check-in) ou entrega (check-out)
+        'tipo' => $this->string()->notNull(),
+        //quilometros lidos
+        'km' => $this->integer()->notNull(),
+        'data_hora' => $this->dateTime()->notNull(),
+        //estado da viatura
+        'estado_geral' => $this->string()->notNull(),
+        //documentos a bordo confirmados
+        'docs_a_bordo' => $this->boolean()->notNull()->defaultValue(0),
+        'observacoes' => $this->string(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: checklist.atribuicao_id -> atribuicao.id
+    $this->createIndex('idx-checklist-atribuicao_id', '{{%checklist}}', 'atribuicao_id');
+    $this->addForeignKey(
+        'fk-checklist-atribuicao_id',
+        '{{%checklist}}',
+        'atribuicao_id',
+        '{{%atribuicao}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-checklist-atribuicao_id', '{{%checklist}}');
+    $this->dropIndex('idx-checklist-atribuicao_id', '{{%checklist}}');
+    $this->dropTable('{{%checklist}}');
+}</script>
+
+<script type="text/plain" id="c28">php yii migrate/create create_anexo_table</script>
+
+<script type="text/plain" id="c29">public function safeUp()
+{
+    //criar a tabela anexo
+    $this->createTable('{{%anexo}}', [
+        'id' => $this->primaryKey(),
+        //FK: viatura a que o ficheiro pertence
+        'viatura_id' => $this->integer()->notNull(),
+        //FK: so preenchido nas fotografias das checklists
+        'checklist_id' => $this->integer(),
+        //foto ou documento
+        'categoria' => $this->string()->notNull(),
+        //frente, tras, esquerda, direita / seguro, inspecao, iuc
+        'tipo' => $this->string()->notNull(),
+        //caminho do ficheiro
+        'ficheiro' => $this->string()->notNull(),
+        //so preenchida nos documentos legais
+        'data_validade' => $this->date(),
+        //1 se o coordenador assinalou um possivel dano
+        'risco' => $this->boolean()->notNull()->defaultValue(0),
+        'data_registo' => $this->dateTime()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: anexo.viatura_id -> viatura.id
+    $this->createIndex('idx-anexo-viatura_id', '{{%anexo}}', 'viatura_id');
+    $this->addForeignKey(
+        'fk-anexo-viatura_id',
+        '{{%anexo}}',
+        'viatura_id',
+        '{{%viatura}}',
+        'id'
+    );
+
+    //indice e chave estrangeira: anexo.checklist_id -> checklist.id
+    $this->createIndex('idx-anexo-checklist_id', '{{%anexo}}', 'checklist_id');
+    $this->addForeignKey(
+        'fk-anexo-checklist_id',
+        '{{%anexo}}',
+        'checklist_id',
+        '{{%checklist}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-anexo-checklist_id', '{{%anexo}}');
+    $this->dropIndex('idx-anexo-checklist_id', '{{%anexo}}');
+    $this->dropForeignKey('fk-anexo-viatura_id', '{{%anexo}}');
+    $this->dropIndex('idx-anexo-viatura_id', '{{%anexo}}');
+    $this->dropTable('{{%anexo}}');
+}</script>
+
+<script type="text/plain" id="c30">php yii migrate/create create_fatura_combustivel_table</script>
+
+<script type="text/plain" id="c31">public function safeUp()
+{
+    //criar a tabela fatura_combustivel
+    $this->createTable('{{%fatura_combustivel}}', [
+        'id' => $this->primaryKey(),
+        //FK: utilizacao da viatura
+        'atribuicao_id' => $this->integer()->notNull(),
+        //ficheiro da fatura (PDF, JPG ou PNG)
+        'fotografia' => $this->string()->notNull(),
+        //pode ser corrigido a mao
+        'litros' => $this->float(),
+        //pode ser corrigido a mao
+        'valor' => $this->float(),
+        'data_registo' => $this->dateTime()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: fatura_combustivel.atribuicao_id -> atribuicao.id
+    $this->createIndex('idx-fatura_combustivel-atribuicao_id', '{{%fatura_combustivel}}', 'atribuicao_id');
+    $this->addForeignKey(
+        'fk-fatura_combustivel-atribuicao_id',
+        '{{%fatura_combustivel}}',
+        'atribuicao_id',
+        '{{%atribuicao}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-fatura_combustivel-atribuicao_id', '{{%fatura_combustivel}}');
+    $this->dropIndex('idx-fatura_combustivel-atribuicao_id', '{{%fatura_combustivel}}');
+    $this->dropTable('{{%fatura_combustivel}}');
+}</script>
+
+<script type="text/plain" id="c32">php yii migrate/create create_localizacao_table</script>
+
+<script type="text/plain" id="c33">public function safeUp()
+{
+    //criar a tabela localizacao
+    $this->createTable('{{%localizacao}}', [
+        'id' => $this->primaryKey(),
+        //FK: utilizacao da viatura
+        'atribuicao_id' => $this->integer()->notNull(),
+        'latitude' => $this->float()->notNull(),
+        'longitude' => $this->float()->notNull(),
+        'data_hora' => $this->dateTime()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: localizacao.atribuicao_id -> atribuicao.id
+    $this->createIndex('idx-localizacao-atribuicao_id', '{{%localizacao}}', 'atribuicao_id');
+    $this->addForeignKey(
+        'fk-localizacao-atribuicao_id',
+        '{{%localizacao}}',
+        'atribuicao_id',
+        '{{%atribuicao}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-localizacao-atribuicao_id', '{{%localizacao}}');
+    $this->dropIndex('idx-localizacao-atribuicao_id', '{{%localizacao}}');
+    $this->dropTable('{{%localizacao}}');
+}</script>
+
+<script type="text/plain" id="c34">php yii migrate</script>
+
+<script type="text/plain" id="c35">php yii migrate/create create_alerta_table</script>
+
+<script type="text/plain" id="c36">public function safeUp()
+{
+    //criar a tabela alerta
+    $this->createTable('{{%alerta}}', [
+        'id' => $this->primaryKey(),
+        //FK: viatura a que o alerta se refere
+        'viatura_id' => $this->integer()->notNull(),
+        //seguro, inspecao, iuc ou revisao
+        'tipo' => $this->string()->notNull(),
+        'descricao' => $this->string(),
+        //data em que o documento expira
+        'data_limite' => $this->date(),
+        //quando o sistema gerou o alerta
+        'data_geracao' => $this->dateTime()->notNull(),
+        //ex.: ativo, resolvido
+        'estado' => $this->string()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: alerta.viatura_id -> viatura.id
+    $this->createIndex('idx-alerta-viatura_id', '{{%alerta}}', 'viatura_id');
+    $this->addForeignKey(
+        'fk-alerta-viatura_id',
+        '{{%alerta}}',
+        'viatura_id',
+        '{{%viatura}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-alerta-viatura_id', '{{%alerta}}');
+    $this->dropIndex('idx-alerta-viatura_id', '{{%alerta}}');
+    $this->dropTable('{{%alerta}}');
+}</script>
+
+<script type="text/plain" id="c37">php yii migrate/create create_notificacao_table</script>
+
+<script type="text/plain" id="c38">public function safeUp()
+{
+    //criar a tabela notificacao
+    $this->createTable('{{%notificacao}}', [
+        'id' => $this->primaryKey(),
+        //FK: destinatario (tabela user)
+        'utilizador_id' => $this->integer()->notNull(),
+        //FK: preenchido se vem de uma requisicao
+        'requisicao_id' => $this->integer(),
+        //FK: preenchido se vem de um alerta
+        'alerta_id' => $this->integer(),
+        'tipo' => $this->string()->notNull(),
+        'titulo' => $this->string()->notNull(),
+        'mensagem' => $this->string(),
+        //0 por ler, 1 lida
+        'lida' => $this->boolean()->notNull()->defaultValue(0),
+        'data_envio' => $this->dateTime()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: notificacao.utilizador_id -> user.id
+    $this->createIndex('idx-notificacao-utilizador_id', '{{%notificacao}}', 'utilizador_id');
+    $this->addForeignKey(
+        'fk-notificacao-utilizador_id',
+        '{{%notificacao}}',
+        'utilizador_id',
+        '{{%user}}',
+        'id'
+    );
+
+    //indice e chave estrangeira: notificacao.requisicao_id -> requisicao.id
+    $this->createIndex('idx-notificacao-requisicao_id', '{{%notificacao}}', 'requisicao_id');
+    $this->addForeignKey(
+        'fk-notificacao-requisicao_id',
+        '{{%notificacao}}',
+        'requisicao_id',
+        '{{%requisicao}}',
+        'id'
+    );
+
+    //indice e chave estrangeira: notificacao.alerta_id -> alerta.id
+    $this->createIndex('idx-notificacao-alerta_id', '{{%notificacao}}', 'alerta_id');
+    $this->addForeignKey(
+        'fk-notificacao-alerta_id',
+        '{{%notificacao}}',
+        'alerta_id',
+        '{{%alerta}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-notificacao-alerta_id', '{{%notificacao}}');
+    $this->dropIndex('idx-notificacao-alerta_id', '{{%notificacao}}');
+    $this->dropForeignKey('fk-notificacao-requisicao_id', '{{%notificacao}}');
+    $this->dropIndex('idx-notificacao-requisicao_id', '{{%notificacao}}');
+    $this->dropForeignKey('fk-notificacao-utilizador_id', '{{%notificacao}}');
+    $this->dropIndex('idx-notificacao-utilizador_id', '{{%notificacao}}');
+    $this->dropTable('{{%notificacao}}');
+}</script>
+
+<script type="text/plain" id="c39">php yii migrate</script>
+
+<script type="text/plain" id="c40">php yii migrate/create create_orcamento_compra_table</script>
+
+<script type="text/plain" id="c41">public function safeUp()
+{
+    //criar a tabela orcamento_compra
+    $this->createTable('{{%orcamento_compra}}', [
+        'id' => $this->primaryKey(),
+        //FK: viatura
+        'viatura_id' => $this->integer()->notNull(),
+        //FK: coordenador que o montou (tabela user)
+        'criado_por' => $this->integer()->notNull(),
+        //fornecedor externo
+        'fornecedor' => $this->string()->notNull(),
+        //rascunho, pendente, aceite ou recusado
+        'estado' => $this->string()->notNull()->defaultValue('rascunho'),
+        'data' => $this->date()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: orcamento_compra.viatura_id -> viatura.id
+    $this->createIndex('idx-orcamento_compra-viatura_id', '{{%orcamento_compra}}', 'viatura_id');
+    $this->addForeignKey(
+        'fk-orcamento_compra-viatura_id',
+        '{{%orcamento_compra}}',
+        'viatura_id',
+        '{{%viatura}}',
+        'id'
+    );
+
+    //indice e chave estrangeira: orcamento_compra.criado_por -> user.id
+    $this->createIndex('idx-orcamento_compra-criado_por', '{{%orcamento_compra}}', 'criado_por');
+    $this->addForeignKey(
+        'fk-orcamento_compra-criado_por',
+        '{{%orcamento_compra}}',
+        'criado_por',
+        '{{%user}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-orcamento_compra-criado_por', '{{%orcamento_compra}}');
+    $this->dropIndex('idx-orcamento_compra-criado_por', '{{%orcamento_compra}}');
+    $this->dropForeignKey('fk-orcamento_compra-viatura_id', '{{%orcamento_compra}}');
+    $this->dropIndex('idx-orcamento_compra-viatura_id', '{{%orcamento_compra}}');
+    $this->dropTable('{{%orcamento_compra}}');
+}</script>
+
+<script type="text/plain" id="c42">php yii migrate/create create_item_orcamento_table</script>
+
+<script type="text/plain" id="c43">public function safeUp()
+{
+    //criar a tabela item_orcamento
+    $this->createTable('{{%item_orcamento}}', [
+        'id' => $this->primaryKey(),
+        //FK: orcamento a que o item pertence
+        'orcamento_id' => $this->integer()->notNull(),
+        //peca, servico ou seguro
+        'tipo' => $this->string()->notNull(),
+        'descricao' => $this->string()->notNull(),
+        'quantidade' => $this->integer()->notNull()->defaultValue(1),
+        'preco_unitario' => $this->float()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: item_orcamento.orcamento_id -> orcamento_compra.id
+    $this->createIndex('idx-item_orcamento-orcamento_id', '{{%item_orcamento}}', 'orcamento_id');
+    $this->addForeignKey(
+        'fk-item_orcamento-orcamento_id',
+        '{{%item_orcamento}}',
+        'orcamento_id',
+        '{{%orcamento_compra}}',
+        'id',
+        'CASCADE'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-item_orcamento-orcamento_id', '{{%item_orcamento}}');
+    $this->dropIndex('idx-item_orcamento-orcamento_id', '{{%item_orcamento}}');
+    $this->dropTable('{{%item_orcamento}}');
+}</script>
+
+<script type="text/plain" id="c44">php yii migrate/create create_necessidade_manutencao_table</script>
+
+<script type="text/plain" id="c45">public function safeUp()
+{
+    //criar a tabela necessidade_manutencao
+    $this->createTable('{{%necessidade_manutencao}}', [
+        'id' => $this->primaryKey(),
+        //FK: viatura
+        'viatura_id' => $this->integer()->notNull(),
+        //FK: so preenchido quando e agrupada num orcamento
+        'orcamento_id' => $this->integer(),
+        //FK: coordenador ou tecnico (tabela user)
+        'registada_por' => $this->integer()->notNull(),
+        //revisao, inspecao, pneus ou peca
+        'tipo' => $this->string()->notNull(),
+        'descricao' => $this->string(),
+        'data' => $this->date()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: necessidade_manutencao.viatura_id -> viatura.id
+    $this->createIndex('idx-necessidade_manutencao-viatura_id', '{{%necessidade_manutencao}}', 'viatura_id');
+    $this->addForeignKey(
+        'fk-necessidade_manutencao-viatura_id',
+        '{{%necessidade_manutencao}}',
+        'viatura_id',
+        '{{%viatura}}',
+        'id'
+    );
+
+    //indice e chave estrangeira: necessidade_manutencao.orcamento_id -> orcamento_compra.id
+    $this->createIndex('idx-necessidade_manutencao-orcamento_id', '{{%necessidade_manutencao}}', 'orcamento_id');
+    $this->addForeignKey(
+        'fk-necessidade_manutencao-orcamento_id',
+        '{{%necessidade_manutencao}}',
+        'orcamento_id',
+        '{{%orcamento_compra}}',
+        'id'
+    );
+
+    //indice e chave estrangeira: necessidade_manutencao.registada_por -> user.id
+    $this->createIndex('idx-necessidade_manutencao-registada_por', '{{%necessidade_manutencao}}', 'registada_por');
+    $this->addForeignKey(
+        'fk-necessidade_manutencao-registada_por',
+        '{{%necessidade_manutencao}}',
+        'registada_por',
+        '{{%user}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-necessidade_manutencao-registada_por', '{{%necessidade_manutencao}}');
+    $this->dropIndex('idx-necessidade_manutencao-registada_por', '{{%necessidade_manutencao}}');
+    $this->dropForeignKey('fk-necessidade_manutencao-orcamento_id', '{{%necessidade_manutencao}}');
+    $this->dropIndex('idx-necessidade_manutencao-orcamento_id', '{{%necessidade_manutencao}}');
+    $this->dropForeignKey('fk-necessidade_manutencao-viatura_id', '{{%necessidade_manutencao}}');
+    $this->dropIndex('idx-necessidade_manutencao-viatura_id', '{{%necessidade_manutencao}}');
+    $this->dropTable('{{%necessidade_manutencao}}');
+}</script>
+
+<script type="text/plain" id="c46">php yii migrate/create create_manutencao_table</script>
+
+<script type="text/plain" id="c47">public function safeUp()
+{
+    //criar a tabela manutencao
+    $this->createTable('{{%manutencao}}', [
+        'id' => $this->primaryKey(),
+        //FK: viatura intervencionada
+        'viatura_id' => $this->integer()->notNull(),
+        //FK: tecnico responsavel (tabela user); vazio ate um tecnico assumir uma manutencao gerada por um orcamento
+        'tecnico_id' => $this->integer(),
+        //FK: so preenchido se nasceu de um orcamento aceite
+        'orcamento_id' => $this->integer(),
+        'data' => $this->date()->notNull(),
+        'tipo' => $this->string()->notNull(),
+        //quilometros na intervencao
+        'km' => $this->integer(),
+        'horas_trabalho' => $this->float(),
+        'descricao' => $this->string(),
+        //ao concluir, a viatura volta a ficar disponivel
+        'estado' => $this->string()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: manutencao.viatura_id -> viatura.id
+    $this->createIndex('idx-manutencao-viatura_id', '{{%manutencao}}', 'viatura_id');
+    $this->addForeignKey(
+        'fk-manutencao-viatura_id',
+        '{{%manutencao}}',
+        'viatura_id',
+        '{{%viatura}}',
+        'id'
+    );
+
+    //indice e chave estrangeira: manutencao.tecnico_id -> user.id
+    $this->createIndex('idx-manutencao-tecnico_id', '{{%manutencao}}', 'tecnico_id');
+    $this->addForeignKey(
+        'fk-manutencao-tecnico_id',
+        '{{%manutencao}}',
+        'tecnico_id',
+        '{{%user}}',
+        'id'
+    );
+
+    //indice e chave estrangeira: manutencao.orcamento_id -> orcamento_compra.id
+    $this->createIndex('idx-manutencao-orcamento_id', '{{%manutencao}}', 'orcamento_id');
+    $this->addForeignKey(
+        'fk-manutencao-orcamento_id',
+        '{{%manutencao}}',
+        'orcamento_id',
+        '{{%orcamento_compra}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-manutencao-orcamento_id', '{{%manutencao}}');
+    $this->dropIndex('idx-manutencao-orcamento_id', '{{%manutencao}}');
+    $this->dropForeignKey('fk-manutencao-tecnico_id', '{{%manutencao}}');
+    $this->dropIndex('idx-manutencao-tecnico_id', '{{%manutencao}}');
+    $this->dropForeignKey('fk-manutencao-viatura_id', '{{%manutencao}}');
+    $this->dropIndex('idx-manutencao-viatura_id', '{{%manutencao}}');
+    $this->dropTable('{{%manutencao}}');
+}</script>
+
+<script type="text/plain" id="c48">php yii migrate/create create_peca_table</script>
+
+<script type="text/plain" id="c49">public function safeUp()
+{
+    //criar a tabela peca
+    $this->createTable('{{%peca}}', [
+        'id' => $this->primaryKey(),
+        //FK: manutencao em que foi usada
+        'manutencao_id' => $this->integer()->notNull(),
+        'descricao' => $this->string()->notNull(),
+        'quantidade' => $this->integer()->notNull()->defaultValue(1),
+        'custo' => $this->float()->notNull(),
+        'fotografia' => $this->string(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: peca.manutencao_id -> manutencao.id
+    $this->createIndex('idx-peca-manutencao_id', '{{%peca}}', 'manutencao_id');
+    $this->addForeignKey(
+        'fk-peca-manutencao_id',
+        '{{%peca}}',
+        'manutencao_id',
+        '{{%manutencao}}',
+        'id',
+        'CASCADE'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-peca-manutencao_id', '{{%peca}}');
+    $this->dropIndex('idx-peca-manutencao_id', '{{%peca}}');
+    $this->dropTable('{{%peca}}');
+}</script>
+
+<script type="text/plain" id="c50">php yii migrate</script>
+
+<script type="text/plain" id="c51">php yii migrate/create create_perfil_table</script>
+
+<script type="text/plain" id="c52">public function safeUp()
+{
+    //criar a tabela perfil
+    $this->createTable('{{%perfil}}', [
+        'id' => $this->primaryKey(),
+        //FK: utilizador a que o perfil pertence (1 para 1)
+        'user_id' => $this->integer()->notNull()->unique(),
+        'nome' => $this->string()->notNull(),
+        'telemovel' => $this->string(),
+        //usado na taxa de ocupacao por departamento
+        'departamento' => $this->string(),
+        //numero da carta de conducao
+        'n_carta' => $this->string(),
+        'validade_carta' => $this->date(),
+        //token das notificacoes da app
+        'token_push' => $this->string(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: perfil.user_id -> user.id
+    $this->createIndex('idx-perfil-user_id', '{{%perfil}}', 'user_id');
+    $this->addForeignKey(
+        'fk-perfil-user_id',
+        '{{%perfil}}',
+        'user_id',
+        '{{%user}}',
+        'id',
+        'CASCADE'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-perfil-user_id', '{{%perfil}}');
+    $this->dropIndex('idx-perfil-user_id', '{{%perfil}}');
+    $this->dropTable('{{%perfil}}');
+}</script>
+
+<script type="text/plain" id="c53">php yii migrate/create create_log_auditoria_table</script>
+
+<script type="text/plain" id="c54">public function safeUp()
+{
+    //criar a tabela log_auditoria
+    $this->createTable('{{%log_auditoria}}', [
+        'id' => $this->primaryKey(),
+        //FK: quem fez a acao (vazio se nao havia login)
+        'utilizador_id' => $this->integer(),
+        //frontoffice, backoffice ou app
+        'canal' => $this->string()->notNull(),
+        //auditoria ou erro
+        'nivel' => $this->string()->notNull(),
+        'acao' => $this->string()->notNull(),
+        'tabela_afetada' => $this->string(),
+        'registo_id' => $this->integer(),
+        'detalhe' => $this->string(),
+        'data_hora' => $this->dateTime()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: log_auditoria.utilizador_id -> user.id
+    $this->createIndex('idx-log_auditoria-utilizador_id', '{{%log_auditoria}}', 'utilizador_id');
+    $this->addForeignKey(
+        'fk-log_auditoria-utilizador_id',
+        '{{%log_auditoria}}',
+        'utilizador_id',
+        '{{%user}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-log_auditoria-utilizador_id', '{{%log_auditoria}}');
+    $this->dropIndex('idx-log_auditoria-utilizador_id', '{{%log_auditoria}}');
+    $this->dropTable('{{%log_auditoria}}');
+}</script>
+
+<script type="text/plain" id="c55">php yii migrate/create create_parametro_table</script>
+
+<script type="text/plain" id="c56">public function safeUp()
+{
+    //criar a tabela parametro
+    $this->createTable('{{%parametro}}', [
+        'id' => $this->primaryKey(),
+        //FK: quem alterou por ultimo (tabela user); vazio nos valores iniciais
+        'atualizado_por' => $this->integer(),
+        //nome do parametro
+        'chave' => $this->string()->notNull()->unique(),
+        'valor' => $this->string()->notNull(),
+        'atualizado_em' => $this->dateTime()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: parametro.atualizado_por -> user.id
+    $this->createIndex('idx-parametro-atualizado_por', '{{%parametro}}', 'atualizado_por');
+    $this->addForeignKey(
+        'fk-parametro-atualizado_por',
+        '{{%parametro}}',
+        'atualizado_por',
+        '{{%user}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-parametro-atualizado_por', '{{%parametro}}');
+    $this->dropIndex('idx-parametro-atualizado_por', '{{%parametro}}');
+    $this->dropTable('{{%parametro}}');
+}</script>
+
+<script type="text/plain" id="c57">php yii migrate/create create_servico_externo_table</script>
+
+<script type="text/plain" id="c58">public function safeUp()
+{
+    //criar a tabela servico_externo
+    $this->createTable('{{%servico_externo}}', [
+        'id' => $this->primaryKey(),
+        //FK: quem alterou por ultimo (tabela user); vazio nos valores iniciais
+        'atualizado_por' => $this->integer(),
+        //Google Calendar ou Firebase Cloud Messaging
+        'nome' => $this->string()->notNull(),
+        'credenciais' => $this->string(),
+        'ativo' => $this->boolean()->notNull()->defaultValue(0),
+        'atualizado_em' => $this->dateTime()->notNull(),
+    ], 'ENGINE=InnoDB');
+
+    //indice e chave estrangeira: servico_externo.atualizado_por -> user.id
+    $this->createIndex('idx-servico_externo-atualizado_por', '{{%servico_externo}}', 'atualizado_por');
+    $this->addForeignKey(
+        'fk-servico_externo-atualizado_por',
+        '{{%servico_externo}}',
+        'atualizado_por',
+        '{{%user}}',
+        'id'
+    );
+}
+
+public function safeDown()
+{
+    //desfazer pela ordem inversa do safeUp
+    $this->dropForeignKey('fk-servico_externo-atualizado_por', '{{%servico_externo}}');
+    $this->dropIndex('idx-servico_externo-atualizado_por', '{{%servico_externo}}');
+    $this->dropTable('{{%servico_externo}}');
+}</script>
+
+<script type="text/plain" id="c59">php yii migrate</script>
+
+<script type="text/plain" id="c60">php yii migrate/create seed_parametro</script>
+
+<script type="text/plain" id="c61">public function safeUp()
+{
+    //valores por omissao dos parametros; o administrador altera-os depois no back-office
+    $this->batchInsert('{{%parametro}}', ['chave', 'valor', 'atualizado_em'], [
+        ['alerta_dias_seguro', '30', date('Y-m-d H:i:s')],
+        ['alerta_dias_inspecao', '30', date('Y-m-d H:i:s')],
+        ['alerta_dias_iuc', '30', date('Y-m-d H:i:s')],
+        ['alerta_dias_revisao', '30', date('Y-m-d H:i:s')],
+        ['requisicao_antecedencia_min_dias', '1', date('Y-m-d H:i:s')],
+        ['requisicao_duracao_max_dias', '15', date('Y-m-d H:i:s')],
+        ['viatura_parada_dias', '30', date('Y-m-d H:i:s')],
+        ['localizacao_intervalo_seg', '60', date('Y-m-d H:i:s')],
+        ['sessao_expiracao_min', '60', date('Y-m-d H:i:s')],
+        ['logs_retencao_dias', '90', date('Y-m-d H:i:s')],
+    ]);
+}
+
+public function safeDown()
+{
+    $this->delete('{{%parametro}}');
+}</script>
+
+<script type="text/plain" id="c62">php yii gii/model --tableName=categoria --modelClass=Categoria --ns=common\models --interactive=0
+php yii gii/model --tableName=viatura --modelClass=Viatura --ns=common\models --interactive=0
+php yii gii/model --tableName=condutor --modelClass=Condutor --ns=common\models --interactive=0
+php yii gii/model --tableName=ausencia_condutor --modelClass=AusenciaCondutor --ns=common\models --interactive=0
+php yii gii/model --tableName=requisicao --modelClass=Requisicao --ns=common\models --interactive=0
+php yii gii/model --tableName=atribuicao --modelClass=Atribuicao --ns=common\models --interactive=0
+php yii gii/model --tableName=checklist --modelClass=Checklist --ns=common\models --interactive=0
+php yii gii/model --tableName=anexo --modelClass=Anexo --ns=common\models --interactive=0
+php yii gii/model --tableName=fatura_combustivel --modelClass=FaturaCombustivel --ns=common\models --interactive=0
+php yii gii/model --tableName=localizacao --modelClass=Localizacao --ns=common\models --interactive=0
+php yii gii/model --tableName=alerta --modelClass=Alerta --ns=common\models --interactive=0
+php yii gii/model --tableName=notificacao --modelClass=Notificacao --ns=common\models --interactive=0
+php yii gii/model --tableName=orcamento_compra --modelClass=OrcamentoCompra --ns=common\models --interactive=0
+php yii gii/model --tableName=item_orcamento --modelClass=ItemOrcamento --ns=common\models --interactive=0
+php yii gii/model --tableName=necessidade_manutencao --modelClass=NecessidadeManutencao --ns=common\models --interactive=0
+php yii gii/model --tableName=manutencao --modelClass=Manutencao --ns=common\models --interactive=0
+php yii gii/model --tableName=peca --modelClass=Peca --ns=common\models --interactive=0
+php yii gii/model --tableName=perfil --modelClass=Perfil --ns=common\models --interactive=0
+php yii gii/model --tableName=log_auditoria --modelClass=LogAuditoria --ns=common\models --interactive=0
+php yii gii/model --tableName=parametro --modelClass=Parametro --ns=common\models --interactive=0
+php yii gii/model --tableName=servico_externo --modelClass=ServicoExterno --ns=common\models --interactive=0</script>
+
+<script type="text/plain" id="c63">//numa vista ou num controlador, as relacoes usam-se como propriedades
+$viatura = Viatura::findOne(3);
+echo $viatura->categoria->nome;          // hasOne: um objeto Categoria
+foreach ($viatura->manutencaos as $m) {  // hasMany: uma lista de Manutencao
+    echo $m->data;
+}</script>
+
+<script type="text/plain" id="c64">//o perfil (dados extra) do utilizador: relacao 1 para 1
+public function getPerfil()
+{
+    return $this->hasOne(Perfil::class, ['user_id' => 'id']);
+}</script>
+
+<script type="text/plain" id="c65">//no Perfil, o caminho inverso (o Gii ja o gerou como getUser)
+public function getUser()
+{
+    return $this->hasOne(User::class, ['id' => 'user_id']);
+}</script>
+
+<script type="text/plain" id="c66">php yii gii/crud --modelClass=common\models\Viatura --searchModelClass=backend\models\ViaturaSearch --controllerClass=backend\controllers\ViaturaController --viewPath=@backend/views/viatura --interactive=0</script>
+
+<script type="text/plain" id="c67">use yii\filters\AccessControl;</script>
+
+<script type="text/plain" id="c68">public function behaviors()
+{
+    return array_merge(
+        parent::behaviors(),
+        [
+            //quem pode entrar neste controlador: so quem tem a permissao gerirViaturas
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['gerirViaturas'],
+                    ],
+                ],
+            ],
+            //isto o Gii ja tinha posto
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ]
+    );
+}</script>
+
+<script type="text/plain" id="c69">[
+    'actions' => ['index'],
+    'allow' => true,
+    //so entra quem tem a permissao acederBackoffice (coordenador, tecnico e administrador)
+    'roles' => ['acederBackoffice'],
+],
+[
+    'actions' => ['logout'],
+    'allow' => true,
+    'roles' => ['@'],
+],</script>
+
+<script type="text/plain" id="c70">[
+    //so aparece a quem tem a permissao gerirViaturas
+    'label' => 'Viaturas',
+    'url' => ['/viatura/index'],
+    'visible' => Yii::$app->user->can('gerirViaturas'),
+],
+[
+    'label' => 'Condutores',
+    'url' => ['/condutor/index'],
+    'visible' => Yii::$app->user->can('gerirCondutores'),
+],
+[
+    'label' => 'Requisicoes',
+    'url' => ['/requisicao/index'],
+    'visible' => Yii::$app->user->can('verRequisicao'),
+],
+[
+    'label' => 'Manutencoes',
+    'url' => ['/manutencao/historico'],
+    'visible' => Yii::$app->user->can('verHistoricoManutencoes'),
+],
+[
+    'label' => 'Utilizadores',
+    'url' => ['/user/index'],
+    'visible' => Yii::$app->user->can('gerirUtilizadores'),
+],</script>
+
+<script type="text/plain" id="c71">//uma viatura esta livre se estiver disponivel e nao tiver nenhum pedido a sobrepor-se ao periodo
+public function estaLivre($dataInicio, $dataFim)
+{
+    //viatura em manutencao ou indisponivel nunca esta livre
+    if ($this->estado != 'disponivel') {
+        return false;
+    }
+    //procurar atribuicoes desta viatura cujo pedido se sobrepoe ao periodo
+    //dois periodos sobrepoem-se quando: inicio1 <= fim2 e fim1 >= inicio2
+    $sobrepostas = Atribuicao::find()
+        ->joinWith('requisicao')
+        ->where(['atribuicao.viatura_id' => $this->id])
+        ->andWhere(['<=', 'requisicao.data_inicio', $dataFim])
+        ->andWhere(['>=', 'requisicao.data_fim', $dataInicio])
+        ->andWhere(['not in', 'requisicao.estado', ['recusada', 'cancelada']])
+        ->exists();
+    return !$sobrepostas;
+}</script>
+
+<script type="text/plain" id="c72">public function actionCreate()
+{
+    $model = new Requisicao();
+    //buscar os dados do form ao pedido e carregar no modelo
+    if ($model->load(Yii::$app->request->post())) {
+        //estes campos nao vem do formulario, sao do sistema
+        $model->utilizador_id = Yii::$app->user->id;
+        $model->estado = 'pendente';
+        $model->data_pedido = date('Y-m-d H:i:s');
+        //save() valida e grava
+        if ($model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+    }
+    return $this->render('create', ['model' => $model]);
+}</script>
+
+<script type="text/plain" id="c73">//a data de fim nao pode ser antes da data de inicio
+['data_fim', 'compare', 'compareAttribute' => 'data_inicio', 'operator' => '>=',
+    'message' => 'A data de fim tem de ser igual ou depois da data de inicio.'],</script>
+
+<script type="text/plain" id="c74">public function actionIndex()
+{
+    //so os pedidos do utilizador autenticado, os mais recentes primeiro
+    $dataProvider = new ActiveDataProvider([
+        'query' => Requisicao::find()->where(['utilizador_id' => Yii::$app->user->id]),
+        'sort' => ['defaultOrder' => ['data_pedido' => SORT_DESC]],
+    ]);
+    return $this->render('index', ['dataProvider' => $dataProvider]);
+}
+
+public function actionView($id)
+{
+    $model = $this->findModel($id);
+    //a regra do dono: so se ve o proprio pedido
+    if (!Yii::$app->user->can('verPropriaRequisicao', ['requisicao' => $model])) {
+        throw new ForbiddenHttpException('Nao pode ver este pedido.');
+    }
+    return $this->render('view', ['model' => $model]);
+}</script>
+
+<script type="text/plain" id="c75">public function actionCancelar($id)
+{
+    $model = $this->findModel($id);
+    //a regra do dono: so o proprio colaborador cancela o seu pedido
+    if (!Yii::$app->user->can('cancelarRequisicao', ['requisicao' => $model])) {
+        throw new ForbiddenHttpException('Nao pode cancelar este pedido.');
+    }
+    //so se cancela um pedido que ainda esta pendente
+    if ($model->estado == 'pendente') {
+        $model->estado = 'cancelada';
+        $model->save();
+    }
+    return $this->redirect(['index']);
+}</script>
+
+<script type="text/plain" id="c76">//no behaviors(), o cancelar so por POST (como o delete que o Gii ja tinha)
+'verbs' => [
+    'class' => VerbFilter::class,
+    'actions' => [
+        'cancelar' => ['POST'],
+    ],
+],</script>
+
+<script type="text/plain" id="c77">//um condutor pode conduzir se estiver ativo, com carta valida, sem ausencia e sem outro pedido
+public function podeConduzir($dataInicio, $dataFim)
+{
+    //inativo ou com a carta a expirar antes do fim do periodo
+    if (!$this->ativo || $this->validade_carta < $dataFim) {
+        return false;
+    }
+    //ferias ou baixa que se sobrepoem ao periodo
+    $ausente = AusenciaCondutor::find()
+        ->where(['condutor_id' => $this->id])
+        ->andWhere(['<=', 'data_inicio', $dataFim])
+        ->andWhere(['>=', 'data_fim', $dataInicio])
+        ->exists();
+    if ($ausente) {
+        return false;
+    }
+    //ja atribuido a outro pedido neste periodo
+    $ocupado = Atribuicao::find()
+        ->joinWith('requisicao')
+        ->where(['atribuicao.condutor_id' => $this->id])
+        ->andWhere(['<=', 'requisicao.data_inicio', $dataFim])
+        ->andWhere(['>=', 'requisicao.data_fim', $dataInicio])
+        ->andWhere(['not in', 'requisicao.estado', ['recusada', 'cancelada']])
+        ->exists();
+    return !$ocupado;
+}</script>
+
+<script type="text/plain" id="c78">public function actionAprovar($id)
+{
+    $requisicao = $this->findModel($id);
+    $atribuicao = new Atribuicao();
+    //o coordenador escolhe a viatura e o condutor no formulario
+    if ($atribuicao->load(Yii::$app->request->post())) {
+        $atribuicao->requisicao_id = $requisicao->id;
+        $atribuicao->aprovada_por = Yii::$app->user->id;
+        $atribuicao->data_atribuicao = date('Y-m-d H:i:s');
+
+        $viatura = Viatura::findOne($atribuicao->viatura_id);
+        $condutor = Condutor::findOne($atribuicao->condutor_id);
+
+        //validar antes de gravar
+        if (!$viatura || !$viatura->estaLivre($requisicao->data_inicio, $requisicao->data_fim)) {
+            $atribuicao->addError('viatura_id', 'A viatura nao esta livre neste periodo.');
+        } elseif (!$condutor || !$condutor->podeConduzir($requisicao->data_inicio, $requisicao->data_fim)) {
+            $atribuicao->addError('condutor_id', 'O condutor nao esta disponivel neste periodo.');
+        } else {
+            //gravar a atribuicao e mudar o estado do pedido: ou as duas coisas, ou nenhuma
+            $transacao = Yii::$app->db->beginTransaction();
+            try {
+                $atribuicao->save();
+                $requisicao->estado = 'aprovada';
+                $requisicao->save();
+                $transacao->commit();
+            } catch (\Throwable $e) {
+                $transacao->rollBack();
+                throw $e;
+            }
+            //avisar o colaborador e registar quem aprovou (passos das notificacoes e dos logs)
+            return $this->redirect(['pendentes']);
+        }
+    }
+    return $this->render('aprovar', ['requisicao' => $requisicao, 'atribuicao' => $atribuicao]);
+}</script>
+
+<script type="text/plain" id="c79">public function actionRecusar($id)
+{
+    $model = $this->findModel($id);
+    if (Yii::$app->request->isPost) {
+        $motivo = trim(Yii::$app->request->post('motivo_recusa'));
+        //o motivo e obrigatorio
+        if ($motivo == '') {
+            Yii::$app->session->setFlash('error', 'Indique o motivo da recusa.');
+        } else {
+            $model->estado = 'recusada';
+            $model->motivo_recusa = $motivo;
+            $model->save();
+            return $this->redirect(['pendentes']);
+        }
+    }
+    return $this->render('recusar', ['model' => $model]);
+}</script>
+
+<script type="text/plain" id="c80">public function actionChecklist($id, $tipo)
+{
+    //$id e o id da requisicao; $tipo e rececao (check-in) ou entrega (check-out)
+    $requisicao = $this->findModel($id);
+    if (!Yii::$app->user->can('registarChecklist', ['requisicao' => $requisicao])) {
+        throw new ForbiddenHttpException('Nao pode registar neste pedido.');
+    }
+    $atribuicao = Atribuicao::findOne(['requisicao_id' => $requisicao->id]);
+
+    $model = new Checklist();
+    if ($model->load(Yii::$app->request->post())) {
+        $model->atribuicao_id = $atribuicao->id;
+        $model->tipo = $tipo;
+        $model->data_hora = date('Y-m-d H:i:s');
+        if ($model->save()) {
+            //guardar as 4 fotografias, uma por posicao
+            foreach (['frente', 'tras', 'esquerda', 'direita'] as $posicao) {
+                $ficheiro = UploadedFile::getInstanceByName('foto_' . $posicao);
+                if ($ficheiro) {
+                    $caminho = 'uploads/' . $model->id . '_' . $posicao . '.' . $ficheiro->extension;
+                    $ficheiro->saveAs(Yii::getAlias('@frontend/web/') . $caminho);
+
+                    $anexo = new Anexo();
+                    $anexo->viatura_id = $atribuicao->viatura_id;
+                    $anexo->checklist_id = $model->id;
+                    $anexo->categoria = 'foto';
+                    $anexo->tipo = $posicao;
+                    $anexo->ficheiro = $caminho;
+                    $anexo->data_registo = date('Y-m-d H:i:s');
+                    $anexo->save();
+                }
+            }
+            //o check-in poe o pedido em curso; o check-out conclui-o e atualiza os km da viatura
+            if ($tipo == 'rececao') {
+                $requisicao->estado = 'em curso';
+            } else {
+                $requisicao->estado = 'concluida';
+                $atribuicao->viatura->km_atual = $model->km;
+                $atribuicao->viatura->save();
+            }
+            $requisicao->save();
+            return $this->redirect(['view', 'id' => $requisicao->id]);
+        }
+    }
+    return $this->render('checklist', ['model' => $model, 'tipo' => $tipo]);
+}</script>
+
+<script type="text/plain" id="c81"><?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+
+    <?= $form->field($model, 'km')->textInput() ?>
+    <?= $form->field($model, 'estado_geral')->textInput() ?>
+    <?= $form->field($model, 'docs_a_bordo')->checkbox() ?>
+    <?= $form->field($model, 'observacoes')->textInput() ?>
+
+    <?php foreach (['frente', 'tras', 'esquerda', 'direita'] as $posicao): ?>
+        <label>Foto <?= Html::encode($posicao) ?></label>
+        <input type="file" name="foto_<?= $posicao ?>">
+    <?php endforeach; ?>
+
+    <?= Html::submitButton('Guardar', ['class' => 'btn btn-primary']) ?>
+<?php ActiveForm::end(); ?></script>
+
+<script type="text/plain" id="c82"><?php
+
+namespace console\controllers;
+
+use common\models\Alerta;
+use common\models\Anexo;
+use common\models\Parametro;
+use yii\console\Controller;
+
+class AlertaController extends Controller
+{
+    // php yii alerta/gerar
+    public function actionGerar()
+    {
+        //documentos legais de todas as viaturas
+        $documentos = Anexo::find()->where(['categoria' => 'documento'])->all();
+        foreach ($documentos as $documento) {
+            //dias de antecedencia deste tipo (seguro, inspecao, iuc), vindos da tabela parametro
+            $parametro = Parametro::findOne(['chave' => 'alerta_dias_' . $documento->tipo]);
+            $dias = $parametro ? (int) $parametro->valor : 30;
+            $limite = date('Y-m-d', strtotime('+' . $dias . ' days'));
+
+            //so documentos que expiram dentro do prazo
+            if ($documento->data_validade <= $limite) {
+                //nao repetir um alerta que ja existe
+                $existe = Alerta::find()
+                    ->where(['viatura_id' => $documento->viatura_id, 'tipo' => $documento->tipo, 'estado' => 'ativo'])
+                    ->exists();
+                if (!$existe) {
+                    $alerta = new Alerta();
+                    $alerta->viatura_id = $documento->viatura_id;
+                    $alerta->tipo = $documento->tipo;
+                    $alerta->descricao = 'Documento a expirar: ' . $documento->tipo;
+                    $alerta->data_limite = $documento->data_validade;
+                    $alerta->data_geracao = date('Y-m-d H:i:s');
+                    $alerta->estado = 'ativo';
+                    $alerta->save();
+                }
+            }
+        }
+        echo "Alertas gerados.\n";
+    }
+}</script>
+
+<script type="text/plain" id="c83">public function actionConcluir($id)
+{
+    $model = $this->findModel($id);
+    $model->estado = 'concluida';
+    $model->save();
+    //ao concluir, a viatura volta a ficar disponivel (por isso nao ha um campo "reparada")
+    $viatura = $model->viatura;
+    $viatura->estado = 'disponivel';
+    $viatura->save();
+    return $this->redirect(['view', 'id' => $model->id]);
+}</script>
+
+<script type="text/plain" id="c84">public function actionHistorico()
+{
+    //master: a lista de viaturas
+    $dataProvider = new ActiveDataProvider(['query' => Viatura::find()]);
+    return $this->render('historico', ['dataProvider' => $dataProvider]);
+}
+
+public function actionHistoricoViatura($id)
+{
+    //detail: todas as manutencoes anteriores da viatura, com as pecas
+    $viatura = Viatura::findOne($id);
+    return $this->render('historico-viatura', ['viatura' => $viatura]);
+}</script>
+
+<script type="text/plain" id="c85">public function actionAceitar($id)
+{
+    $orcamento = $this->findModel($id);
+    $orcamento->estado = 'aceite';
+    if ($orcamento->save()) {
+        //gerar o registo de manutencao para o tecnico executar
+        $manutencao = new Manutencao();
+        $manutencao->viatura_id = $orcamento->viatura_id;
+        $manutencao->orcamento_id = $orcamento->id;
+        $manutencao->data = date('Y-m-d');
+        $manutencao->tipo = 'orcamento';
+        $manutencao->estado = 'pendente';
+        $manutencao->save();
+    }
+    return $this->redirect(['view', 'id' => $orcamento->id]);
+}</script>
+
+<script type="text/plain" id="c86">//cria uma notificacao para um utilizador
+public static function enviar($utilizadorId, $tipo, $titulo, $mensagem = null, $requisicaoId = null, $alertaId = null)
+{
+    $n = new Notificacao();
+    $n->utilizador_id = $utilizadorId;
+    $n->tipo = $tipo;
+    $n->titulo = $titulo;
+    $n->mensagem = $mensagem;
+    $n->requisicao_id = $requisicaoId;
+    $n->alerta_id = $alertaId;
+    $n->lida = 0;
+    $n->data_envio = date('Y-m-d H:i:s');
+    return $n->save();
+}</script>
+
+<script type="text/plain" id="c87">//regista uma acao ou um erro; o utilizador e quem esta autenticado (vazio na consola)
+public static function registar($canal, $nivel, $acao, $tabelaAfetada = null, $registoId = null, $detalhe = null)
+{
+    $log = new LogAuditoria();
+    $log->utilizador_id = Yii::$app->has('user') ? Yii::$app->user->id : null;
+    $log->canal = $canal;
+    $log->nivel = $nivel;
+    $log->acao = $acao;
+    $log->tabela_afetada = $tabelaAfetada;
+    $log->registo_id = $registoId;
+    $log->detalhe = $detalhe;
+    $log->data_hora = date('Y-m-d H:i:s');
+    return $log->save();
+}</script>
+
+<script type="text/plain" id="c88">//na action aprovar, depois de gravar com sucesso:
+Notificacao::enviar($requisicao->utilizador_id, 'pedido', 'Pedido aprovado', null, $requisicao->id);
+LogAuditoria::registar('backoffice', 'auditoria', 'aprovar_requisicao', 'requisicao', $requisicao->id);</script>
+
+<script type="text/plain" id="c89">//dentro de uma action create do UserController, com os dados do formulario ja validados
+$user = new User();
+$user->username = $username;
+$user->email = $email;
+$user->setPassword($password);
+$user->generateAuthKey();
+$user->status = User::STATUS_ACTIVE;
+if ($user->save()) {
+    //os dados extra vao para o perfil (relacao 1 para 1)
+    $perfil = new Perfil();
+    $perfil->user_id = $user->id;
+    $perfil->nome = $nome;
+    $perfil->save();
+    //atribuir o role escolhido (colaborador, coordenador, tecnico ou administrador)
+    $auth = Yii::$app->authManager;
+    $auth->assign($auth->getRole($role), $user->id);
+}</script>
+
+<script type="text/plain" id="c90">public function actionRole($nome)
+{
+    $auth = Yii::$app->authManager;
+    $role = $auth->getRole($nome);
+    if (Yii::$app->request->isPost) {
+        $escolhidas = Yii::$app->request->post('permissoes', []);
+        //apagar as permissoes atuais do role e gravar as que foram marcadas
+        $auth->removeChildren($role);
+        foreach ($escolhidas as $nomePermissao) {
+            $auth->addChild($role, $auth->getPermission($nomePermissao));
+        }
+        return $this->refresh();
+    }
+    return $this->render('role', [
+        'role' => $role,
+        'permissoes' => $auth->getPermissions(),
+        'atuais' => $auth->getPermissionsByRole($nome),
+    ]);
+}</script>
+
+
+<script>
+(function(){
+  // preencher cada bloco de codigo a partir do seu <script type="text/plain">, sem escapar nada
+  document.querySelectorAll('pre[data-src]').forEach(function(pre){
+    var src = document.getElementById(pre.getAttribute('data-src'));
+    var code = document.createElement('code');
+    code.style.cssText = 'background:none;padding:0;font-size:inherit;color:inherit';
+    code.textContent = src ? src.textContent : '';
+    pre.appendChild(code);
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copy'; b.textContent = 'Copiar';
+    b.addEventListener('click', function(){
+      var txt = code.textContent;
+      var ok = function(){ b.textContent = 'Copiado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 1500); };
+      var fail = function(){
+        var r = document.createRange(); r.selectNodeContents(code);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        b.textContent = 'Selecionado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 1500);
+      };
+      try { navigator.clipboard.writeText(txt).then(ok, fail); } catch(e){ fail(); }
+    });
+    pre.parentNode.appendChild(b);
+  });
+
+  // progresso: caixas guardadas no browser (so uma comodidade, a pagina funciona sem isto)
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.chk'));
+  var KEY = 'frotagest-manual-progresso-v1';
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } }
+  function save(){
+    var o = {}; boxes.forEach(function(c){ if (c.checked) o[c.id] = 1; });
+    try { localStorage.setItem(KEY, JSON.stringify(o)); } catch(e){}
+  }
+  function paint(){
+    var n = boxes.filter(function(c){ return c.checked; }).length;
+    document.getElementById('pt').textContent = n + ' de ' + boxes.length + ' itens';
+    document.getElementById('pb').style.width = (n / boxes.length * 100) + '%';
+  }
+  var saved = load();
+  boxes.forEach(function(c){
+    if (saved[c.id]) c.checked = true;
+    // clicar na caixa de um passo nao deve abrir/fechar o passo
+    c.addEventListener('click', function(e){ e.stopPropagation(); });
+    c.addEventListener('change', function(){ save(); paint(); });
+  });
+  document.getElementById('reset').addEventListener('click', function(){
+    boxes.forEach(function(c){ c.checked = false; }); save(); paint();
+  });
+  paint();
+})();
+</script>
