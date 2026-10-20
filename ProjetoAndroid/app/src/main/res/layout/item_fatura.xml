@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fatura de combustível registada (lista dentro de M-Viagem) -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/fg_gap_xs"
+    android:paddingBottom="@dimen/fg_gap_xs">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_fatura"
+        android:layout_width="@dimen/fg_thumb"
+        android:layout_height="@dimen/fg_thumb"
+        android:background="@color/fg_surface_variant"
+        android:contentDescription="@string/via_faturas"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_receipt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.FrotaGest.Rounded8" />
+
+    <TextView
+        android:id="@+id/tv_valor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/fg_gap_m"
+        android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle"
+        app:layout_constraintBottom_toTopOf="@id/tv_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_fatura"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:text="42,30 € · 26,1 L" />
+
+    <TextView
+        android:id="@+id/tv_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_valor"
+        app:layout_constraintTop_toBottomOf="@id/tv_valor"
+        android:text="06/10 · por sincronizar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

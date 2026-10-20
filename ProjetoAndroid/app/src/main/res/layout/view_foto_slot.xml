@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Espaço para uma fotografia da checklist (frente / trás / esq. / dir.).
+    Dois estados: vazio (fl_vazio, tracejado "+ esq.") e preenchido
+    (iv_foto + visto + legenda). Incluído 4 vezes em activity_checklist.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="0dp"
+    android:layout_height="72dp"
+    android:layout_weight="1"
+    android:clickable="true"
+    android:focusable="true"
+    tools:layout_width="88dp">
+
+    <!-- Estado preenchido -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_foto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/fg_surface_variant"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.FrotaGest.Rounded8" />
+
+    <ImageView
+        android:id="@+id/iv_foto_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="4dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_check_badge"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_foto_legenda"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_margin="4dp"
+        android:background="@drawable/bg_photo_label"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:textColor="@color/fg_surface"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:text="@string/chk_foto_frente" />
+
+    <!-- Estado vazio -->
+    <TextView
+        android:id="@+id/tv_foto_adicionar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_photo_add"
+        android:gravity="center"
+        android:textColor="@color/fg_primary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:text="+\nesq." />
+
+</FrameLayout>

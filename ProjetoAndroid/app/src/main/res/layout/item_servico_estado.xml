@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Linha "Serviço ........ estado" em M-AdminSistema. Estado OK → Status.Aprovada, Falha → Status.Recusada -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="36dp"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_servico"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/fg_gap_s"
+        android:layout_weight="1"
+        android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+        android:text="API REST" />
+
+    <TextView
+        android:id="@+id/tv_estado"
+        style="@style/Widget.FrotaGest.Status.Aprovada"
+        android:text="OK · 180 ms" />
+
+</LinearLayout>

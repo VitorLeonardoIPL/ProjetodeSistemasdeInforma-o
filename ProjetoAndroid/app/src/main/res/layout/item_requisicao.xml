@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartão de requisição do colaborador (lista M-Requisicoes) -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_requisicao"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/fg_card_padding">
+
+        <TextView
+            android:id="@+id/tv_titulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/fg_gap_s"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle"
+            app:layout_constraintEnd_toStartOf="@id/tv_estado"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="#1031 · Coimbra" />
+
+        <TextView
+            android:id="@+id/tv_estado"
+            style="@style/Widget.FrotaGest.Status.Aprovada"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_titulo"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/estado_em_curso" />
+
+        <TextView
+            android:id="@+id/tv_detalhe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_titulo"
+            android:text="06/10 → 07/10 · Toyota Corolla EG-23-KL" />
+
+        <!-- Só visível quando a requisição está Em curso -->
+        <TextView
+            android:id="@+id/tv_acao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/req_registar_km"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Link"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_detalhe"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

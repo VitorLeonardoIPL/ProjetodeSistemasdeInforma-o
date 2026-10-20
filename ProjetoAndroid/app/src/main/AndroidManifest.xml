@@ -11,8 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FrotaGest">
+        <!-- Ecrã inicial: Login -->
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.auth.LoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -21,6 +22,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".MainActivity" />
+        <activity android:name=".ui.comum.ConfiguracaoActivity" />
+        <activity android:name=".ui.comum.NotificacoesActivity" />
+        <activity
+            android:name=".ui.colaborador.NovoPedidoActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.colaborador.RequisicaoDetalheActivity" />
+        <activity
+            android:name=".ui.colaborador.ChecklistActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.coordenador.PedidoCoordActivity" />
+        <activity android:name=".ui.coordenador.CondutoresDisponiveisActivity" />
     </application>
 
 </manifest>

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    M-Checklist · RF-AM-04 · 05 · 06
+    Receção e entrega usam o mesmo ecrã: o separador "Entrega" troca o rótulo
+    para "Quilómetros finais" e o botão para "Confirmar entrega".
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/fg_surface"
+    tools:context=".ui.colaborador.ChecklistActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/layout_top_bar_back"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/ll_rodape"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/fg_screen_padding">
+
+            <!-- Separadores Receção / Entrega -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_tabs"
+                android:padding="4dp">
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggle_tipo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:checkedButton="@id/btn_tab_rececao"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_tab_rececao"
+                        style="@style/Widget.FrotaGest.Button.Tab"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/chk_tab_rececao" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_tab_entrega"
+                        style="@style/Widget.FrotaGest.Button.Tab"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/chk_tab_entrega" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+            </FrameLayout>
+
+            <!-- Quilómetros -->
+            <TextView
+                android:id="@+id/lbl_km"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_l"
+                android:layout_marginBottom="6dp"
+                android:labelFor="@id/et_km"
+                android:text="@string/chk_km_iniciais"
+                android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_km"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_km"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:minHeight="@dimen/fg_button_height"
+                    android:text="48 210" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Estado geral -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_l"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/fg_gap_s">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:labelFor="@id/act_estado_geral"
+                    android:text="@string/chk_estado_geral"
+                    android:textAppearance="@style/TextAppearance.FrotaGest.Body" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_estado_geral"
+                    style="@style/Widget.FrotaGest.TextInput.Dropdown"
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/act_estado_geral"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:minHeight="@dimen/fg_button_height_small"
+                        tools:ignore="LabelFor"
+                        android:text="Bom" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <View style="@style/Widget.FrotaGest.Divider" />
+
+            <!-- Documentos a bordo -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/fg_gap_s"
+                android:paddingBottom="@dimen/fg_gap_s">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/chk_documentos"
+                    android:textAppearance="@style/TextAppearance.FrotaGest.Body" />
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggle_documentos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:checkedButton="@id/btn_documentos_sim"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_documentos_sim"
+                        style="@style/Widget.FrotaGest.Button.Toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chk_sim" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_documentos_nao"
+                        style="@style/Widget.FrotaGest.Button.Toggle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/chk_nao" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+            </LinearLayout>
+
+            <View style="@style/Widget.FrotaGest.Divider" />
+
+            <!-- Fotografias -->
+            <TextView
+                android:id="@+id/tv_fotografias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_l"
+                android:layout_marginBottom="@dimen/fg_gap_s"
+                android:text="@string/chk_fotografias"
+                android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <include
+                    android:id="@+id/foto_frente"
+                    layout="@layout/view_foto_slot"
+                    android:layout_width="0dp"
+                    android:layout_height="72dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1" />
+
+                <include
+                    android:id="@+id/foto_tras"
+                    layout="@layout/view_foto_slot"
+                    android:layout_width="0dp"
+                    android:layout_height="72dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1" />
+
+                <include
+                    android:id="@+id/foto_esq"
+                    layout="@layout/view_foto_slot"
+                    android:layout_width="0dp"
+                    android:layout_height="72dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1" />
+
+                <include
+                    android:id="@+id/foto_dir"
+                    layout="@layout/view_foto_slot"
+                    android:layout_width="0dp"
+                    android:layout_height="72dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <!-- Observações -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_observacoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_l">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_observacoes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|start"
+                    android:hint="@string/chk_observacoes_hint"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minLines="2" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/ll_rodape"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/fg_screen_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_confirmar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/chk_confirmar_rececao" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fg_gap_s"
+            android:gravity="center"
+            android:text="@string/chk_ajuda"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Caption"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

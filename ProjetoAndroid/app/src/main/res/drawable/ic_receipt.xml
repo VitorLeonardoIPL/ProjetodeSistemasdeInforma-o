@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Miniatura genérica de fatura (substituída pela fotografia real) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="52dp"
+    android:height="52dp"
+    android:viewportWidth="52"
+    android:viewportHeight="52">
+    <path
+        android:fillColor="@color/fg_surface_variant"
+        android:pathData="M6,2H46V50H6Z" />
+    <path
+        android:pathData="M12,8H26"
+        android:strokeWidth="3"
+        android:strokeColor="@color/fg_primary" />
+    <path
+        android:pathData="M12,16H32M12,22H28M12,28H34M12,34H26"
+        android:strokeWidth="1.5"
+        android:strokeColor="@color/fg_border_input" />
+    <path
+        android:pathData="M12,42H22M34,42H40"
+        android:strokeWidth="2.5"
+        android:strokeColor="@color/fg_ink" />
+</vector>

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- M-Detalhe · RF-AM-03 · 08 · detalhe de um pedido do colaborador -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/fg_background"
+    tools:context=".ui.colaborador.RequisicaoDetalheActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/layout_top_bar_back"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/ll_rodape"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/fg_screen_padding">
+
+            <!-- Viatura atribuída -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_viatura"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/fg_card_padding">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/det_viatura_atribuida"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/fg_gap_s"
+                        android:layout_marginBottom="@dimen/fg_gap_xs"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_viatura"
+                            android:layout_width="72dp"
+                            android:layout_height="52dp"
+                            android:background="@color/fg_surface_variant"
+                            android:contentDescription="@string/det_viatura_atribuida"
+                            android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearance.FrotaGest.Rounded8" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/fg_gap_m"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_viatura_modelo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle"
+                                android:text="Renault Clio" />
+
+                            <TextView
+                                android:id="@+id/tv_viatura_matricula"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+                                android:text="AA-12-BC · Ligeiro" />
+                        </LinearLayout>
+                    </LinearLayout>
+                <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/det_levantamento"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                    <TextView
+                        android:id="@+id/tv_levantamento"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+                        android:text="20/10 · 09:00" />
+                </LinearLayout>
+                <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/det_entrega"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                    <TextView
+                        android:id="@+id/tv_entrega"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+                        android:text="22/10 · 18:00" />
+                </LinearLayout>
+                <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/det_destino"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                    <TextView
+                        android:id="@+id/tv_destino"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+                        android:text="Lisboa" />
+                </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Quilómetros -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_km"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_m">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/fg_card_padding">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/fg_gap_xs"
+                        android:text="@string/det_quilometros"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle" />
+                <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/det_km_inicial"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                    <TextView
+                        android:id="@+id/tv_km_inicial"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+                        android:text="—" />
+                </LinearLayout>
+                <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/det_km_final"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                    <TextView
+                        android:id="@+id/tv_km_final"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+                        android:text="—" />
+                </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Checklist e fotografias -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_checklist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_m">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/fg_card_padding">
+
+                    <LinearLayout
+                        style="@style/Widget.FrotaGest.InfoRow"
+                        android:layout_marginBottom="@dimen/fg_gap_xs">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/det_checklist"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle" />
+
+                        <TextView
+                            android:id="@+id/tv_checklist_progresso"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+                            android:text="0 / 2" />
+                    </LinearLayout>
+                <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/det_rececao"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                    <TextView
+                        android:id="@+id/tv_checklist_rececao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+                        android:text="@string/det_por_preencher" />
+                </LinearLayout>
+                <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/det_entrega"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                    <TextView
+                        android:id="@+id/tv_checklist_entrega"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+                        android:text="@string/det_por_preencher" />
+                </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/ll_rodape"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/fg_screen_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_ler_qr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/det_ler_qr"
+            app:icon="@drawable/ic_qr_code"
+            app:iconGravity="textStart"
+            app:iconTint="@color/fg_surface" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_cancelar"
+            style="@style/Widget.FrotaGest.Button.Danger"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fg_gap_s"
+            android:enabled="false"
+            android:text="@string/det_cancelar" />
+
+        <TextView
+            android:id="@+id/tv_cancelar_ajuda"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fg_gap_s"
+            android:gravity="center"
+            android:text="@string/det_cancelar_ajuda"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Caption"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

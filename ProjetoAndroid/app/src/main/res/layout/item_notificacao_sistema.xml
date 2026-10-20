@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Alerta técnico em M-AdminSistema (ex.: "FCM: credencial inválida") -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/fg_gap_s">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/fg_card_padding"
+        android:paddingTop="@dimen/fg_gap_m"
+        android:paddingEnd="@dimen/fg_card_padding"
+        android:paddingBottom="@dimen/fg_gap_m">
+
+        <TextView
+            android:id="@+id/tv_titulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/fg_gap_s"
+            android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel"
+            app:layout_constraintEnd_toStartOf="@id/tv_hora"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="FCM: credencial inválida" />
+
+        <TextView
+            android:id="@+id/tv_hora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Caption"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_titulo"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="17:58" />
+
+        <TextView
+            android:id="@+id/tv_descricao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_titulo"
+            android:text="Notificações push não estão a ser enviadas." />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

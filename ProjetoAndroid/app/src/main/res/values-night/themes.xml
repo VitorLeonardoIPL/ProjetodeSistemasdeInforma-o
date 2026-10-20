@@ -1,7 +1,32 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.FrotaGest" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <!--
+        A app usa sempre o tema claro dos mockups (cores em values/colors.xml).
+        Para ter modo escuro no futuro, redefinir aqui as cores do tema.
+    -->
+    <style name="Base.Theme.FrotaGest" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/fg_primary</item>
+        <item name="colorOnPrimary">@color/fg_surface</item>
+        <item name="colorPrimaryContainer">@color/fg_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/fg_primary_dark</item>
+        <item name="colorSecondary">@color/fg_ink</item>
+        <item name="colorOnSecondary">@color/fg_surface</item>
+        <item name="colorError">@color/fg_danger</item>
+        <item name="colorOnError">@color/fg_surface</item>
+        <item name="android:colorBackground">@color/fg_background</item>
+        <item name="colorOnBackground">@color/fg_ink</item>
+        <item name="colorSurface">@color/fg_surface</item>
+        <item name="colorOnSurface">@color/fg_ink</item>
+        <item name="colorOnSurfaceVariant">@color/fg_text_muted</item>
+        <item name="colorSurfaceContainer">@color/fg_surface</item>
+        <item name="colorOutline">@color/fg_border_input</item>
+        <item name="colorOutlineVariant">@color/fg_border</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@color/fg_background</item>
+        <item name="materialButtonStyle">@style/Widget.FrotaGest.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.FrotaGest.Button.Outlined</item>
+        <item name="textInputStyle">@style/Widget.FrotaGest.TextInput</item>
+        <item name="materialCardViewStyle">@style/Widget.FrotaGest.Card</item>
+        <item name="bottomNavigationStyle">@style/Widget.FrotaGest.BottomNav</item>
+        <item name="materialSwitchStyle">@style/Widget.FrotaGest.Switch</item>
     </style>
 </resources>

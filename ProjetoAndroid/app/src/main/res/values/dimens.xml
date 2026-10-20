@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fg_screen_padding">16dp</dimen>
+    <dimen name="fg_screen_padding_large">24dp</dimen>
+    <dimen name="fg_gap_xs">4dp</dimen>
+    <dimen name="fg_gap_s">8dp</dimen>
+    <dimen name="fg_gap_m">12dp</dimen>
+    <dimen name="fg_gap_l">16dp</dimen>
+    <dimen name="fg_gap_xl">24dp</dimen>
+
+    <dimen name="fg_card_padding">14dp</dimen>
+    <dimen name="fg_card_radius">12dp</dimen>
+    <dimen name="fg_button_height">52dp</dimen>
+    <dimen name="fg_button_height_small">44dp</dimen>
+    <dimen name="fg_input_radius">8dp</dimen>
+    <dimen name="fg_top_bar_height">68dp</dimen>
+    <dimen name="fg_bell_size">44dp</dimen>
+    <dimen name="fg_icon_tile">38dp</dimen>
+    <dimen name="fg_avatar">56dp</dimen>
+    <dimen name="fg_logo">72dp</dimen>
+    <dimen name="fg_thumb">52dp</dimen>
+    <dimen name="fg_divider">1dp</dimen>
+</resources>

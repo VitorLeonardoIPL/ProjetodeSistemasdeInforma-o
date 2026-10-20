@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    M-NotifColab / M-Notificacao · aberto pelo sino do cabeçalho.
+    O mesmo ecrã serve Colaborador e Coordenador; muda só o tipo de itens.
+    Lista com cabeçalhos de secção (item_notificacao_seccao: "Hoje", "Ontem", "Esta semana")
+    e itens (item_notificacao), num BaseAdapter com 2 tipos de vista.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/fg_background"
+    tools:context=".ui.comum.NotificacoesActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/layout_top_bar_back"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/lv_notificacoes"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/fg_gap_m"
+        android:paddingStart="@dimen/fg_screen_padding"
+        android:paddingTop="@dimen/fg_gap_m"
+        android:paddingEnd="@dimen/fg_screen_padding"
+        android:paddingBottom="@dimen/fg_screen_padding"
+        android:scrollbarStyle="outsideOverlay"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
+        tools:listitem="@layout/item_notificacao" />
+
+    <TextView
+        android:id="@+id/tv_vazio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/fg_screen_padding_large"
+        android:text="@string/sem_resultados"
+        android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

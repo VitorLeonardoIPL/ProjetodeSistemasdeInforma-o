@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Notificação (Colaborador e Coordenador).
+    tv_icone: etiqueta de tipo sobre fundo colorido
+      REQ → bg_icon_tile_req · DOC → bg_icon_tile_doc · INS → bg_icon_tile_ins
+      REV → bg_icon_tile_rev · ✓ → bg_icon_tile_ok
+    ll_acoes (Recusar / Aprovar) só aparece em "Novo pedido" para o Coordenador.
+    tv_ver_pedido só aparece quando a notificação abre um pedido.
+-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_notificacao"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/fg_card_padding">
+
+        <TextView
+            android:id="@+id/tv_icone"
+            android:layout_width="@dimen/fg_icon_tile"
+            android:layout_height="@dimen/fg_icon_tile"
+            android:background="@drawable/bg_icon_tile_req"
+            android:gravity="center"
+            android:importantForAccessibility="no"
+            android:textColor="@color/fg_status_apr_text"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="REQ" />
+
+        <TextView
+            android:id="@+id/tv_titulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/fg_gap_m"
+            android:layout_marginEnd="@dimen/fg_gap_s"
+            android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle"
+            app:layout_constraintEnd_toStartOf="@id/tv_hora"
+            app:layout_constraintStart_toEndOf="@id/tv_icone"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Novo pedido #1048" />
+
+        <TextView
+            android:id="@+id/tv_hora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/fg_gap_s"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Caption"
+            android:textSize="13sp"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_titulo"
+            app:layout_constraintEnd_toStartOf="@id/dot_por_ler"
+            app:layout_goneMarginEnd="0dp"
+            android:text="há 1 min" />
+
+        <!-- Ponto azul de "por ler" -->
+        <View
+            android:id="@+id/dot_por_ler"
+            android:layout_width="9dp"
+            android:layout_height="9dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/dot_unread"
+            android:contentDescription="@string/cd_por_ler"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_descricao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_titulo"
+            app:layout_constraintTop_toBottomOf="@id/tv_titulo"
+            android:text="Ana Ribeiro · Ligeiro · 03/11 → 04/11 · Porto" />
+
+        <TextView
+            android:id="@+id/tv_ver_pedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="@string/not_ver_pedido"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Link"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/tv_titulo"
+            app:layout_constraintTop_toBottomOf="@id/tv_descricao" />
+
+        <!-- Ações rápidas (Coordenador · novo pedido) -->
+        <LinearLayout
+            android:id="@+id/ll_acoes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fg_gap_m"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_titulo"
+            app:layout_constraintTop_toBottomOf="@id/tv_ver_pedido"
+            tools:visibility="visible">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_recusar"
+                style="@style/Widget.FrotaGest.Button.Danger"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/fg_gap_s"
+                android:layout_weight="1"
+                android:minHeight="@dimen/fg_button_height_small"
+                android:text="@string/not_recusar" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_aprovar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:minHeight="@dimen/fg_button_height_small"
+                android:text="@string/not_aprovar" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- M-PedidosCoord · Coordenador · separador "Pedidos" (pedidos pendentes de decisão) -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fg_background"
+    tools:context=".ui.coordenador.PedidosCoordFragment">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/layout_top_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <HorizontalScrollView
+        android:id="@+id/hsv_filtro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_filtro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/fg_screen_padding"
+            android:paddingTop="@dimen/fg_gap_m"
+            android:paddingEnd="@dimen/fg_screen_padding"
+            app:checkedChip="@id/chip_pendentes"
+            app:selectionRequired="true"
+            app:singleLine="true"
+            app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_pendentes"
+                    style="@style/Widget.FrotaGest.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/coord_filtro_pendentes"
+                    tools:text="Pendentes (3)" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_aprovados"
+                    style="@style/Widget.FrotaGest.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/coord_filtro_aprovados" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_recusados"
+                    style="@style/Widget.FrotaGest.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/coord_filtro_recusados" />
+
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <!-- Lista preenchida por um adaptador (BaseAdapter) com item_pedido_coord -->
+    <ListView
+        android:id="@+id/lv_pedidos"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="@dimen/fg_gap_m"
+        android:paddingStart="@dimen/fg_screen_padding"
+        android:paddingTop="@dimen/fg_gap_m"
+        android:paddingEnd="@dimen/fg_screen_padding"
+        android:paddingBottom="@dimen/fg_gap_m"
+        android:scrollbarStyle="outsideOverlay"
+        app:layout_constraintBottom_toTopOf="@id/tv_ajuda"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hsv_filtro"
+        tools:listitem="@layout/item_pedido_coord" />
+
+    <TextView
+        android:id="@+id/tv_vazio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/fg_screen_padding_large"
+        android:text="@string/sem_resultados"
+        android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/lv_pedidos"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/lv_pedidos" />
+
+    <TextView
+        android:id="@+id/tv_ajuda"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/fg_gap_m"
+        android:text="@string/coord_ajuda_aprovar"
+        android:textAppearance="@style/TextAppearance.FrotaGest.Caption"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- M-Viagem · Colaborador · separador "Viagem" · RF-AM-06 · 07 · 14 · 16 -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fg_background"
+    tools:context=".ui.colaborador.ViagemFragment">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/layout_top_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Aviso de modo offline (RF-AM-16) -->
+    <TextView
+        android:id="@+id/tv_banner_offline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:accessibilityLiveRegion="polite"
+        android:background="@drawable/bg_banner_offline"
+        android:paddingStart="@dimen/fg_screen_padding"
+        android:paddingTop="@dimen/fg_gap_m"
+        android:paddingEnd="@dimen/fg_screen_padding"
+        android:paddingBottom="@dimen/fg_gap_m"
+        android:textColor="@color/fg_status_pend_text"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
+        android:text="Sem ligação. 3 registos guardados no dispositivo."
+        tools:visibility="visible" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/sv_viagem"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/btn_entregar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_banner_offline">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/fg_screen_padding">
+
+            <!-- Quilómetros -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_km"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/fg_card_padding">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/fg_gap_xs"
+                        android:text="@string/via_quilometros"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle" />
+
+                    <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                        <TextView
+                            android:id="@+id/tv_km_inicial_label"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+                            android:text="Inicial (06/10 09:12)" />
+
+                        <TextView
+                            android:id="@+id/tv_km_inicial"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle"
+                            android:text="48 210 km" />
+                    </LinearLayout>
+
+                    <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/det_km_final"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                        <TextView
+                            android:id="@+id/tv_km_final"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/via_km_final_entrega"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Faturas de combustível (RF-AM-07) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_faturas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_m">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/fg_card_padding">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/fg_gap_s"
+                        android:text="@string/via_faturas"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle" />
+
+                    <!-- Preenchido em código: um item_fatura por fatura registada -->
+                    <LinearLayout
+                        android:id="@+id/ll_faturas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_fotografar_fatura"
+                        style="@style/Widget.FrotaGest.Button.Outlined"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/fg_gap_m"
+                        android:text="@string/via_fotografar_fatura"
+                        app:icon="@drawable/ic_camera"
+                        app:iconGravity="textStart"
+                        app:iconTint="@color/fg_ink" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Localização partilhada (RF-AM-14) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_localizacao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_m">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/fg_card_padding">
+
+                    <View
+                        android:id="@+id/dot_localizacao"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:background="@drawable/dot_live" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/fg_gap_m"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/via_localizacao"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/via_localizacao_ajuda"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_entregar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fg_screen_padding"
+        android:text="@string/via_entregar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Estado vazio: sem viagem em curso -->
+    <LinearLayout
+        android:id="@+id/ll_vazio"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/fg_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/fg_screen_padding_large"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ic_nav_viagem"
+            app:tint="@color/fg_border_input" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fg_gap_m"
+            android:text="@string/via_vazio_titulo"
+            android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fg_gap_xs"
+            android:gravity="center"
+            android:text="@string/via_vazio_texto"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

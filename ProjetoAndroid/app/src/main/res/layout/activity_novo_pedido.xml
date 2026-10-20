@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- M-NovoPedido · RF-AM-02 · aberto pelo botão flutuante "Novo pedido" -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/fg_surface"
+    tools:context=".ui.colaborador.NovoPedidoActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/layout_top_bar_back"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/ll_rodape"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/fg_screen_padding">
+
+            <!-- Início -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/fg_gap_m"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:labelFor="@id/et_data_inicio"
+                        android:text="@string/novo_inicio"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_data_inicio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:endIconDrawable="@drawable/ic_calendar"
+                        app:endIconMode="custom"
+                        app:endIconTint="@color/fg_ink">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_data_inicio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:inputType="none"
+                            android:minHeight="@dimen/fg_button_height"
+                            android:text="03/11/2026" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:labelFor="@id/et_hora_inicio"
+                        android:text="@string/novo_hora"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_hora_inicio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:endIconDrawable="@drawable/ic_clock"
+                        app:endIconMode="custom"
+                        app:endIconTint="@color/fg_ink">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_hora_inicio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:inputType="none"
+                            android:minHeight="@dimen/fg_button_height"
+                            android:text="09:00" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Fim -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_m"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/fg_gap_m"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:labelFor="@id/et_data_fim"
+                        android:text="@string/novo_fim"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_data_fim"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:endIconDrawable="@drawable/ic_calendar"
+                        app:endIconMode="custom"
+                        app:endIconTint="@color/fg_ink">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_data_fim"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:inputType="none"
+                            android:minHeight="@dimen/fg_button_height"
+                            android:text="04/11/2026" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:labelFor="@id/et_hora_fim"
+                        android:text="@string/novo_hora"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_hora_fim"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:endIconDrawable="@drawable/ic_clock"
+                        app:endIconMode="custom"
+                        app:endIconTint="@color/fg_ink">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_hora_fim"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:inputType="none"
+                            android:minHeight="@dimen/fg_button_height"
+                            android:text="18:00" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Categoria -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_l"
+                android:layout_marginBottom="6dp"
+                android:text="@string/novo_categoria"
+                android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggle_categoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:checkedButton="@id/btn_cat_ligeiro"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_cat_ligeiro"
+                    style="@style/Widget.FrotaGest.Button.Segment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/categoria_ligeiro" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_cat_comercial"
+                    style="@style/Widget.FrotaGest.Button.Segment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/categoria_comercial" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_cat_eletrico"
+                    style="@style/Widget.FrotaGest.Button.Segment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/categoria_eletrico" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <TextView
+                android:id="@+id/tv_viaturas_livres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+                android:text="4 viaturas livres neste período" />
+
+            <!-- Destino -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_l"
+                android:layout_marginBottom="6dp"
+                android:labelFor="@id/et_destino"
+                android:text="@string/novo_destino"
+                android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_destino"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_destino"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/novo_destino_hint"
+                    android:inputType="textPostalAddress"
+                    android:minHeight="@dimen/fg_button_height" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Motivo -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_l"
+                android:layout_marginBottom="6dp"
+                android:labelFor="@id/et_motivo"
+                android:text="@string/novo_motivo"
+                android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_motivo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_motivo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|start"
+                    android:hint="@string/novo_motivo_hint"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:minLines="3" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_erro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_m"
+                android:accessibilityLiveRegion="polite"
+                android:text="@string/novo_erro_motivo"
+                android:textAppearance="@style/TextAppearance.FrotaGest.Error"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/ll_rodape"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/fg_screen_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_submeter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/novo_submeter" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fg_gap_s"
+            android:gravity="center"
+            android:text="@string/novo_offline"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Caption"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
