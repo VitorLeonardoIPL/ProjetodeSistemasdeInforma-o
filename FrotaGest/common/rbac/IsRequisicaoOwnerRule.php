@@ -14,6 +14,6 @@ class IsRequisicaoOwnerRule extends Rule
     //$user: id do utilizador, $params: o que vai em can('x', ['requisicao' => $model])
     public function execute($user, $item, $params)
     {
-        return isset($params['requisicao']) ? $params['requisicao']->user_id == $user : false;
+        return isset($params['requisicao']) ? $params['requisicao']->utilizador_id == $user : false;
     }
 }
