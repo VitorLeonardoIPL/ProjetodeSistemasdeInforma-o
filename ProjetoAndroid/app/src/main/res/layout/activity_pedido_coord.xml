@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    M-PedidoCoord · RF-AM-11 · BO-04 · 05 · 08
+    Dois modos no mesmo ecrã:
+      aprovar  → ll_aprovar + ll_botoes_aprovar  (escolha de condutor e viatura)
+      recusar  → ll_recusar + ll_botoes_recusar  (motivo obrigatório)
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/fg_background"
+    tools:context=".ui.coordenador.PedidoCoordActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/layout_top_bar_back"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/ll_rodape"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/fg_screen_padding">
+
+            <!-- Dados do pedido -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_pedido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/fg_card_padding">
+
+                    <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/fg_gap_m"
+                            android:text="@string/pc_colaborador"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                        <TextView
+                            android:id="@+id/tv_colaborador"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel"
+                            android:text="Ana Ribeiro" />
+                    </LinearLayout>
+                    <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/fg_gap_m"
+                            android:text="@string/pc_periodo"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                        <TextView
+                            android:id="@+id/tv_periodo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+                            android:text="03/11 09:00 → 04/11 18:00" />
+                    </LinearLayout>
+                    <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/fg_gap_m"
+                            android:text="@string/pc_categoria"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                        <TextView
+                            android:id="@+id/tv_categoria"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+                            android:text="Ligeiro" />
+                    </LinearLayout>
+                    <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/fg_gap_m"
+                            android:text="@string/pc_destino"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                        <TextView
+                            android:id="@+id/tv_destino"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+                            android:text="Porto" />
+                    </LinearLayout>
+                    <LinearLayout style="@style/Widget.FrotaGest.InfoRow">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/fg_gap_m"
+                            android:text="@string/pc_motivo"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted" />
+
+                        <TextView
+                            android:id="@+id/tv_motivo"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+                            android:text="Visita a cliente" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Validação da carta de condução -->
+            <TextView
+                android:id="@+id/tv_carta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_m"
+                android:background="@drawable/bg_banner_ok"
+                android:drawablePadding="@dimen/fg_gap_s"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/fg_gap_m"
+                android:paddingTop="10dp"
+                android:paddingEnd="@dimen/fg_gap_m"
+                android:paddingBottom="10dp"
+                android:textColor="@color/fg_status_ok_text"
+                android:textSize="14sp"
+                app:drawableStartCompat="@drawable/ic_check"
+                app:drawableTint="@color/fg_status_ok_text"
+                android:text="Carta do condutor válida até 14/03/2031" />
+
+            <!-- Modo APROVAR -->
+            <LinearLayout
+                android:id="@+id/ll_aprovar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_l"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:labelFor="@id/act_condutor"
+                        android:text="@string/pc_condutor"
+                        android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+                    <!-- Abre M-CondutoresDisp -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_ver_disponiveis"
+                        style="@style/Widget.FrotaGest.Button.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minHeight="36dp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="0dp"
+                        android:text="@string/pc_ver_disponiveis"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_condutor"
+                    style="@style/Widget.FrotaGest.TextInput.Dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/act_condutor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:minHeight="@dimen/fg_button_height"
+                        android:text="Ana Ribeiro · L-123456" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/fg_gap_m"
+                    android:layout_marginBottom="6dp"
+                    android:labelFor="@id/act_viatura"
+                    android:text="@string/pc_viatura"
+                    android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_viatura"
+                    style="@style/Widget.FrotaGest.TextInput.Dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/act_viatura"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:minHeight="@dimen/fg_button_height"
+                        android:text="AA-12-BC · Renault Clio (livre)" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/pc_ajuda_livres"
+                    android:textAppearance="@style/TextAppearance.FrotaGest.Caption"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Modo RECUSAR -->
+            <LinearLayout
+                android:id="@+id/ll_recusar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_l"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:labelFor="@id/act_motivo_recusa"
+                    android:text="@string/pc_motivo_recusa"
+                    android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_motivo_recusa"
+                    style="@style/Widget.FrotaGest.TextInput.Dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/act_motivo_recusa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:minHeight="@dimen/fg_button_height"
+                        android:hint="@string/pc_motivo_recusa_hint" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_observacoes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/fg_gap_m">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_observacoes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|start"
+                        android:hint="@string/pc_observacoes_hint"
+                        android:inputType="textMultiLine|textCapSentences"
+                        android:minLines="2" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/ll_rodape"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/fg_screen_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Botões do modo aprovar -->
+        <LinearLayout
+            android:id="@+id/ll_botoes_aprovar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_recusar"
+                style="@style/Widget.FrotaGest.Button.Danger"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/fg_gap_s"
+                android:layout_weight="1"
+                android:text="@string/pc_recusar" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_aprovar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.6"
+                android:text="@string/pc_aprovar_atribuir" />
+        </LinearLayout>
+
+        <!-- Botões do modo recusar -->
+        <LinearLayout
+            android:id="@+id/ll_botoes_recusar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_voltar_aprovar"
+                style="@style/Widget.FrotaGest.Button.Outlined"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/fg_gap_s"
+                android:layout_weight="1"
+                android:text="@string/pc_voltar" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_confirmar_recusa"
+                style="@style/Widget.FrotaGest.Button.DangerFilled"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.6"
+                android:text="@string/pc_confirmar_recusa" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fg_gap_s"
+            android:gravity="center"
+            android:text="@string/pc_ajuda_push"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Caption"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

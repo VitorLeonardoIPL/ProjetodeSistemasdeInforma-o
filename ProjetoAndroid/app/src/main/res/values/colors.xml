@@ -2,4 +2,50 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Marca -->
+    <color name="fg_primary">#2457D6</color>
+    <color name="fg_primary_dark">#1A43B0</color>
+    <color name="fg_primary_container">#E4ECFF</color>
+    <color name="fg_primary_light">#DBE6FF</color>
+    <color name="fg_primary_tint">#EEF3FF</color>
+
+    <!-- Texto -->
+    <color name="fg_ink">#0F172A</color>
+    <color name="fg_text_body">#334155</color>
+    <color name="fg_text_muted">#526075</color>
+
+    <!-- Superfícies e contornos -->
+    <color name="fg_background">#F4F6FA</color>
+    <color name="fg_surface">#FFFFFF</color>
+    <color name="fg_surface_variant">#EEF1F6</color>
+    <color name="fg_border">#DCE2EA</color>
+    <color name="fg_border_input">#7F8DA3</color>
+    <color name="fg_divider">#EDF0F5</color>
+
+    <!-- Ações perigosas e alertas -->
+    <color name="fg_danger">#B42318</color>
+    <color name="fg_badge">#D92D20</color>
+    <color name="fg_photo_label">#99000000</color>
+
+    <!-- Estados (Aprovada / Em curso) -->
+    <color name="fg_status_apr_text">#1A43B0</color>
+    <color name="fg_status_apr_bg">#E4ECFF</color>
+    <color name="fg_status_apr_stroke">#A8BFF5</color>
+    <!-- Pendente / aviso -->
+    <color name="fg_status_pend_text">#93370D</color>
+    <color name="fg_status_pend_bg">#FEF0C7</color>
+    <color name="fg_status_pend_stroke">#F5C26B</color>
+    <!-- Recusada / falha -->
+    <color name="fg_status_rec_text">#912018</color>
+    <color name="fg_status_rec_bg">#FDE8E7</color>
+    <color name="fg_status_rec_stroke">#F0A9A4</color>
+    <!-- Disponível / OK -->
+    <color name="fg_status_ok_text">#166534</color>
+    <color name="fg_status_ok_bg">#DCFCE7</color>
+    <color name="fg_status_ok_stroke">#86EFAC</color>
+    <!-- Neutro -->
+    <color name="fg_status_neu_text">#334155</color>
+    <color name="fg_status_neu_bg">#EEF1F6</color>
+    <color name="fg_status_neu_stroke">#DCE2EA</color>
 </resources>

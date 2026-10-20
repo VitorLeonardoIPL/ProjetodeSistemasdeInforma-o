@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    M-Mapa · Coordenador · separador "Mapa" · RF-AM-14
+    map_container é o espaço reservado para o mapa (a biblioteca de mapas
+    ainda não está escolhida). Os marcadores com a matrícula podem ser
+    desenhados a partir de @layout/view_map_pin.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fg_background"
+    tools:context=".ui.coordenador.MapaFragment">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/layout_top_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/map_container"
+        android:background="@color/fg_surface_variant"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_centrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fg_screen_padding"
+        android:contentDescription="@string/mapa_centrar"
+        android:src="@drawable/ic_my_location"
+        app:backgroundTint="@color/fg_surface"
+        app:fabSize="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
+        app:shapeAppearanceOverlay="@style/ShapeAppearance.FrotaGest.Pill"
+        app:tint="@color/fg_ink" />
+
+    <!-- Painel da viatura selecionada -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_viatura"
+        style="@style/Widget.FrotaGest.Card.Elevated"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fg_gap_m"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/fg_gap_l">
+
+            <TextView
+                android:id="@+id/tv_viatura"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/fg_gap_s"
+                android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle"
+                app:layout_constraintEnd_toStartOf="@id/tv_atualizado"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="EG-23-KL · Toyota Corolla" />
+
+            <TextView
+                android:id="@+id/tv_atualizado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.FrotaGest.Caption"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="há 2 min" />
+
+            <TextView
+                android:id="@+id/tv_condutor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_xs"
+                android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_viatura"
+                android:text="Rita Gomes · #1031 · Coimbra" />
+
+            <TextView
+                android:id="@+id/tv_km"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textAppearance="@style/TextAppearance.FrotaGest.BodySmall"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_condutor"
+                android:text="118 km percorridos · entrega 07/10 18:00" />
+
+            <TextView
+                android:id="@+id/tv_ver_requisicao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_m"
+                android:background="?attr/selectableItemBackground"
+                android:minHeight="32dp"
+                android:gravity="center_vertical"
+                android:text="@string/mapa_ver_requisicao"
+                android:textAppearance="@style/TextAppearance.FrotaGest.Link"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_km" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

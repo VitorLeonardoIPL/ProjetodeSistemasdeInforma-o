@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cartão de pedido pendente na lista do coordenador (M-PedidosCoord) -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_pedido"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/fg_card_padding">
+
+        <TextView
+            android:id="@+id/tv_titulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/fg_gap_s"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle"
+            app:layout_constraintEnd_toStartOf="@id/tv_disponibilidade"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="#1048 · Ana Ribeiro" />
+
+        <!-- "4 livres" (Aprovada) ou "Sem viaturas" (Recusada) -->
+        <TextView
+            android:id="@+id/tv_disponibilidade"
+            style="@style/Widget.FrotaGest.Status.Aprovada"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_titulo"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="4 livres" />
+
+        <TextView
+            android:id="@+id/tv_detalhe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_titulo"
+            android:text="03/11 → 04/11 · Ligeiro · Porto" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_recusar"
+            style="@style/Widget.FrotaGest.Button.Danger"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/fg_gap_m"
+            android:layout_marginEnd="@dimen/fg_gap_s"
+            android:minHeight="@dimen/fg_button_height_small"
+            android:text="@string/not_recusar"
+            app:layout_constraintEnd_toStartOf="@id/btn_aprovar"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_detalhe" />
+
+        <!-- Desativado quando não há viaturas livres -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_aprovar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/fg_button_height_small"
+            android:text="@string/not_aprovar"
+            app:layout_constraintBaseline_toBaselineOf="@id/btn_recusar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_recusar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

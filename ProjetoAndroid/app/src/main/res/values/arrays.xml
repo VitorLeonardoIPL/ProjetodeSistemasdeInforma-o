@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="estado_geral_opcoes">
+        <item>Bom</item>
+        <item>Danos ligeiros</item>
+        <item>Danos graves</item>
+    </string-array>
+
+    <string-array name="motivos_recusa">
+        <item>Sem viaturas disponíveis</item>
+        <item>Motivo não justificado</item>
+        <item>Outro</item>
+    </string-array>
+</resources>

@@ -1,3 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">FrotaGest</string>
+
+    <!-- Comum -->
+    <string name="cd_voltar">Voltar</string>
+    <string name="cd_notificacoes">Notificações</string>
+    <string name="cd_logotipo">FrotaGest</string>
+    <string name="cd_por_ler">Por ler</string>
+    <string name="sem_resultados">Não há registos para mostrar.</string>
+
+    <!-- Navegação inferior -->
+    <string name="nav_pedidos">Pedidos</string>
+    <string name="nav_viagem">Viagem</string>
+    <string name="nav_mapa">Mapa</string>
+    <string name="nav_perfil">Perfil</string>
+    <string name="nav_sistema">Sistema</string>
+
+    <!-- Estados -->
+    <string name="estado_pendente">Pendente</string>
+    <string name="estado_aprovada">Aprovada</string>
+    <string name="estado_recusada">Recusada</string>
+    <string name="estado_em_curso">Em curso</string>
+    <string name="estado_concluida">Concluída</string>
+    <string name="estado_disponivel">Disponível</string>
+    <string name="estado_indisponivel">Indisponível</string>
+    <string name="estado_ok">OK</string>
+    <string name="estado_falha">Falha</string>
+
+    <!-- Login (M-Login) -->
+    <string name="login_perfis">Colaborador, Coordenador de Frota e Administrador</string>
+    <string name="login_email">Email</string>
+    <string name="login_email_hint">nome@empresa.pt</string>
+    <string name="login_password">Palavra-passe</string>
+    <string name="login_entrar">Entrar</string>
+    <string name="login_esqueci">Esqueci-me da palavra-passe</string>
+
+    <!-- As minhas requisições (M-Requisicoes) -->
+    <string name="req_titulo">As minhas requisições</string>
+    <string name="req_filtro_ativas">Ativas</string>
+    <string name="req_filtro_pendentes">Pendentes</string>
+    <string name="req_filtro_historico">Histórico</string>
+    <string name="req_novo_pedido">Novo pedido</string>
+    <string name="req_registar_km">Registar km e entrega →</string>
+
+    <!-- Novo pedido (M-NovoPedido) -->
+    <string name="novo_titulo">Novo pedido</string>
+    <string name="novo_inicio">Início</string>
+    <string name="novo_fim">Fim</string>
+    <string name="novo_hora">Hora</string>
+    <string name="novo_categoria">Categoria</string>
+    <string name="categoria_ligeiro">Ligeiro</string>
+    <string name="categoria_comercial">Comercial</string>
+    <string name="categoria_eletrico">Elétrico</string>
+    <string name="novo_destino">Destino</string>
+    <string name="novo_destino_hint">Cidade ou morada</string>
+    <string name="novo_motivo">Motivo</string>
+    <string name="novo_motivo_hint">Motivo profissional da deslocação</string>
+    <string name="novo_erro_motivo">Indique o motivo para continuar.</string>
+    <string name="novo_submeter">Submeter pedido</string>
+    <string name="novo_offline">Sem rede, o pedido fica em fila e é enviado quando houver ligação.</string>
+
+    <!-- Detalhe do pedido (M-Detalhe) -->
+    <string name="det_titulo">Pedido</string>
+    <string name="det_viatura_atribuida">Viatura atribuída</string>
+    <string name="det_levantamento">Levantamento</string>
+    <string name="det_entrega">Entrega</string>
+    <string name="det_destino">Destino</string>
+    <string name="det_quilometros">Quilómetros</string>
+    <string name="det_km_inicial">Inicial</string>
+    <string name="det_km_final">Final</string>
+    <string name="det_checklist">Checklist e fotografias</string>
+    <string name="det_rececao">Receção</string>
+    <string name="det_por_preencher">Por preencher</string>
+    <string name="det_ler_qr">Ler QR e confirmar receção</string>
+    <string name="det_cancelar">Cancelar pedido</string>
+    <string name="det_cancelar_ajuda">Só é possível cancelar enquanto o pedido estiver Pendente.</string>
+
+    <!-- Checklist (M-Checklist) -->
+    <string name="chk_titulo_rececao">Receção da viatura</string>
+    <string name="chk_titulo_entrega">Entrega da viatura</string>
+    <string name="chk_tab_rececao">Receção</string>
+    <string name="chk_tab_entrega">Entrega</string>
+    <string name="chk_km_iniciais">Quilómetros iniciais</string>
+    <string name="chk_km_finais">Quilómetros finais</string>
+    <string name="chk_estado_geral">Estado geral</string>
+    <string name="chk_documentos">Documentos a bordo</string>
+    <string name="chk_sim">Sim</string>
+    <string name="chk_nao">Não</string>
+    <string name="chk_fotografias">Fotografias (mín. 4)</string>
+    <string name="chk_foto_frente">frente</string>
+    <string name="chk_foto_tras">trás</string>
+    <string name="chk_foto_esq">esq.</string>
+    <string name="chk_foto_dir">dir.</string>
+    <string name="chk_observacoes_hint">Observações (ex.: interior com areia)</string>
+    <string name="chk_confirmar_rececao">Confirmar receção</string>
+    <string name="chk_confirmar_entrega">Confirmar entrega</string>
+    <string name="chk_ajuda">A entrega usa o mesmo ecrã (separador Entrega) com km finais.</string>
+
+    <!-- Viagem em curso (M-Viagem) -->
+    <string name="via_titulo">Viagem em curso</string>
+    <string name="via_sem_ligacao"><b>Sem ligação.</b> %1$d registos guardados no dispositivo.</string>
+    <string name="via_quilometros">Quilómetros</string>
+    <string name="via_km_final_entrega">Registado na entrega</string>
+    <string name="via_faturas">Faturas de combustível</string>
+    <string name="via_fotografar_fatura">Fotografar fatura</string>
+    <string name="via_localizacao">Localização partilhada</string>
+    <string name="via_localizacao_ajuda">Só durante a utilização e só visível ao Coordenador (RGPD).</string>
+    <string name="via_entregar">Entregar viatura</string>
+    <string name="via_vazio_titulo">Sem viagem em curso</string>
+    <string name="via_vazio_texto">Quando levantar uma viatura aprovada, a viagem aparece aqui.</string>
+
+    <!-- Notificações (M-NotifColab / M-Notificacao) -->
+    <string name="not_titulo">Notificações</string>
+    <string name="not_marcar_lidas">Marcar lidas</string>
+    <string name="not_ver_pedido">Ver pedido →</string>
+    <string name="not_recusar">Recusar</string>
+    <string name="not_aprovar">Aprovar</string>
+
+    <!-- Pedidos do coordenador (M-PedidosCoord) -->
+    <string name="coord_titulo">Pedidos</string>
+    <string name="coord_filtro_pendentes">Pendentes</string>
+    <string name="coord_filtro_aprovados">Aprovados</string>
+    <string name="coord_filtro_recusados">Recusados</string>
+    <string name="coord_ajuda_aprovar">Aprovar abre a escolha da viatura e do condutor.</string>
+
+    <!-- Pedido do coordenador (M-PedidoCoord) -->
+    <string name="pc_colaborador">Colaborador</string>
+    <string name="pc_periodo">Período</string>
+    <string name="pc_categoria">Categoria</string>
+    <string name="pc_destino">Destino</string>
+    <string name="pc_motivo">Motivo</string>
+    <string name="pc_condutor">Condutor</string>
+    <string name="pc_ver_disponiveis">Ver disponíveis</string>
+    <string name="pc_viatura">Viatura a atribuir</string>
+    <string name="pc_ajuda_livres">Só aparecem viaturas livres e condutores ativos.</string>
+    <string name="pc_motivo_recusa">Motivo da recusa (obrigatório)</string>
+    <string name="pc_motivo_recusa_hint">Selecione…</string>
+    <string name="pc_observacoes_hint">Detalhe do motivo (se escolher Outro)</string>
+    <string name="pc_recusar">Recusar</string>
+    <string name="pc_aprovar_atribuir">Aprovar e atribuir</string>
+    <string name="pc_voltar">Voltar</string>
+    <string name="pc_confirmar_recusa">Confirmar recusa</string>
+    <string name="pc_ajuda_push">O colaborador recebe a decisão por push.</string>
+
+    <!-- Condutores disponíveis (M-CondutoresDisp) -->
+    <string name="cond_titulo">Condutores disponíveis</string>
+    <string name="cond_de">De</string>
+    <string name="cond_ate">Até</string>
+    <string name="cond_disponiveis">Disponíveis (%1$d)</string>
+    <string name="cond_indisponiveis">Indisponíveis (%1$d)</string>
+    <string name="cond_indisponiveis_periodo">Indisponíveis neste período</string>
+    <string name="cond_usar">Usar %1$s no pedido #%2$d</string>
+
+    <!-- Mapa (M-Mapa) -->
+    <string name="mapa_titulo">Mapa da frota</string>
+    <string name="mapa_centrar">Centrar no mapa</string>
+    <string name="mapa_ver_requisicao">Ver requisição →</string>
+
+    <!-- Perfil (M-Perfil) -->
+    <string name="perfil_titulo">Perfil</string>
+    <string name="perfil_alterar_password">Alterar palavra-passe</string>
+    <string name="perfil_push">Notificações push</string>
+    <string name="perfil_por_sincronizar">Registos por sincronizar</string>
+    <string name="perfil_ajuda">Ajuda e contactos</string>
+    <string name="perfil_versao">Versão da aplicação</string>
+    <string name="perfil_terminar_sessao">Terminar sessão</string>
+    <string name="perfil_terminar_ajuda">Ao terminar sessão, os registos por sincronizar são mantidos no dispositivo.</string>
+
+    <!-- Configuração do servidor (obrigatório no enunciado AMSI) -->
+    <string name="cfg_titulo">Configuração do servidor</string>
+    <string name="cfg_abrir">Configurar servidor</string>
+    <string name="cfg_intro">Indique o endereço onde está alojada a API do FrotaGest. Fica guardado neste dispositivo.</string>
+    <string name="cfg_url">Endereço da API</string>
+    <string name="cfg_url_hint">http://172.22.21.10/frotagest/backend/web/api</string>
+    <string name="cfg_url_ajuda">Inclua http:// ou https:// e o caminho até /api.</string>
+    <string name="cfg_testar">Testar ligação</string>
+    <string name="cfg_guardar">Guardar</string>
+    <string name="cfg_repor">Repor endereço por omissão</string>
+    <string name="cfg_ligacao_ok">Ligação estabelecida (%1$d ms)</string>
+    <string name="cfg_ligacao_falhou">Sem resposta do servidor</string>
+    <string name="perfil_servidor">Servidor da API</string>
+
+    <!-- Estado do sistema (M-AdminSistema) -->
+    <string name="adm_titulo">Estado do sistema</string>
+    <string name="adm_servicos">Serviços</string>
+    <string name="adm_notificacoes">Notificações do sistema</string>
+    <string name="adm_ajuda">Só consulta. Para corrigir, usar Configuração no back-office.</string>
 </resources>

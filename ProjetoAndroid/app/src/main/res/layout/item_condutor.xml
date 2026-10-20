@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Condutor na lista de M-CondutoresDisp. O cartão selecionado fica com contorno azul (setChecked). -->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_condutor"
+    style="@style/Widget.FrotaGest.Card.Selectable"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/fg_gap_m"
+    android:clickable="true"
+    android:focusable="true"
+    tools:checked="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/fg_gap_s"
+        android:paddingTop="@dimen/fg_gap_m"
+        android:paddingEnd="@dimen/fg_card_padding"
+        android:paddingBottom="@dimen/fg_gap_m">
+
+        <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/rb_condutor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="false"
+            android:focusable="false"
+            android:importantForAccessibility="no"
+            app:buttonTint="@color/fg_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:checked="true" />
+
+        <TextView
+            android:id="@+id/tv_nome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/fg_gap_xs"
+            android:layout_marginEnd="@dimen/fg_gap_s"
+            android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle"
+            app:layout_constraintBottom_toTopOf="@id/tv_info"
+            app:layout_constraintEnd_toStartOf="@id/tv_estado"
+            app:layout_constraintStart_toEndOf="@id/rb_condutor"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            android:text="Ana Ribeiro" />
+
+        <TextView
+            android:id="@+id/tv_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_nome"
+            app:layout_constraintStart_toStartOf="@id/tv_nome"
+            app:layout_constraintTop_toBottomOf="@id/tv_nome"
+            android:text="912 345 678 · carta até 14/03/2031" />
+
+        <TextView
+            android:id="@+id/tv_estado"
+            style="@style/Widget.FrotaGest.Status.Disponivel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/estado_disponivel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

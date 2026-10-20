@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- M-AdminSistema · Administrador · separador "Sistema" (só consulta) -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fg_background"
+    android:orientation="vertical"
+    tools:context=".ui.admin.AdminSistemaFragment">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/layout_top_bar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/fg_screen_padding">
+
+                <!-- Serviços -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_servicos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/fg_card_padding"
+                        android:paddingTop="@dimen/fg_gap_m"
+                        android:paddingEnd="@dimen/fg_card_padding"
+                        android:paddingBottom="@dimen/fg_gap_m">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/fg_gap_xs"
+                            android:text="@string/adm_servicos"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle" />
+
+                        <!-- Preenchido em código: um item_servico_estado por serviço -->
+                        <LinearLayout
+                            android:id="@+id/ll_servicos"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Notificações do sistema -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/fg_gap_l"
+                    android:layout_marginBottom="@dimen/fg_gap_s"
+                    android:accessibilityHeading="true"
+                    android:text="@string/adm_notificacoes"
+                    android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle"
+                    tools:targetApi="p" />
+
+                <!-- Preenchido em código: um item_notificacao_sistema por alerta -->
+                <LinearLayout
+                    android:id="@+id/ll_notificacoes_sistema"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/fg_gap_s"
+                    android:gravity="center"
+                    android:text="@string/adm_ajuda"
+                    android:textAppearance="@style/TextAppearance.FrotaGest.Caption"
+                    android:textSize="13sp" />
+            </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

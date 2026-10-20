@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Marcador do mapa com a matrícula. Inflado e convertido em Bitmap
+    (BitmapDescriptorFactory.fromBitmap). Viatura sem posição recente:
+    usar bg_map_pin_idle + dot_map_pin_idle + texto fg_text_body.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_pin"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_map_pin"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="5dp"
+    android:paddingTop="3dp"
+    android:paddingEnd="9dp"
+    android:paddingBottom="3dp">
+
+    <View
+        android:id="@+id/dot_pin"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:background="@drawable/dot_map_pin" />
+
+    <TextView
+        android:id="@+id/tv_pin_matricula"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:textColor="@color/fg_primary_dark"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:text="EG-23-KL" />
+
+</LinearLayout>

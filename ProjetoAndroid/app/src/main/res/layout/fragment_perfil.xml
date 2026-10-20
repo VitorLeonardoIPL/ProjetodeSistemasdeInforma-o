@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- M-Perfil · comum aos três perfis (separador "Perfil") -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fg_background"
+    android:orientation="vertical"
+    tools:context=".ui.comum.PerfilFragment">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/layout_top_bar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/fg_screen_padding">
+
+            <!-- Identificação -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_utilizador"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/fg_card_padding">
+
+                    <TextView
+                        android:id="@+id/tv_iniciais"
+                        android:layout_width="@dimen/fg_avatar"
+                        android:layout_height="@dimen/fg_avatar"
+                        android:background="@drawable/bg_avatar"
+                        android:gravity="center"
+                        android:importantForAccessibility="no"
+                        android:textColor="@color/fg_primary_dark"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:text="RM" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/fg_gap_l"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_nome"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.CardTitle"
+                            android:textSize="18sp"
+                            android:text="Rui Matos" />
+
+                        <TextView
+                            android:id="@+id/tv_perfil"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+                            android:textSize="15sp"
+                            android:text="Coordenador de Frota" />
+
+                        <TextView
+                            android:id="@+id/tv_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+                            android:text="rui.matos@empresa.pt" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Opções -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_opcoes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_m">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/row_alterar_password"
+                        style="@style/Widget.FrotaGest.ListRow"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/perfil_alterar_password"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Body" />
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_chevron_right"
+                            app:tint="@color/fg_text_muted" />
+                    </LinearLayout>
+
+                    <View
+                        style="@style/Widget.FrotaGest.Divider"
+                        android:layout_marginStart="@dimen/fg_gap_l"
+                        android:layout_marginEnd="@dimen/fg_gap_l" />
+
+                    <LinearLayout
+                        android:id="@+id/row_push"
+                        style="@style/Widget.FrotaGest.ListRow">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:labelFor="@id/sw_push"
+                            android:text="@string/perfil_push"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Body" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/sw_push"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:contentDescription="@string/perfil_push" />
+                    </LinearLayout>
+
+                    <View
+                        style="@style/Widget.FrotaGest.Divider"
+                        android:layout_marginStart="@dimen/fg_gap_l"
+                        android:layout_marginEnd="@dimen/fg_gap_l" />
+
+                    <LinearLayout
+                        android:id="@+id/row_por_sincronizar"
+                        style="@style/Widget.FrotaGest.ListRow">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/perfil_por_sincronizar"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Body" />
+
+                        <TextView
+                            android:id="@+id/tv_por_sincronizar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+                            android:textSize="15sp"
+                            android:text="0" />
+                    </LinearLayout>
+
+                    <View
+                        style="@style/Widget.FrotaGest.Divider"
+                        android:layout_marginStart="@dimen/fg_gap_l"
+                        android:layout_marginEnd="@dimen/fg_gap_l" />
+
+                    <LinearLayout
+                        android:id="@+id/row_servidor"
+                        style="@style/Widget.FrotaGest.ListRow"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/perfil_servidor"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Body" />
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_chevron_right"
+                            app:tint="@color/fg_text_muted" />
+                    </LinearLayout>
+
+                    <View
+                        style="@style/Widget.FrotaGest.Divider"
+                        android:layout_marginStart="@dimen/fg_gap_l"
+                        android:layout_marginEnd="@dimen/fg_gap_l" />
+
+                    <LinearLayout
+                        android:id="@+id/row_ajuda"
+                        style="@style/Widget.FrotaGest.ListRow"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/perfil_ajuda"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Body" />
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_chevron_right"
+                            app:tint="@color/fg_text_muted" />
+                    </LinearLayout>
+
+                    <View
+                        style="@style/Widget.FrotaGest.Divider"
+                        android:layout_marginStart="@dimen/fg_gap_l"
+                        android:layout_marginEnd="@dimen/fg_gap_l" />
+
+                    <LinearLayout
+                        android:id="@+id/row_versao"
+                        style="@style/Widget.FrotaGest.ListRow">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/perfil_versao"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Body" />
+
+                        <TextView
+                            android:id="@+id/tv_versao"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+                            android:textSize="15sp"
+                            android:text="1.0.0" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_terminar_sessao"
+                style="@style/Widget.FrotaGest.Button.Danger"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_l"
+                android:text="@string/perfil_terminar_sessao" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_m"
+                android:gravity="center"
+                android:text="@string/perfil_terminar_ajuda"
+                android:textAppearance="@style/TextAppearance.FrotaGest.Caption"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

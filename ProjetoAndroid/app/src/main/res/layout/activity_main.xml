@@ -1,19 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Contentor principal após login. O menu da barra inferior é escolhido por perfil:
+      Colaborador  → @menu/menu_bottom_colaborador  (Pedidos · Viagem · Perfil)
+      Coordenador  → @menu/menu_bottom_coordenador  (Pedidos · Mapa · Perfil)
+      Administrador→ @menu/menu_bottom_admin        (Sistema · Perfil)
+    Cada separador é um Fragment carregado em fragment_container.
+    As margens das barras do sistema (edge-to-edge) são aplicadas em MainActivity sobre R.id.main.
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/fg_background"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/divider_bottom_nav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_requisicoes" />
+
+    <View
+        android:id="@+id/divider_bottom_nav"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/fg_divider"
+        android:background="@color/fg_border"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:menu="@menu/menu_bottom_colaborador" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

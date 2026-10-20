@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Visto azul sobre fotografia já tirada -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="22dp"
+    android:height="22dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="@color/fg_primary"
+        android:pathData="M12,1a11,11 0,1 0,0 22a11,11 0,1 0,0 -22z" />
+    <path
+        android:pathData="M17,8.5L10.5,15L7,11.5"
+        android:strokeWidth="2.2"
+        android:strokeColor="@color/fg_surface"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Faixa amarela "Sem ligação" com linha inferior -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/fg_status_pend_stroke" />
+        </shape>
+    </item>
+    <item android:bottom="1dp" android:top="1dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/fg_status_pend_bg" />
+        </shape>
+    </item>
+</layer-list>

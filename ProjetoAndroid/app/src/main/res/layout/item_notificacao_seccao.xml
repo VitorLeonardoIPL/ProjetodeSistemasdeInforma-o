@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cabeçalho de secção na lista de notificações ("HOJE", "ONTEM", "ESTA SEMANA") -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_seccao"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:accessibilityHeading="true"
+    android:paddingTop="@dimen/fg_gap_s"
+    android:paddingBottom="0dp"
+    android:textAppearance="@style/TextAppearance.FrotaGest.SectionLabel"
+    tools:targetApi="p"
+    android:text="Hoje" />

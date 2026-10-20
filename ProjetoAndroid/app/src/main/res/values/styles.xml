@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ===== Tipografia ===== -->
+    <style name="TextAppearance.FrotaGest.Brand" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/fg_ink</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.ScreenTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/fg_ink</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.ScreenSubtitle" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/fg_text_muted</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.CardTitle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/fg_ink</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.Body" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/fg_ink</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.BodySmall" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/fg_ink</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.Muted" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/fg_text_muted</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.Caption" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/fg_text_muted</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.FieldLabel" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/fg_ink</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.SectionLabel" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textColor">@color/fg_text_muted</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.Link" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/fg_primary</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.Error" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/fg_danger</item>
+    </style>
+
+    <!-- ===== Botões ===== -->
+    <!-- Primário (azul, preenchido) -->
+    <style name="Widget.FrotaGest.Button" parent="Widget.Material3.Button">
+        <item name="android:minHeight">@dimen/fg_button_height</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="cornerRadius">@dimen/fg_input_radius</item>
+        <item name="backgroundTint">@color/fg_button_primary_bg</item>
+        <item name="android:textColor">@color/fg_surface</item>
+    </style>
+
+    <!-- Secundário (contorno escuro) -->
+    <style name="Widget.FrotaGest.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">@dimen/fg_button_height</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="cornerRadius">@dimen/fg_input_radius</item>
+        <item name="strokeColor">@color/fg_ink_content</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:textColor">@color/fg_ink_content</item>
+        <item name="backgroundTint">@color/fg_surface</item>
+    </style>
+
+    <!-- Recusar / Terminar sessão (contorno vermelho) -->
+    <style name="Widget.FrotaGest.Button.Danger" parent="Widget.FrotaGest.Button.Outlined">
+        <item name="strokeColor">@color/fg_danger_content</item>
+        <item name="android:textColor">@color/fg_danger_content</item>
+    </style>
+
+    <!-- Confirmar recusa (vermelho preenchido) -->
+    <style name="Widget.FrotaGest.Button.DangerFilled" parent="Widget.FrotaGest.Button">
+        <item name="backgroundTint">@color/fg_button_danger_bg</item>
+    </style>
+
+    <!-- Ligações de texto ("Marcar lidas", "Esqueci-me da palavra-passe") -->
+    <style name="Widget.FrotaGest.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@color/fg_primary</item>
+    </style>
+
+    <!-- Botões dentro de MaterialButtonToggleGroup: Sim / Não -->
+    <style name="Widget.FrotaGest.Button.Toggle" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minWidth">56dp</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">@dimen/fg_input_radius</item>
+        <item name="strokeColor">@color/fg_toggle_stroke</item>
+        <item name="backgroundTint">@color/fg_toggle_bg</item>
+        <item name="android:textColor">@color/fg_toggle_text</item>
+    </style>
+
+    <!-- Controlo segmentado: Categoria Ligeiro / Comercial / Elétrico -->
+    <style name="Widget.FrotaGest.Button.Segment" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">@dimen/fg_button_height_small</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">@dimen/fg_input_radius</item>
+        <item name="strokeColor">@color/fg_border_input</item>
+        <item name="backgroundTint">@color/fg_segment_bg</item>
+        <item name="android:textColor">@color/fg_segment_text</item>
+    </style>
+
+    <!-- Separadores em pílula: Receção / Entrega -->
+    <style name="Widget.FrotaGest.Button.Tab" parent="Widget.Material3.Button.TextButton">
+        <item name="android:minHeight">40dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">@dimen/fg_input_radius</item>
+        <item name="backgroundTint">@color/fg_tab_bg</item>
+        <item name="android:textColor">@color/fg_tab_text</item>
+    </style>
+
+    <!-- ===== Campos de texto ===== -->
+    <style name="Widget.FrotaGest.TextInput" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">@dimen/fg_input_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/fg_input_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/fg_input_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/fg_input_radius</item>
+        <item name="boxStrokeColor">@color/fg_input_stroke</item>
+        <item name="boxBackgroundColor">@color/fg_surface</item>
+        <item name="hintEnabled">false</item>
+        <item name="errorTextColor">@color/fg_danger</item>
+    </style>
+
+    <style name="Widget.FrotaGest.TextInput.Dropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxCornerRadiusTopStart">@dimen/fg_input_radius</item>
+        <item name="boxCornerRadiusTopEnd">@dimen/fg_input_radius</item>
+        <item name="boxCornerRadiusBottomStart">@dimen/fg_input_radius</item>
+        <item name="boxCornerRadiusBottomEnd">@dimen/fg_input_radius</item>
+        <item name="boxStrokeColor">@color/fg_input_stroke</item>
+        <item name="boxBackgroundColor">@color/fg_surface</item>
+        <item name="hintEnabled">false</item>
+    </style>
+
+    <!-- ===== Cartões ===== -->
+    <style name="Widget.FrotaGest.Card" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardCornerRadius">@dimen/fg_card_radius</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardBackgroundColor">@color/fg_surface</item>
+        <item name="strokeColor">@color/fg_border</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <!-- Cartão selecionável (condutor escolhido fica com contorno azul) -->
+    <style name="Widget.FrotaGest.Card.Selectable">
+        <item name="strokeColor">@color/fg_card_stroke_checkable</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="checkedIcon">@null</item>
+        <item name="android:checkable">true</item>
+    </style>
+
+    <!-- Cartão flutuante (painel sobre o mapa) -->
+    <style name="Widget.FrotaGest.Card.Elevated" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">6dp</item>
+        <item name="cardBackgroundColor">@color/fg_surface</item>
+    </style>
+
+    <!-- ===== Chips de filtro (Ativas / Pendentes / Histórico) ===== -->
+    <style name="Widget.FrotaGest.Chip.Filter" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">@color/fg_chip_bg</item>
+        <item name="chipStrokeColor">@color/fg_chip_stroke</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipCornerRadius">18dp</item>
+        <item name="chipMinHeight">36dp</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="android:textColor">@color/fg_chip_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:checkable">true</item>
+    </style>
+
+    <!-- ===== Barra de navegação inferior ===== -->
+    <style name="Widget.FrotaGest.BottomNav" parent="Widget.Material3.BottomNavigationView">
+        <item name="backgroundTint">@color/fg_surface</item>
+        <item name="itemIconTint">@color/fg_bottom_nav_item</item>
+        <item name="itemTextColor">@color/fg_bottom_nav_item</item>
+        <item name="itemActiveIndicatorStyle">@style/Widget.FrotaGest.BottomNav.ActiveIndicator</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.FrotaGest.BottomNavLabel.Active</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.FrotaGest.BottomNavLabel</item>
+    </style>
+
+    <style name="Widget.FrotaGest.BottomNav.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@android:color/transparent</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.BottomNavLabel" parent="TextAppearance.Material3.LabelMedium">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.FrotaGest.BottomNavLabel.Active">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- ===== Interruptor ===== -->
+    <style name="Widget.FrotaGest.Switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="trackTint">@color/fg_switch_track</item>
+        <item name="thumbTint">@color/fg_surface</item>
+        <item name="trackDecorationTint">@android:color/transparent</item>
+    </style>
+
+    <!-- ===== Etiquetas de estado (pílulas) ===== -->
+    <style name="Widget.FrotaGest.Status" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:background">@drawable/bg_status_neutro</item>
+        <item name="android:textColor">@color/fg_status_neu_text</item>
+    </style>
+
+    <!-- Aprovada, Em curso, "N livres", OK -->
+    <style name="Widget.FrotaGest.Status.Aprovada">
+        <item name="android:background">@drawable/bg_status_aprovada</item>
+        <item name="android:textColor">@color/fg_status_apr_text</item>
+    </style>
+
+    <!-- Pendente -->
+    <style name="Widget.FrotaGest.Status.Pendente">
+        <item name="android:background">@drawable/bg_status_pendente</item>
+        <item name="android:textColor">@color/fg_status_pend_text</item>
+    </style>
+
+    <!-- Recusada, Sem viaturas, Falha -->
+    <style name="Widget.FrotaGest.Status.Recusada">
+        <item name="android:background">@drawable/bg_status_recusada</item>
+        <item name="android:textColor">@color/fg_status_rec_text</item>
+    </style>
+
+    <!-- Disponível -->
+    <style name="Widget.FrotaGest.Status.Disponivel">
+        <item name="android:background">@drawable/bg_status_disponivel</item>
+        <item name="android:textColor">@color/fg_status_ok_text</item>
+    </style>
+
+    <style name="Widget.FrotaGest.Status.Neutro" />
+
+    <!-- ===== Formas ===== -->
+    <style name="ShapeAppearance.FrotaGest.Pill" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="ShapeAppearance.FrotaGest.Rounded8" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+    <!-- ===== Diversos ===== -->
+    <style name="Widget.FrotaGest.Divider" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/fg_divider</item>
+        <item name="android:background">@color/fg_divider</item>
+    </style>
+
+    <!-- Linha "rótulo ............ valor" dentro de cartões -->
+    <style name="Widget.FrotaGest.InfoRow" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">28dp</item>
+    </style>
+
+    <!-- Linha clicável da lista do Perfil -->
+    <style name="Widget.FrotaGest.ListRow" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:paddingStart">@dimen/fg_gap_l</item>
+        <item name="android:paddingEnd">@dimen/fg_gap_l</item>
+    </style>
+
+</resources>

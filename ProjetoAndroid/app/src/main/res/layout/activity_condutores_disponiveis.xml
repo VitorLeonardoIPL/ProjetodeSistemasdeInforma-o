@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- M-CondutoresDisp · aberto a partir de M-PedidoCoord ("Ver disponíveis") -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/fg_background"
+    tools:context=".ui.coordenador.CondutoresDisponiveisActivity">
+
+    <include
+        android:id="@+id/top_bar"
+        layout="@layout/layout_top_bar_back"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/btn_usar_condutor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/fg_screen_padding">
+
+            <!-- Período -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_periodo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/fg_card_padding">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/fg_gap_m"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            android:labelFor="@id/et_de"
+                            android:text="@string/cond_de"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_de"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_de"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:inputType="none"
+                                android:minHeight="@dimen/fg_button_height"
+                                android:text="03/11 · 09:00" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="6dp"
+                            android:labelFor="@id/et_ate"
+                            android:text="@string/cond_ate"
+                            android:textAppearance="@style/TextAppearance.FrotaGest.FieldLabel" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_ate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_ate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:inputType="none"
+                                android:minHeight="@dimen/fg_button_height"
+                                android:text="04/11 · 18:00" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Filtro -->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_filtro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_m"
+                app:checkedChip="@id/chip_disponiveis"
+                app:selectionRequired="true"
+                app:singleLine="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_disponiveis"
+                    style="@style/Widget.FrotaGest.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Disponíveis (2)" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_indisponiveis"
+                    style="@style/Widget.FrotaGest.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Indisponíveis (4)" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- Lista de condutores (seleção única) -->
+            <!-- Preenchido em código: um item_condutor por condutor (seleção única) -->
+            <LinearLayout
+                android:id="@+id/ll_condutores"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_m"
+                android:orientation="vertical" />
+
+            <!-- Resumo dos indisponíveis -->
+            <TextView
+                android:id="@+id/lbl_indisponiveis"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_s"
+                android:text="@string/cond_indisponiveis_periodo"
+                android:textAppearance="@style/TextAppearance.FrotaGest.SectionLabel" />
+
+            <TextView
+                android:id="@+id/tv_indisponiveis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/fg_gap_s"
+                android:lineSpacingExtra="6dp"
+                android:textAppearance="@style/TextAppearance.FrotaGest.Muted"
+                android:textSize="15sp"
+                android:text="João Pires · Baixa até 06/11\nRita Gomes · Atribuída à requisição #1055\nHugo Silva · Carta expirada · Marta Lopes · Inativo" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_usar_condutor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fg_screen_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Usar Ana Ribeiro no pedido #1048" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
