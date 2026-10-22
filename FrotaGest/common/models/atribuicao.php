@@ -15,12 +15,12 @@ use Yii;
  * @property string $data_atribuicao
  *
  * @property User $aprovadaPor
- * @property Checklist[] $checklists
- * @property Condutor $condutor
- * @property FaturaCombustivel[] $faturaCombustivels
- * @property Localizacao[] $localizacaos
- * @property Requisicao $requisicao
- * @property Viatura $viatura
+ * @property checklist[] $checklists
+ * @property condutor $condutor
+ * @property fatura_combustivel[] $faturaCombustivels
+ * @property localizacao[] $localizacaos
+ * @property requisicao $requisicao
+ * @property viatura $viatura
  */
 class atribuicao extends \yii\db\ActiveRecord
 {
@@ -44,9 +44,9 @@ class atribuicao extends \yii\db\ActiveRecord
             [['requisicao_id', 'viatura_id', 'condutor_id', 'aprovada_por'], 'integer'],
             [['data_atribuicao'], 'safe'],
             [['aprovada_por'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['aprovada_por' => 'id']],
-            [['condutor_id'], 'exist', 'skipOnError' => true, 'targetClass' => Condutor::class, 'targetAttribute' => ['condutor_id' => 'id']],
-            [['requisicao_id'], 'exist', 'skipOnError' => true, 'targetClass' => Requisicao::class, 'targetAttribute' => ['requisicao_id' => 'id']],
-            [['viatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Viatura::class, 'targetAttribute' => ['viatura_id' => 'id']],
+            [['condutor_id'], 'exist', 'skipOnError' => true, 'targetClass' => condutor::class, 'targetAttribute' => ['condutor_id' => 'id']],
+            [['requisicao_id'], 'exist', 'skipOnError' => true, 'targetClass' => requisicao::class, 'targetAttribute' => ['requisicao_id' => 'id']],
+            [['viatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => viatura::class, 'targetAttribute' => ['viatura_id' => 'id']],
         ];
     }
 
@@ -82,7 +82,7 @@ class atribuicao extends \yii\db\ActiveRecord
      */
     public function getChecklists()
     {
-        return $this->hasMany(Checklist::class, ['atribuicao_id' => 'id']);
+        return $this->hasMany(checklist::class, ['atribuicao_id' => 'id']);
     }
 
     /**
@@ -92,7 +92,7 @@ class atribuicao extends \yii\db\ActiveRecord
      */
     public function getCondutor()
     {
-        return $this->hasOne(Condutor::class, ['id' => 'condutor_id']);
+        return $this->hasOne(condutor::class, ['id' => 'condutor_id']);
     }
 
     /**
@@ -102,7 +102,7 @@ class atribuicao extends \yii\db\ActiveRecord
      */
     public function getFaturaCombustivels()
     {
-        return $this->hasMany(FaturaCombustivel::class, ['atribuicao_id' => 'id']);
+        return $this->hasMany(fatura_combustivel::class, ['atribuicao_id' => 'id']);
     }
 
     /**
@@ -112,7 +112,7 @@ class atribuicao extends \yii\db\ActiveRecord
      */
     public function getLocalizacaos()
     {
-        return $this->hasMany(Localizacao::class, ['atribuicao_id' => 'id']);
+        return $this->hasMany(localizacao::class, ['atribuicao_id' => 'id']);
     }
 
     /**
@@ -122,7 +122,7 @@ class atribuicao extends \yii\db\ActiveRecord
      */
     public function getRequisicao()
     {
-        return $this->hasOne(Requisicao::class, ['id' => 'requisicao_id']);
+        return $this->hasOne(requisicao::class, ['id' => 'requisicao_id']);
     }
 
     /**
@@ -132,7 +132,7 @@ class atribuicao extends \yii\db\ActiveRecord
      */
     public function getViatura()
     {
-        return $this->hasOne(Viatura::class, ['id' => 'viatura_id']);
+        return $this->hasOne(viatura::class, ['id' => 'viatura_id']);
     }
 
 }

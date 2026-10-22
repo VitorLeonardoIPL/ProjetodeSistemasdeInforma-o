@@ -15,9 +15,9 @@ use Yii;
  * @property string|null $descricao
  * @property string $data
  *
- * @property OrcamentoCompra $orcamento
+ * @property orcamento_compra $orcamento
  * @property User $registadaPor
- * @property Viatura $viatura
+ * @property viatura $viatura
  */
 class necessidade_manutencao extends \yii\db\ActiveRecord
 {
@@ -42,9 +42,9 @@ class necessidade_manutencao extends \yii\db\ActiveRecord
             [['viatura_id', 'orcamento_id', 'registada_por'], 'integer'],
             [['data'], 'safe'],
             [['tipo', 'descricao'], 'string', 'max' => 255],
-            [['orcamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => OrcamentoCompra::class, 'targetAttribute' => ['orcamento_id' => 'id']],
+            [['orcamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => orcamento_compra::class, 'targetAttribute' => ['orcamento_id' => 'id']],
             [['registada_por'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['registada_por' => 'id']],
-            [['viatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Viatura::class, 'targetAttribute' => ['viatura_id' => 'id']],
+            [['viatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => viatura::class, 'targetAttribute' => ['viatura_id' => 'id']],
         ];
     }
 
@@ -71,7 +71,7 @@ class necessidade_manutencao extends \yii\db\ActiveRecord
      */
     public function getOrcamento()
     {
-        return $this->hasOne(OrcamentoCompra::class, ['id' => 'orcamento_id']);
+        return $this->hasOne(orcamento_compra::class, ['id' => 'orcamento_id']);
     }
 
     /**
@@ -91,7 +91,7 @@ class necessidade_manutencao extends \yii\db\ActiveRecord
      */
     public function getViatura()
     {
-        return $this->hasOne(Viatura::class, ['id' => 'viatura_id']);
+        return $this->hasOne(viatura::class, ['id' => 'viatura_id']);
     }
 
 }

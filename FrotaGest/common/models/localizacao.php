@@ -13,7 +13,7 @@ use Yii;
  * @property float $longitude
  * @property string $data_hora
  *
- * @property Atribuicao $atribuicao
+ * @property atribuicao $atribuicao
  */
 class localizacao extends \yii\db\ActiveRecord
 {
@@ -37,7 +37,7 @@ class localizacao extends \yii\db\ActiveRecord
             [['atribuicao_id'], 'integer'],
             [['latitude', 'longitude'], 'number'],
             [['data_hora'], 'safe'],
-            [['atribuicao_id'], 'exist', 'skipOnError' => true, 'targetClass' => Atribuicao::class, 'targetAttribute' => ['atribuicao_id' => 'id']],
+            [['atribuicao_id'], 'exist', 'skipOnError' => true, 'targetClass' => atribuicao::class, 'targetAttribute' => ['atribuicao_id' => 'id']],
         ];
     }
 
@@ -62,7 +62,7 @@ class localizacao extends \yii\db\ActiveRecord
      */
     public function getAtribuicao()
     {
-        return $this->hasOne(Atribuicao::class, ['id' => 'atribuicao_id']);
+        return $this->hasOne(atribuicao::class, ['id' => 'atribuicao_id']);
     }
 
 }

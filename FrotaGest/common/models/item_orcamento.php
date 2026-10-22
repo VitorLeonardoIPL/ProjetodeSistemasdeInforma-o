@@ -14,7 +14,7 @@ use Yii;
  * @property int $quantidade
  * @property float $preco_unitario
  *
- * @property OrcamentoCompra $orcamento
+ * @property orcamento_compra $orcamento
  */
 class item_orcamento extends \yii\db\ActiveRecord
 {
@@ -39,7 +39,7 @@ class item_orcamento extends \yii\db\ActiveRecord
             [['orcamento_id', 'quantidade'], 'integer'],
             [['preco_unitario'], 'number'],
             [['tipo', 'descricao'], 'string', 'max' => 255],
-            [['orcamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => OrcamentoCompra::class, 'targetAttribute' => ['orcamento_id' => 'id']],
+            [['orcamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => orcamento_compra::class, 'targetAttribute' => ['orcamento_id' => 'id']],
         ];
     }
 
@@ -65,7 +65,7 @@ class item_orcamento extends \yii\db\ActiveRecord
      */
     public function getOrcamento()
     {
-        return $this->hasOne(OrcamentoCompra::class, ['id' => 'orcamento_id']);
+        return $this->hasOne(orcamento_compra::class, ['id' => 'orcamento_id']);
     }
 
 }

@@ -16,8 +16,8 @@ use Yii;
  * @property int $docs_a_bordo
  * @property string|null $observacoes
  *
- * @property Anexo[] $anexos
- * @property Atribuicao $atribuicao
+ * @property anexo[] $anexos
+ * @property atribuicao $atribuicao
  */
 class checklist extends \yii\db\ActiveRecord
 {
@@ -43,7 +43,7 @@ class checklist extends \yii\db\ActiveRecord
             [['atribuicao_id', 'km', 'docs_a_bordo'], 'integer'],
             [['data_hora'], 'safe'],
             [['tipo', 'estado_geral', 'observacoes'], 'string', 'max' => 255],
-            [['atribuicao_id'], 'exist', 'skipOnError' => true, 'targetClass' => Atribuicao::class, 'targetAttribute' => ['atribuicao_id' => 'id']],
+            [['atribuicao_id'], 'exist', 'skipOnError' => true, 'targetClass' => atribuicao::class, 'targetAttribute' => ['atribuicao_id' => 'id']],
         ];
     }
 
@@ -71,7 +71,7 @@ class checklist extends \yii\db\ActiveRecord
      */
     public function getAnexos()
     {
-        return $this->hasMany(Anexo::class, ['checklist_id' => 'id']);
+        return $this->hasMany(anexo::class, ['checklist_id' => 'id']);
     }
 
     /**
@@ -81,7 +81,7 @@ class checklist extends \yii\db\ActiveRecord
      */
     public function getAtribuicao()
     {
-        return $this->hasOne(Atribuicao::class, ['id' => 'atribuicao_id']);
+        return $this->hasOne(atribuicao::class, ['id' => 'atribuicao_id']);
     }
 
 }

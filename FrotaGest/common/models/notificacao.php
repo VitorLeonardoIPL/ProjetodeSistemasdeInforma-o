@@ -17,8 +17,8 @@ use Yii;
  * @property int $lida
  * @property string $data_envio
  *
- * @property Alerta $alerta
- * @property Requisicao $requisicao
+ * @property alerta $alerta
+ * @property requisicao $requisicao
  * @property User $utilizador
  */
 class notificacao extends \yii\db\ActiveRecord
@@ -45,8 +45,8 @@ class notificacao extends \yii\db\ActiveRecord
             [['utilizador_id', 'requisicao_id', 'alerta_id', 'lida'], 'integer'],
             [['data_envio'], 'safe'],
             [['tipo', 'titulo', 'mensagem'], 'string', 'max' => 255],
-            [['alerta_id'], 'exist', 'skipOnError' => true, 'targetClass' => Alerta::class, 'targetAttribute' => ['alerta_id' => 'id']],
-            [['requisicao_id'], 'exist', 'skipOnError' => true, 'targetClass' => Requisicao::class, 'targetAttribute' => ['requisicao_id' => 'id']],
+            [['alerta_id'], 'exist', 'skipOnError' => true, 'targetClass' => alerta::class, 'targetAttribute' => ['alerta_id' => 'id']],
+            [['requisicao_id'], 'exist', 'skipOnError' => true, 'targetClass' => requisicao::class, 'targetAttribute' => ['requisicao_id' => 'id']],
             [['utilizador_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['utilizador_id' => 'id']],
         ];
     }
@@ -76,7 +76,7 @@ class notificacao extends \yii\db\ActiveRecord
      */
     public function getAlerta()
     {
-        return $this->hasOne(Alerta::class, ['id' => 'alerta_id']);
+        return $this->hasOne(alerta::class, ['id' => 'alerta_id']);
     }
 
     /**
@@ -86,7 +86,7 @@ class notificacao extends \yii\db\ActiveRecord
      */
     public function getRequisicao()
     {
-        return $this->hasOne(Requisicao::class, ['id' => 'requisicao_id']);
+        return $this->hasOne(requisicao::class, ['id' => 'requisicao_id']);
     }
 
     /**
