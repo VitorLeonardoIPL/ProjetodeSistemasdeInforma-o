@@ -14,7 +14,7 @@ use Yii;
  * @property float $custo
  * @property string|null $fotografia
  *
- * @property Manutencao $manutencao
+ * @property manutencao $manutencao
  */
 class peca extends \yii\db\ActiveRecord
 {
@@ -40,7 +40,7 @@ class peca extends \yii\db\ActiveRecord
             [['manutencao_id', 'quantidade'], 'integer'],
             [['custo'], 'number'],
             [['descricao', 'fotografia'], 'string', 'max' => 255],
-            [['manutencao_id'], 'exist', 'skipOnError' => true, 'targetClass' => Manutencao::class, 'targetAttribute' => ['manutencao_id' => 'id']],
+            [['manutencao_id'], 'exist', 'skipOnError' => true, 'targetClass' => manutencao::class, 'targetAttribute' => ['manutencao_id' => 'id']],
         ];
     }
 
@@ -66,7 +66,7 @@ class peca extends \yii\db\ActiveRecord
      */
     public function getManutencao()
     {
-        return $this->hasOne(Manutencao::class, ['id' => 'manutencao_id']);
+        return $this->hasOne(manutencao::class, ['id' => 'manutencao_id']);
     }
 
 }

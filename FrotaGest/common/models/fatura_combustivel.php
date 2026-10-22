@@ -14,7 +14,7 @@ use Yii;
  * @property float|null $valor
  * @property string $data_registo
  *
- * @property Atribuicao $atribuicao
+ * @property atribuicao $atribuicao
  */
 class fatura_combustivel extends \yii\db\ActiveRecord
 {
@@ -40,7 +40,7 @@ class fatura_combustivel extends \yii\db\ActiveRecord
             [['litros', 'valor'], 'number'],
             [['data_registo'], 'safe'],
             [['fotografia'], 'string', 'max' => 255],
-            [['atribuicao_id'], 'exist', 'skipOnError' => true, 'targetClass' => Atribuicao::class, 'targetAttribute' => ['atribuicao_id' => 'id']],
+            [['atribuicao_id'], 'exist', 'skipOnError' => true, 'targetClass' => atribuicao::class, 'targetAttribute' => ['atribuicao_id' => 'id']],
         ];
     }
 
@@ -66,7 +66,7 @@ class fatura_combustivel extends \yii\db\ActiveRecord
      */
     public function getAtribuicao()
     {
-        return $this->hasOne(Atribuicao::class, ['id' => 'atribuicao_id']);
+        return $this->hasOne(atribuicao::class, ['id' => 'atribuicao_id']);
     }
 
 }

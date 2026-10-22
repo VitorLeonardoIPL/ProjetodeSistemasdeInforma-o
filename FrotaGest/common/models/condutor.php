@@ -14,8 +14,8 @@ use Yii;
  * @property string|null $telefone
  * @property int $ativo
  *
- * @property Atribuicao[] $atribuicaos
- * @property AusenciaCondutor[] $ausenciaCondutors
+ * @property atribuicao[] $atribuicaos
+ * @property ausencia_condutor[] $ausenciaCondutors
  */
 class condutor extends \yii\db\ActiveRecord
 {
@@ -66,7 +66,7 @@ class condutor extends \yii\db\ActiveRecord
      */
     public function getAtribuicaos()
     {
-        return $this->hasMany(Atribuicao::class, ['condutor_id' => 'id']);
+        return $this->hasMany(atribuicao::class, ['condutor_id' => 'id']);
     }
 
     /**
@@ -76,7 +76,7 @@ class condutor extends \yii\db\ActiveRecord
      */
     public function getAusenciaCondutors()
     {
-        return $this->hasMany(AusenciaCondutor::class, ['condutor_id' => 'id']);
+        return $this->hasMany(ausencia_condutor::class, ['condutor_id' => 'id']);
     }
 
 }

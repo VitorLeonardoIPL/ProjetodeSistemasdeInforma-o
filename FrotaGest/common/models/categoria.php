@@ -11,10 +11,10 @@ use Yii;
  * @property string $nome
  * @property string|null $descricao
  *
- * @property Requisicao[] $requisicaos
- * @property Viatura[] $viaturas
+ * @property requisicao[] $requisicaos
+ * @property viatura[] $viaturas
  */
-class Categoria extends \yii\db\ActiveRecord
+class categoria extends \yii\db\ActiveRecord
 {
 
 
@@ -57,7 +57,7 @@ class Categoria extends \yii\db\ActiveRecord
      */
     public function getRequisicaos()
     {
-        return $this->hasMany(Requisicao::class, ['categoria_id' => 'id']);
+        return $this->hasMany(requisicao::class, ['categoria_id' => 'id']);
     }
 
     /**
@@ -67,7 +67,7 @@ class Categoria extends \yii\db\ActiveRecord
      */
     public function getViaturas()
     {
-        return $this->hasMany(Viatura::class, ['categoria_id' => 'id']);
+        return $this->hasMany(viatura::class, ['categoria_id' => 'id']);
     }
 
 }

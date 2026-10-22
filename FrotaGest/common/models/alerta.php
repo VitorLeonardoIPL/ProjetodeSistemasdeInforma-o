@@ -15,8 +15,8 @@ use Yii;
  * @property string $data_geracao
  * @property string $estado
  *
- * @property Notificacao[] $notificacaos
- * @property Viatura $viatura
+ * @property notificacao[] $notificacaos
+ * @property viatura $viatura
  */
 class alerta extends \yii\db\ActiveRecord
 {
@@ -41,7 +41,7 @@ class alerta extends \yii\db\ActiveRecord
             [['viatura_id'], 'integer'],
             [['data_limite', 'data_geracao'], 'safe'],
             [['tipo', 'descricao', 'estado'], 'string', 'max' => 255],
-            [['viatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Viatura::class, 'targetAttribute' => ['viatura_id' => 'id']],
+            [['viatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => viatura::class, 'targetAttribute' => ['viatura_id' => 'id']],
         ];
     }
 
@@ -68,7 +68,7 @@ class alerta extends \yii\db\ActiveRecord
      */
     public function getNotificacaos()
     {
-        return $this->hasMany(Notificacao::class, ['alerta_id' => 'id']);
+        return $this->hasMany(notificacao::class, ['alerta_id' => 'id']);
     }
 
     /**
@@ -78,7 +78,7 @@ class alerta extends \yii\db\ActiveRecord
      */
     public function getViatura()
     {
-        return $this->hasOne(Viatura::class, ['id' => 'viatura_id']);
+        return $this->hasOne(viatura::class, ['id' => 'viatura_id']);
     }
 
 }

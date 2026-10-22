@@ -18,9 +18,9 @@ use Yii;
  * @property string|null $motivo_recusa
  * @property string $data_pedido
  *
- * @property Atribuicao[] $atribuicaos
- * @property Categoria $categoria
- * @property Notificacao[] $notificacaos
+ * @property atribuicao[] $atribuicaos
+ * @property categoria $categoria
+ * @property notificacao[] $notificacaos
  * @property User $utilizador
  */
 class requisicao extends \yii\db\ActiveRecord
@@ -47,7 +47,7 @@ class requisicao extends \yii\db\ActiveRecord
             [['utilizador_id', 'categoria_id'], 'integer'],
             [['data_inicio', 'data_fim', 'data_pedido'], 'safe'],
             [['destino', 'motivo', 'estado', 'motivo_recusa'], 'string', 'max' => 255],
-            [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
+            [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
             [['utilizador_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['utilizador_id' => 'id']],
         ];
     }
@@ -78,7 +78,7 @@ class requisicao extends \yii\db\ActiveRecord
      */
     public function getAtribuicaos()
     {
-        return $this->hasMany(Atribuicao::class, ['requisicao_id' => 'id']);
+        return $this->hasMany(atribuicao::class, ['requisicao_id' => 'id']);
     }
 
     /**
@@ -88,7 +88,7 @@ class requisicao extends \yii\db\ActiveRecord
      */
     public function getCategoria()
     {
-        return $this->hasOne(Categoria::class, ['id' => 'categoria_id']);
+        return $this->hasOne(categoria::class, ['id' => 'categoria_id']);
     }
 
     /**
@@ -98,7 +98,7 @@ class requisicao extends \yii\db\ActiveRecord
      */
     public function getNotificacaos()
     {
-        return $this->hasMany(Notificacao::class, ['requisicao_id' => 'id']);
+        return $this->hasMany(notificacao::class, ['requisicao_id' => 'id']);
     }
 
     /**

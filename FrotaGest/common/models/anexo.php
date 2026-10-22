@@ -17,8 +17,8 @@ use Yii;
  * @property int $risco
  * @property string $data_registo
  *
- * @property Checklist $checklist
- * @property Viatura $viatura
+ * @property checklist $checklist
+ * @property viatura $viatura
  */
 class anexo extends \yii\db\ActiveRecord
 {
@@ -44,8 +44,8 @@ class anexo extends \yii\db\ActiveRecord
             [['viatura_id', 'checklist_id', 'risco'], 'integer'],
             [['data_validade', 'data_registo'], 'safe'],
             [['categoria', 'tipo', 'ficheiro'], 'string', 'max' => 255],
-            [['checklist_id'], 'exist', 'skipOnError' => true, 'targetClass' => Checklist::class, 'targetAttribute' => ['checklist_id' => 'id']],
-            [['viatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Viatura::class, 'targetAttribute' => ['viatura_id' => 'id']],
+            [['checklist_id'], 'exist', 'skipOnError' => true, 'targetClass' => checklist::class, 'targetAttribute' => ['checklist_id' => 'id']],
+            [['viatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => viatura::class, 'targetAttribute' => ['viatura_id' => 'id']],
         ];
     }
 
@@ -74,7 +74,7 @@ class anexo extends \yii\db\ActiveRecord
      */
     public function getChecklist()
     {
-        return $this->hasOne(Checklist::class, ['id' => 'checklist_id']);
+        return $this->hasOne(checklist::class, ['id' => 'checklist_id']);
     }
 
     /**
@@ -84,7 +84,7 @@ class anexo extends \yii\db\ActiveRecord
      */
     public function getViatura()
     {
-        return $this->hasOne(Viatura::class, ['id' => 'viatura_id']);
+        return $this->hasOne(viatura::class, ['id' => 'viatura_id']);
     }
 
 }

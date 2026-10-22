@@ -15,10 +15,10 @@ use Yii;
  * @property string $data
  *
  * @property User $criadoPor
- * @property ItemOrcamento[] $itemOrcamentos
- * @property Manutencao[] $manutencaos
- * @property NecessidadeManutencao[] $necessidadeManutencaos
- * @property Viatura $viatura
+ * @property item_orcamento[] $itemOrcamentos
+ * @property manutencao[] $manutencaos
+ * @property necessidade_manutencao[] $necessidadeManutencaos
+ * @property viatura $viatura
  */
 class orcamento_compra extends \yii\db\ActiveRecord
 {
@@ -44,7 +44,7 @@ class orcamento_compra extends \yii\db\ActiveRecord
             [['data'], 'safe'],
             [['fornecedor', 'estado'], 'string', 'max' => 255],
             [['criado_por'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['criado_por' => 'id']],
-            [['viatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Viatura::class, 'targetAttribute' => ['viatura_id' => 'id']],
+            [['viatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => viatura::class, 'targetAttribute' => ['viatura_id' => 'id']],
         ];
     }
 
@@ -80,7 +80,7 @@ class orcamento_compra extends \yii\db\ActiveRecord
      */
     public function getItemOrcamentos()
     {
-        return $this->hasMany(ItemOrcamento::class, ['orcamento_id' => 'id']);
+        return $this->hasMany(item_orcamento::class, ['orcamento_id' => 'id']);
     }
 
     /**
@@ -90,7 +90,7 @@ class orcamento_compra extends \yii\db\ActiveRecord
      */
     public function getManutencaos()
     {
-        return $this->hasMany(Manutencao::class, ['orcamento_id' => 'id']);
+        return $this->hasMany(manutencao::class, ['orcamento_id' => 'id']);
     }
 
     /**
@@ -100,7 +100,7 @@ class orcamento_compra extends \yii\db\ActiveRecord
      */
     public function getNecessidadeManutencaos()
     {
-        return $this->hasMany(NecessidadeManutencao::class, ['orcamento_id' => 'id']);
+        return $this->hasMany(necessidade_manutencao::class, ['orcamento_id' => 'id']);
     }
 
     /**
@@ -110,7 +110,7 @@ class orcamento_compra extends \yii\db\ActiveRecord
      */
     public function getViatura()
     {
-        return $this->hasOne(Viatura::class, ['id' => 'viatura_id']);
+        return $this->hasOne(viatura::class, ['id' => 'viatura_id']);
     }
 
 }

@@ -19,13 +19,13 @@ use Yii;
  * @property string $estado
  * @property int $km_atual
  *
- * @property Alerta[] $alertas
- * @property Anexo[] $anexos
- * @property Atribuicao[] $atribuicaos
- * @property Categoria $categoria
- * @property Manutencao[] $manutencaos
- * @property NecessidadeManutencao[] $necessidadeManutencaos
- * @property OrcamentoCompra[] $orcamentoCompras
+ * @property alerta[] $alertas
+ * @property anexo[] $anexos
+ * @property atribuicao[] $atribuicaos
+ * @property categoria $categoria
+ * @property manutencao[] $manutencaos
+ * @property necessidade_manutencao[] $necessidadeManutencaos
+ * @property orcamento_compra[] $orcamentoCompras
  */
 class viatura extends \yii\db\ActiveRecord
 {
@@ -53,7 +53,7 @@ class viatura extends \yii\db\ActiveRecord
             [['caracteristicas'], 'string'],
             [['matricula', 'marca', 'modelo', 'combustivel', 'foto', 'qr_code', 'estado'], 'string', 'max' => 255],
             [['matricula'], 'unique'],
-            [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => Categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
+            [['categoria_id'], 'exist', 'skipOnError' => true, 'targetClass' => categoria::class, 'targetAttribute' => ['categoria_id' => 'id']],
         ];
     }
 
@@ -84,7 +84,7 @@ class viatura extends \yii\db\ActiveRecord
      */
     public function getAlertas()
     {
-        return $this->hasMany(Alerta::class, ['viatura_id' => 'id']);
+        return $this->hasMany(alerta::class, ['viatura_id' => 'id']);
     }
 
     /**
@@ -94,7 +94,7 @@ class viatura extends \yii\db\ActiveRecord
      */
     public function getAnexos()
     {
-        return $this->hasMany(Anexo::class, ['viatura_id' => 'id']);
+        return $this->hasMany(anexo::class, ['viatura_id' => 'id']);
     }
 
     /**
@@ -104,7 +104,7 @@ class viatura extends \yii\db\ActiveRecord
      */
     public function getAtribuicaos()
     {
-        return $this->hasMany(Atribuicao::class, ['viatura_id' => 'id']);
+        return $this->hasMany(atribuicao::class, ['viatura_id' => 'id']);
     }
 
     /**
@@ -114,7 +114,7 @@ class viatura extends \yii\db\ActiveRecord
      */
     public function getCategoria()
     {
-        return $this->hasOne(Categoria::class, ['id' => 'categoria_id']);
+        return $this->hasOne(categoria::class, ['id' => 'categoria_id']);
     }
 
     /**
@@ -124,7 +124,7 @@ class viatura extends \yii\db\ActiveRecord
      */
     public function getManutencaos()
     {
-        return $this->hasMany(Manutencao::class, ['viatura_id' => 'id']);
+        return $this->hasMany(manutencao::class, ['viatura_id' => 'id']);
     }
 
     /**
@@ -134,7 +134,7 @@ class viatura extends \yii\db\ActiveRecord
      */
     public function getNecessidadeManutencaos()
     {
-        return $this->hasMany(NecessidadeManutencao::class, ['viatura_id' => 'id']);
+        return $this->hasMany(necessidade_manutencao::class, ['viatura_id' => 'id']);
     }
 
     /**
@@ -144,7 +144,7 @@ class viatura extends \yii\db\ActiveRecord
      */
     public function getOrcamentoCompras()
     {
-        return $this->hasMany(OrcamentoCompra::class, ['viatura_id' => 'id']);
+        return $this->hasMany(orcamento_compra::class, ['viatura_id' => 'id']);
     }
 
 }

@@ -18,10 +18,10 @@ use Yii;
  * @property string|null $descricao
  * @property string $estado
  *
- * @property OrcamentoCompra $orcamento
- * @property Peca[] $pecas
+ * @property orcamento_compra $orcamento
+ * @property peca[] $pecas
  * @property User $tecnico
- * @property Viatura $viatura
+ * @property viatura $viatura
  */
 class manutencao extends \yii\db\ActiveRecord
 {
@@ -47,9 +47,9 @@ class manutencao extends \yii\db\ActiveRecord
             [['data'], 'safe'],
             [['horas_trabalho'], 'number'],
             [['tipo', 'descricao', 'estado'], 'string', 'max' => 255],
-            [['orcamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => OrcamentoCompra::class, 'targetAttribute' => ['orcamento_id' => 'id']],
+            [['orcamento_id'], 'exist', 'skipOnError' => true, 'targetClass' => orcamento_compra::class, 'targetAttribute' => ['orcamento_id' => 'id']],
             [['tecnico_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['tecnico_id' => 'id']],
-            [['viatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => Viatura::class, 'targetAttribute' => ['viatura_id' => 'id']],
+            [['viatura_id'], 'exist', 'skipOnError' => true, 'targetClass' => viatura::class, 'targetAttribute' => ['viatura_id' => 'id']],
         ];
     }
 
@@ -79,7 +79,7 @@ class manutencao extends \yii\db\ActiveRecord
      */
     public function getOrcamento()
     {
-        return $this->hasOne(OrcamentoCompra::class, ['id' => 'orcamento_id']);
+        return $this->hasOne(orcamento_compra::class, ['id' => 'orcamento_id']);
     }
 
     /**
@@ -89,7 +89,7 @@ class manutencao extends \yii\db\ActiveRecord
      */
     public function getPecas()
     {
-        return $this->hasMany(Peca::class, ['manutencao_id' => 'id']);
+        return $this->hasMany(peca::class, ['manutencao_id' => 'id']);
     }
 
     /**
@@ -109,7 +109,7 @@ class manutencao extends \yii\db\ActiveRecord
      */
     public function getViatura()
     {
-        return $this->hasOne(Viatura::class, ['id' => 'viatura_id']);
+        return $this->hasOne(viatura::class, ['id' => 'viatura_id']);
     }
 
 }
