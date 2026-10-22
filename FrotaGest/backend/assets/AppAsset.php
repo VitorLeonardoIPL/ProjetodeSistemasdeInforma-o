@@ -1,22 +1,16 @@
 <?php
 
-/**
- * @link https://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license https://www.yiiframework.com/license/
- */
-
 declare(strict_types=1);
 
 namespace backend\assets;
 
-use common\assets\ColorModeAsset;
-use yii\bootstrap5\BootstrapAsset;
+use hail812\adminlte3\assets\AdminLteAsset;
+use hail812\adminlte3\assets\FontAwesomeAsset;
 use yii\web\AssetBundle;
 use yii\web\YiiAsset;
 
 /**
- * Main backend application asset bundle.
+ * Asset principal do backend (AdminLTE 3 / Bootstrap 4).
  */
 class AppAsset extends AssetBundle
 {
@@ -27,7 +21,7 @@ class AppAsset extends AssetBundle
     ];
     public $depends = [
         YiiAsset::class,
-        BootstrapAsset::class,
-        ColorModeAsset::class,
+        AdminLteAsset::class,
+        FontAwesomeAsset::class,
     ];
 }
