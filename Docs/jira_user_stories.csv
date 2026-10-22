@@ -1,0 +1,213 @@
+﻿Issue Id,Issue Type,Summary,Description,Story Points,Parent
+E1,Epic,Autenticação e conta,,,
+E2,Epic,Requisições (Colaborador),,,
+E3,Epic,Utilização da viatura (App Android),,,
+E4,Epic,Gestão de pedidos (Coordenador),,,
+E5,Epic,Frota e condutores (Coordenador),,,
+E6,Epic,Manutenção (Coordenador e Técnico),,,
+E7,Epic,Administração do sistema,,,
+US1,Story,US1 – Consultar catálogo e disponibilidade de viaturas,"Como colaborador quero consultar o catálogo de viaturas e a sua disponibilidade de forma a escolher a viatura certa para a minha deslocação
+
+Critérios de Aceitação:
+- O catálogo apresenta fotos, categoria e características de cada viatura e pode ser filtrado por pesquisa, categoria, período e combustível
+- O calendário de disponibilidade reflete os bloqueios já aprovados em tempo real
+- Não é possível selecionar uma data já ocupada para a viatura",3,E2
+US2,Story,US2 – Submeter requisição de viatura,"Como colaborador quero submeter um pedido de requisição de viatura indicando datas, motivo e categoria pretendida de forma a reservar uma viatura para a minha deslocação
+
+Critérios de Aceitação:
+- O formulário exige datas, motivo e categoria de viatura
+- Após submissão o pedido fica com estado “pendente”
+- O colaborador recebe notificação push quando o pedido é aprovado ou recusado",5,E2
+US3,Story,US3 – Acompanhar estado do pedido e histórico de requisições,"Como colaborador quero consultar o estado do meu pedido e o histórico das minhas requisições anteriores com detalhe de cada uma de forma a acompanhar as minhas deslocações
+
+Critérios de Aceitação:
+- A lista mostra todos os pedidos do colaborador com o respetivo estado (pendente, aprovado, recusado, atribuída a viatura X)
+- Ao selecionar uma requisição da lista é apresentado o detalhe (viatura usada, km, custos) – master-detail",3,E2
+US4,Story,US4 – Registar quilómetros e fotografar o estado da viatura no check-in/check-out,"Como colaborador quero registar os quilómetros iniciais e finais e fotografar o estado da viatura ao iniciar e terminar a viagem de forma a documentar o uso e o estado em que a entreguei
+
+Critérios de Aceitação:
+- A app obriga a tirar fotos em 4 posições fixas (frente, trás, esquerda, direita) no check-in e no check-out
+- Os quilómetros podem ser lidos automaticamente por OCR a partir de foto do conta-quilómetros, mas ficam sempre editáveis manualmente
+- O checklist de receção e entrega confirma o estado e os documentos a bordo",5,E3
+US5,Story,US5 – Anexar fatura de combustível,"Como colaborador quero fotografar e anexar o recibo de abastecimento de forma a que o custo fique associado à viagem
+
+Critérios de Aceitação:
+- É possível anexar uma fotografia da fatura ao registo da viagem
+- O valor e os litros podem ser extraídos automaticamente da fotografia, mas ficam editáveis",2,E3
+US6,Story,US6 – Usar a app em modo offline e identificar a viatura por QR,"Como colaborador quero poder fazer o check-in/check-out mesmo sem rede e identificar a viatura automaticamente por código QR de forma a não ficar bloqueado em garagens sem sinal e a agilizar o processo
+
+Critérios de Aceitação:
+- Fotos, quilómetros e checklist preenchidos offline ficam guardados localmente e sincronizam automaticamente quando há ligação
+- Um código QR colado no para-brisas identifica a viatura automaticamente ao abrir a câmara",5,E3
+US7,Story,US7 – Consultar e aprovar/recusar pedidos pendentes,"Como coordenador de frota quero consultar a lista de requisições pendentes com disponibilidade de viaturas já verificada e aprovar ou recusar cada pedido indicando motivo de forma a gerir os pedidos dos colaboradores
+
+Critérios de Aceitação:
+- A lista de pendentes mostra a disponibilidade de viaturas verificada em tempo real antes de mostrar a opção de aprovar
+- Ao recusar um pedido é obrigatório indicar o motivo, escolhido de uma lista com a opção «Outro»
+- O colaborador é notificado da decisão",5,E4
+US8,Story,US8 – Atribuir viatura a um pedido aprovado,"Como coordenador de frota quero atribuir uma viatura concreta dentro da categoria pedida a uma requisição aprovada de forma a garantir que o colaborador tem transporte disponível
+
+Critérios de Aceitação:
+- O sistema valida automaticamente que a carta de condução do condutor está válida antes de permitir a atribuição
+- Não é possível atribuir uma viatura já reservada, em manutenção ou indisponível
+- A atribuição bloqueia automaticamente o período na disponibilidade da viatura",5,E4
+US9,Story,US9 – Consultar o detalhe de cada requisição,"Como coordenador de frota quero consultar o ecrã de detalhe de uma requisição com colaborador, datas, motivo, km percorridos, duração, combustível abastecido e fotos de antes/depois de forma a validar como decorreu a utilização
+
+Critérios de Aceitação:
+- O detalhe apresenta as duas grelhas de fotos (check-in e check-out) lado a lado para identificar danos
+- É a funcionalidade de master-detail do lado do back-office (lista de requisições → detalhe)",3,E4
+US10,Story,US10 – Gerir viaturas e condutores,"Como coordenador de frota quero criar, editar e remover viaturas e condutores da frota de forma a manter o catálogo atualizado
+
+Critérios de Aceitação:
+- CRUD completo de viaturas (matrícula, marca, modelo, categoria, estado)
+- CRUD completo de condutores associados à frota",5,E5
+US11,Story,US11 – Gerir documentos legais das viaturas e alertas,"Como coordenador de frota quero registar os documentos legais de cada viatura com a respetiva data de validade, consultar os que estão a expirar e configurar os alertas automáticos de forma a nunca ter uma viatura a circular com documentação fora do prazo
+
+Critérios de Aceitação:
+- É possível registar seguro, inspeção e IUC com data de validade por viatura
+- Existe uma lista dos documentos a expirar num prazo configurável
+- É possível configurar o número de dias de antecedência do alerta",5,E5
+US12,Story,US12 – Montar e submeter orçamentos de compra,"Como coordenador de frota quero montar um orçamento de compra como um carrinho, adicionando vários itens (peças, serviços, seguros), e submetê-lo a um fornecedor externo de forma a formalizar uma necessidade de manutenção ou compra
+
+Critérios de Aceitação:
+- O orçamento tem uma lista de itens associados – master-detail
+- É possível alterar o estado do orçamento entre rascunho, pendente, aceite e recusado
+- Ao ser aceite, o orçamento gera automaticamente um registo de manutenção para o Técnico executar",5,E6
+US13,Story,US13 – Registar necessidades de manutenção identificadas,"Como coordenador de frota ou técnico de manutenção quero registar item a item as necessidades de manutenção identificadas (revisões, inspeções, pneus, peças) de forma a dar origem a um orçamento de compra
+
+Critérios de Aceitação:
+- Cada necessidade fica associada a uma viatura
+- As necessidades registadas podem ser agrupadas num orçamento",3,E6
+US14,Story,US14 – Consultar faturas de combustível e indicadores de utilização,"Como coordenador de frota quero consultar as faturas de combustível anexadas pelos colaboradores e os indicadores de utilização da frota (viaturas paradas há muito tempo, taxa de ocupação) de forma a controlar custos e otimizar a frota
+
+Critérios de Aceitação:
+- É possível consultar as faturas associadas a cada viagem
+- O dashboard mostra taxa de ocupação por viatura e por departamento, e viaturas paradas há muito tempo
+- Existe trilha de auditoria de quem aprovou o quê",3,E5
+US15,Story,US15 – Ver localização das viaturas em uso,"Como coordenador de frota quero ver num mapa a localização atual das viaturas em utilização de forma a saber onde está a frota a qualquer momento
+
+Critérios de Aceitação:
+- O mapa mostra a rota percorrida associada a cada requisição em curso
+- A localização é atualizada periodicamente enquanto a viatura está em utilização",3,E5
+US16,Story,US16 – Registar intervenção de manutenção,"Como técnico de manutenção quero registar uma intervenção no back-office (data, peças usadas, horas de trabalho, custo) de forma a documentar o trabalho realizado
+
+Critérios de Aceitação:
+- O registo é feito no back-office, podendo anexar a fotografia da peça substituída
+- O registo pode ser criado a partir de um orçamento aceite ou diretamente, quando o técnico identifica uma necessidade no terreno
+- Peças e custos ficam associados à intervenção",5,E6
+US17,Story,US17 – Marcar manutenção como concluída,"Como técnico de manutenção quero marcar uma manutenção como concluída de forma a que a viatura volte automaticamente ao estado disponível
+
+Critérios de Aceitação:
+- A marcação é feita no back-office
+- A viatura passa automaticamente a “disponível” assim que a manutenção é marcada como concluída",2,E6
+US18,Story,US18 – Consultar histórico de manutenções por viatura,"Como técnico de manutenção quero consultar, no back-office, o histórico completo de manutenções de uma viatura de forma a ter contexto antes de intervir
+
+Critérios de Aceitação:
+- A lista de viaturas permite abrir o detalhe com todas as manutenções anteriores – master-detail
+- O histórico é alimentado diretamente pelos registos deste role",3,E6
+US19,Story,US19 – Detalhar custos de uma manutenção,"Como técnico de manutenção quero detalhar, no back-office, o custo final de uma intervenção de forma a fechar o registo com rigor
+
+Critérios de Aceitação:
+- O back-office permite editar peças e custos de uma intervenção já criada
+- As alterações ficam refletidas no histórico da viatura",2,E6
+US20,Story,US20 – Gerir contas de utilizador e permissões,"Como administrador de sistemas quero criar, editar e desativar contas de utilizador, atribuir o role correto e configurar as permissões de acesso de cada role às funcionalidades de forma a manter o acesso ao sistema controlado
+
+Critérios de Aceitação:
+- É possível atribuir um dos quatro roles (Colaborador, Coordenador, Técnico, Administrador) a cada conta
+- É possível desativar uma conta sem a eliminar
+- As permissões de cada role são configuráveis e distintas",5,E7
+US21,Story,US21 – Configurar parâmetros gerais do sistema,"Como administrador de sistemas quero configurar parâmetros gerais do sistema, como o número de dias de antecedência de um alerta de documento, de forma a adaptar o comportamento do sistema sem precisar de alterar código
+
+Critérios de Aceitação:
+- Os parâmetros configurados ficam persistidos e aplicam-se de imediato
+- Só o administrador tem acesso a este ecrã",2,E7
+US22,Story,US22 – Consultar logs de auditoria,"Como administrador de sistemas quero consultar os logs de auditoria e de erros de todos os canais, com filtro por utilizador e por data, de forma a diagnosticar bugs reportados
+
+Critérios de Aceitação:
+- Os logs cobrem front-office, back-office e app
+- É possível filtrar por utilizador e por intervalo de datas",3,E7
+US23,Story,US23 – Gerir a integração com serviços externos,"Como administrador de sistemas quero gerir a ligação a serviços externos (Google Calendar API, Firebase Cloud Messaging) de forma a manter a sincronização de calendário e as notificações push a funcionar
+
+Critérios de Aceitação:
+- É possível configurar/atualizar as credenciais de serviço sem intervenção no código
+- Uma falha de ligação a um serviço externo fica registada nos logs de auditoria",3,E7
+US24,Story,US24 – Iniciar e terminar sessão,"Como utilizador do sistema quero iniciar sessão com o meu email e palavra-passe numa única entrada para o front-office e o back-office, e terminar sessão quando acabar de forma a aceder apenas às funcionalidades do meu role
+
+Critérios de Aceitação:
+- Após o login o utilizador é encaminhado para o front-office ou para o back-office conforme o seu role
+- Com credenciais inválidas é apresentada uma mensagem de erro e o utilizador pode tentar novamente
+- É possível optar por manter a sessão iniciada
+- Uma conta desativada não consegue iniciar sessão
+- A opção Sair termina a sessão",3,E1
+US25,Story,US25 – Recuperar a palavra-passe,"Como utilizador quero recuperar a minha palavra-passe através de uma ligação enviada por email, e como administrador de sistemas quero enviar a um utilizador um pedido de redefinição de forma a recuperar o acesso sem intervenção técnica
+
+Critérios de Aceitação:
+- A ligação «Esqueci-me da palavra-passe» está disponível no login web e no da aplicação móvel
+- O utilizador recebe um email com uma ligação para definir uma nova palavra-passe
+- O administrador pode enviar o pedido de redefinição a partir da ficha do utilizador
+- A ligação enviada é válida durante 60 minutos e deixa de ser válida depois de utilizada
+- A nova palavra-passe tem pelo menos 8 caracteres, com uma letra e um número
+- Com a sessão iniciada, o utilizador pode alterar a palavra-passe a partir do perfil da aplicação móvel",3,E1
+US26,Story,US26 – Iniciar sessão na aplicação móvel,"Como colaborador, coordenador de frota ou administrador de sistemas quero iniciar sessão na aplicação móvel de forma a usar no telemóvel as funcionalidades do meu role
+
+Critérios de Aceitação:
+- A app aceita contas com os roles Colaborador, Coordenador de Frota e Administrador de Sistemas
+- Depois do login a app apresenta os separadores correspondentes ao role
+- O acesso fica guardado no dispositivo para não ser necessário iniciar sessão a cada utilização
+- O perfil da app apresenta os dados do utilizador, a opção de terminar sessão e o número de registos por sincronizar",2,E1
+US27,Story,US27 – Consultar notificações,"Como utilizador quero consultar as notificações que recebi (decisão sobre pedidos, novos pedidos, documentos a expirar, inspeções e revisões) de forma a não perder nenhum aviso
+
+Critérios de Aceitação:
+- A lista apresenta as notificações mais recentes primeiro e distingue as lidas das não lidas
+- O número de notificações por ler aparece no menu
+- No telemóvel, a notificação push abre o pedido ou a viatura a que diz respeito
+- É possível filtrar as notificações por tipo (pedidos, documentos e manutenção) e ver apenas as que estão por ler
+- É possível marcar todas as notificações como lidas",3,E1
+US28,Story,US28 – Ver os condutores disponíveis,"Como coordenador de frota quero ver na app os condutores disponíveis num período de forma a saber a quem posso atribuir uma viatura quando alguém está indisponível
+
+Critérios de Aceitação:
+- Escolhido o período, uma janela lista os condutores disponíveis com o telefone e a validade da carta
+- Não aparecem os condutores inativos, os que têm indisponibilidade registada nem os já atribuídos a outra requisição nesse período
+- Os condutores indisponíveis podem ser consultados com o respetivo motivo (por exemplo, férias)",3,E5
+US29,Story,US29 – Registar a indisponibilidade de condutores,"Como coordenador de frota quero registar os períodos em que um condutor está indisponível (férias, baixa) de forma a que não seja sugerido para atribuição
+
+Critérios de Aceitação:
+- É possível criar, editar e remover um período de indisponibilidade com data de início, data de fim e motivo
+- Durante esse período o condutor não aparece como disponível",2,E5
+US30,Story,US30 – Sugerir o período livre mais próximo,"Como colaborador quero que, se não houver viaturas livres no período que pedi, o sistema me sugira o período livre mais próximo de forma a conseguir reservar sem tentar datas ao acaso
+
+Critérios de Aceitação:
+- A disponibilidade é verificada ao avançar no pedido
+- Se não existirem viaturas livres na categoria, é indicado o período livre mais próximo
+- O colaborador pode aceitar a sugestão e continuar o pedido
+- Quando existem viaturas livres noutras categorias para o período pedido, essas categorias são indicadas",3,E2
+US31,Story,US31 – Atribuir um condutor ativo e com carta válida,"Como coordenador de frota quero escolher o condutor ao aprovar uma requisição, apenas entre os condutores ativos com carta válida, de forma a garantir que a viatura é conduzida por quem pode
+
+Critérios de Aceitação:
+- Só são apresentados os condutores ativos
+- A atribuição é bloqueada se a carta de condução estiver expirada, sendo a validade visível
+- O colaborador é notificado com a viatura e o condutor atribuídos",2,E4
+US32,Story,US32 – Assinalar risco ao comparar as fotografias,"Como coordenador de frota quero assinalar um risco de dano ao comparar as fotografias de check-in e de check-out e registar uma necessidade de manutenção a partir da requisição de forma a tratar os danos sem perder o contexto
+
+Critérios de Aceitação:
+- Uma fotografia pode ser marcada com «risco assinalado»
+- A partir do detalhe da requisição é possível registar uma necessidade de manutenção para a viatura
+- É possível ampliar a comparação das fotografias",3,E4
+US33,Story,US33 – Configurar regras e parâmetros do sistema,"Como administrador de sistemas quero configurar as regras de requisição (antecedência mínima e duração máxima) e outros parâmetros (dias para considerar uma viatura parada, intervalo de envio da localização, expiração da sessão e retenção de logs) de forma a adaptar o sistema sem alterar código
+
+Critérios de Aceitação:
+- Os pedidos que não cumpram a antecedência mínima ou a duração máxima são rejeitados com uma mensagem
+- Cada parâmetro guarda a data e o autor da última alteração
+- Os dias de antecedência dos alertas são definidos por tipo (seguro, inspeção, IUC e revisões)",2,E7
+US34,Story,US34 – Consultar o estado do sistema e testar os serviços externos,"Como administrador de sistemas quero consultar o estado dos serviços (API, base de dados, Google Calendar, Firebase Cloud Messaging e última cópia de segurança) e testar a ligação aos serviços externos de forma a detetar falhas antes dos utilizadores
+
+Critérios de Aceitação:
+- O estado de cada serviço (ok ou falha) é apresentado no back-office e na app
+- Existe a ação «Testar ligação» para cada serviço externo
+- As falhas ficam registadas nos logs com a data e o detalhe",3,E7
+US35,Story,US35 – Impedir a remoção de viaturas com requisições futuras,"Como coordenador de frota quero que uma viatura com requisições futuras não possa ser removida de forma a não deixar pedidos aprovados sem viatura
+
+Critérios de Aceitação:
+- A remoção pede confirmação
+- Se existirem requisições futuras a viatura passa ao estado indisponível em vez de ser removida
+- Os estados da viatura (disponível, reservada, em utilização, em manutenção e indisponível) são visíveis na lista",2,E5
