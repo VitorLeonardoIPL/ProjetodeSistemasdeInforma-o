@@ -5,66 +5,56 @@ declare(strict_types=1);
 /** @var yii\web\View $this */
 
 use yii\bootstrap5\Nav;
-use yii\bootstrap5\NavBar;
 use yii\helpers\Html;
 
+//links do menu principal
+//o widget Nav transforma cada item num <a class="nav-link"> e marca o da pagina atual como "active"
 $items = [
-    [
-        'label' => 'Home',
-        'url' => ['/site/index'],
-    ],
-    [
-        'label' => 'About',
-        'url' => ['/site/about'],
-    ],
-    [
-        'label' => 'Contact',
-        'url' => ['/site/contact'],
-    ],
-    [
-        'label' => 'Signup',
-        'url' => ['/site/signup'],
-        'visible' => Yii::$app->user->isGuest,
-    ],
-    [
-        'label' => 'Login',
-        'url' => ['/site/login'],
-        'visible' => Yii::$app->user->isGuest,
-    ],
-    [
-        'label' => 'Logout (' . Html::encode(Yii::$app->user->identity?->username) . ')',
-        'url' => ['/site/logout'],
-        'linkOptions' => [
-            'data-method' => 'post',
-            'class' => 'logout',
+        ['label' => 'Início','url' => ['/site/index'],
         ],
-        'visible' => !Yii::$app->user->isGuest,
-    ],
+        ['label' => 'Sobre','url' => ['/site/about'],
+        ],
+        ['label' => 'Contacto','url' => ['/site/contact'],
+        ],
 ];
 
 ?>
-<header id="header">
-    <?php NavBar::begin(
-        [
-            'brandLabel' => Yii::$app->name,
-            'brandUrl' => Yii::$app->homeUrl,
-            'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
-        ],
-    ) ?>
-    <?= Nav::widget(
-        [
-            'options' => ['class' => 'navbar-nav me-auto'],
-            'encodeLabels' => false,
-            'items' => $items,
-        ],
-    ) ?>
-    <?= Html::button(
-        '&#127769;',
-        [
-            'id' => 'theme-toggle',
-            'class' => 'btn btn-link nav-link fs-5',
-            'aria-label' => 'Switch to dark mode',
-        ],
-    ) ?>
-    <?php NavBar::end() ?>
-</header>
+<!-- Navbar Start (copiado do index.html do Cental e adaptado ao Yii) -->
+<div class="container-fluid nav-bar sticky-top px-0 px-lg-4 py-2 py-lg-0">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light">
+
+            <!-- logotipo: icone de carro + nome da aplicacao; leva a pagina inicial -->
+            <a href="<?= Yii::$app->homeUrl ?>" class="navbar-brand p-0">
+                <h1 class="display-6 text-primary"><i class="fas fa-car-alt me-3"></i><?= Html::encode(Yii::$app->name) ?></h1>
+            </a>
+
+            <!-- botao "hamburguer" que aparece em ecras pequenos -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+
+                <!-- links do menu, ao centro (mx-auto) -->
+                <?= Nav::widget(['options' => ['class' => 'navbar-nav mx-auto py-0'],'items' => $items,
+                ]) ?>
+
+                <!-- botoes a direita: dependem de haver ou nao sessao iniciada -->
+                <?php if (Yii::$app->user->isGuest): ?>
+                    <?= Html::a('Registar', ['/site/signup'], ['class' => 'btn btn-light rounded-pill py-2 px-4 me-2']) ?>
+                    <?= Html::a('Entrar', ['/site/login'], ['class' => 'btn btn-primary rounded-pill py-2 px-4']) ?>
+                <?php else: ?>
+                    <!-- nome do utilizador com sessao iniciada -->
+                    <span class="me-3"><i class="fas fa-user text-primary me-2"></i><?= Html::encode(Yii::$app->user->identity->username) ?></span>
+                    <!-- o logout tem de ser um POST (o SiteController so o aceita assim), por isso e um formulario -->
+                    <?= Html::beginForm(['/site/logout'], 'post', ['class' => 'd-inline']) ?>
+                    <?= Html::submitButton('Sair', ['class' => 'btn btn-primary rounded-pill py-2 px-4']) ?>
+                    <?= Html::endForm() ?>
+                <?php endif ?>
+
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- Navbar End -->
