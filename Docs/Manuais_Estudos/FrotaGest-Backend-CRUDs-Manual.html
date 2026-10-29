@@ -98,7 +98,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 
 <header class="hero">
   <h1>FrotaGest, backend: menu lateral e CRUDs, passo a passo</h1>
-  <p>Como pôr os 4 links do Dashboard no menu da esquerda (Viaturas, Viaturas disponíveis, Requisições pendentes, Condutores) e os CRUDs que os suportam (viaturas, condutores e requisições), usando o Gii e em português de Portugal. No fim, a gestão de utilizadores com soft delete. Marca cada passo quando o tiveres feito e abre o código para veres o que escrever.</p>
+  <p>Como pôr os 4 links do Dashboard no menu da esquerda (Viaturas, Viaturas disponíveis, Requisições pendentes, Condutores) e os CRUDs que os suportam (viaturas, condutores e requisições), usando o Gii e em português de Portugal. Depois, a gestão de utilizadores com soft delete e o controlo de acesso pelo RBAC (um role por utilizador e uma permissão por ecrã). Marca cada passo quando o tiveres feito e abre o código para veres o que escrever.</p>
   <ul class="toc">
     <li><a href="#pedido">O que se pede</a></li>
     <li><a href="#passos">Os passos</a></li>
@@ -110,7 +110,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 
 <h2 id="pedido">O que se pede</h2>
 <p>O backend já mostrava o Dashboard com as 4 caixas e um único link no menu. Falta um <b>link no menu</b> para cada caixa e os <b>CRUDs</b> que esses links abrem.</p>
-<div class="flow"><span>Gii gera 3 CRUDs</span><i>→</i><span>AccessControl (só com login)</span><i>→</i><span>4 links no sidebar</span><i>→</i><span>português</span><i>→</i><span>testar</span></div>
+<div class="flow"><span>Gii gera 3 CRUDs</span><i>→</i><span>AccessControl (só com login)</span><i>→</i><span>4 links no sidebar</span><i>→</i><span>português</span><i>→</i><span>utilizadores + role</span><i>→</i><span>RBAC nos controladores</span><i>→</i><span>testar</span></div>
 
 <div class="lbl">Como ficou organizado o código</div>
 <div class="er">
@@ -221,7 +221,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 
 </div></details>
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k6" aria-label="Passo 6 feito"><span class="num">6</span><span class="ttl">Só entra quem fez login (AccessControl)</span><span class="where">backend/controllers/*Controller.php</span></summary>
+<summary><input class="chk" type="checkbox" id="k6" aria-label="Passo 6 feito"><span class="num">6</span><span class="ttl">Primeiro degrau: só entra quem fez login (AccessControl)</span><span class="where">backend/controllers/*Controller.php</span></summary>
 <div class="body">
 
 <div class="lbl">O que fazer</div>
@@ -234,7 +234,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <li>É o mesmo ACF que já está no <code>SiteController</code>, só que sem as acções <code>login</code> e <code>error</code>.</li>
 </ul>
 <div class="note"><b>Erro:</b> se esqueceres o <code>use yii\filters\AccessControl;</code> aparece <code>Class "backend\controllers\AccessControl" not found</code> (erro 500).</div>
-<div class="note"><b>Falta fazer:</b> isto só pede login. Os roles do RBAC (<code>acederBackoffice</code>, <code>gerirViaturas</code>…) ainda não são verificados.</div>
+<div class="note"><b>Mais à frente:</b> isto só pede login. No passo 15 trocamos o <code>'@'</code> pelas permissões do RBAC.</div>
 <div class="check">Verifica: numa janela anónima, <code>?r=viatura/index</code> redireciona para o login.</div>
 
 </div></details>
@@ -346,7 +346,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </ol>
 <div class="codewrap"><div class="cap">backend/controllers/UserController.php</div><pre data-src="c-soft-ctrl"></pre></div>
 <ol start="3">
-<li>Cria o <code>backend/models/UserForm.php</code> (criar e editar, com password), o <code>backend/models/UserSearch.php</code> (filtros) e as vistas em <code>backend/views/user/</code> (<code>index</code>, <code>view</code>, <code>create</code>, <code>update</code>, <code>_form</code>).</li>
+<li>Cria o <code>backend/models/UserForm.php</code> (criar e editar, com password; o role entra no passo 13), o <code>backend/models/UserSearch.php</code> (filtros) e as vistas em <code>backend/views/user/</code> (<code>index</code>, <code>view</code>, <code>create</code>, <code>update</code>, <code>_form</code>).</li>
 <li>Na listagem, o botão do lixo só aparece se a conta <b>não</b> está apagada, e o da seta (reativar) só se está apagada (<code>visibleButtons</code>).</li>
 <li>No <code>sidebar.php</code> acrescenta o link <code>['label' =&gt; 'Utilizadores', 'icon' =&gt; 'users', 'url' =&gt; ['/user/index']]</code>.</li>
 </ol>
@@ -363,14 +363,202 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <div class="check">Verifica: apaga um utilizador de teste; fica na lista com estado "Apagado"; o login dele falha; clicas na seta, volta a "Ativo" e entra.</div>
 
 </div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k11" aria-label="Passo 11 feito"><span class="num">11</span><span class="ttl">RBAC: o que está feito e o que falta ligar</span><span class="where">console/controllers/RbacController.php</span></summary>
+<div class="body">
+
+<div class="lbl">O que é</div>
+<p>O RBAC tem <b>duas partes</b>, como na Ficha 5: <b>configurar</b> (definir roles e permissões e atribuir roles às pessoas) e <b>verificar</b> (perguntar, em cada ecrã, se a pessoa tem a permissão).</p>
+<div class="flow"><span>user</span><i>→</i><span>auth_assignment</span><i>→</i><span>role (auth_item)</span><i>→</i><span>auth_item_child</span><i>→</i><span>permissões (auth_item)</span></div>
+<div class="scroll"><table>
+<tr><th>Tabela</th><th>O que guarda</th><th>Quem preenche</th></tr>
+<tr><td><code>auth_item</code></td><td>os 4 roles (type 1) e as 39 permissões (type 2)</td><td><code>RbacController</code></td></tr>
+<tr><td><code>auth_item_child</code></td><td>"o role <code>coordenador</code> tem a permissão <code>gerirViaturas</code>"</td><td><code>RbacController</code></td></tr>
+<tr><td><code>auth_rule</code></td><td>a regra do dono (<code>isRequisicaoOwner</code>)</td><td><code>RbacController</code></td></tr>
+<tr><td><code>auth_assignment</code></td><td>"o utilizador 3 tem o role <code>coordenador</code>"</td><td>a gestão de utilizadores (passo 13)</td></tr>
+</table></div>
+<div class="lbl">Porquê</div>
+<ul>
+<li>As permissões estão definidas <b>num só sítio</b>, o <code>RbacController</code> (só existe esse em <code>console/controllers</code>), e correm-se uma vez com <code>php yii rbac/init</code>. O resto da aplicação só <b>pergunta</b> ao Yii; nunca repete a lista.</li>
+<li>A tabela <code>user</code> <b>não</b> tem campo de permissões. O utilizador tem um <b>role</b>, e o role já traz as permissões.</li>
+<li>Estava feito: as tabelas <code>auth_*</code> e o <code>rbac/init</code> (4 roles, 39 permissões). Faltava atribuir roles (<code>auth_assignment</code> estava vazia) e usar as permissões nos controladores.</li>
+<li>O role <code>administrador</code> <b>não herda</b> os outros (está assim no <code>RbacController</code> e no PDF). Tem <code>acederBackoffice</code> e <code>gerirUtilizadores</code>, mas não <code>gerirViaturas</code>. Por isso o Admin só vê o Dashboard (sem caixas) e os Utilizadores.</li>
+<li>O <code>rbac/init</code> não limpa nada: correr duas vezes dá erro. Para mudar uma permissão é preciso esvaziar as tabelas <code>auth_*</code> primeiro (o que apaga também as atribuições).</li>
+</ul>
+<div class="check">Verifica: no phpMyAdmin, <code>auth_item</code> tem 43 linhas (4 + 39) e <code>auth_assignment</code> está vazia.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k12" aria-label="Passo 12 feito"><span class="num">12</span><span class="ttl">Coluna role na tabela perfil</span><span class="where">console/migrations, common/models/perfil.php</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<ol>
+<li>Cria uma migração nova e escreve o <code>safeUp</code> e o <code>safeDown</code>:</li>
+</ol>
+<div class="codewrap"><div class="cap">terminal (Git Bash), pasta FrotaGest</div><pre data-src="c-r-migcmd"></pre></div>
+<div class="codewrap"><div class="cap">console/migrations/m261029_190000_add_role_to_perfil_table.php</div><pre data-src="c-r-mig"></pre></div>
+<ol start="2">
+<li>No modelo <code>common/models/perfil.php</code> acrescenta a regra e a etiqueta do <code>role</code>:</li>
+</ol>
+<div class="codewrap"><div class="cap">common/models/perfil.php</div><pre data-src="c-r-perfil"></pre></div>
+<ol start="3">
+<li>No <code>User.php</code> acrescenta a relação "o meu perfil", para a listagem e o detalhe chegarem ao role:</li>
+</ol>
+<div class="codewrap"><div class="cap">common/models/User.php</div><pre data-src="c-r-getperfil"></pre></div>
+<div class="lbl">Porquê</div>
+<ul>
+<li>O role fica associado ao perfil do utilizador (relação 1 para 1 pelo <code>user_id</code>).</li>
+<li>A coluna aceita vazio e <b>não tem chave estrangeira</b> para o <code>auth_item</code>, para não bloquear o <code>rbac/init</code>.</li>
+<li><b>Atenção:</b> o role passa a estar em dois sítios, <code>perfil.role</code> e <code>auth_assignment</code>. O <b>acesso</b> decide-se sempre pela <code>auth_assignment</code>; o <code>perfil.role</code> é só a cópia para consultar. Se alguém mudar uma delas à mão no phpMyAdmin, ficam diferentes. Por isso o formulário do passo 13 é o único sítio que escreve nas duas.</li>
+</ul>
+<div class="check">Verifica: <code>php yii migrate</code> diz "applied"; no phpMyAdmin, a tabela <code>perfil</code> tem a coluna <code>role</code>.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k13" aria-label="Passo 13 feito"><span class="num">13</span><span class="ttl">Campo Role no formulário de utilizadores</span><span class="where">UserForm, views/user, UserSearch</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<p>Ao criar ou editar um utilizador, o administrador escolhe o role numa lista. Ao guardar, o sistema grava <b>três coisas numa só transação</b>: o utilizador, o perfil (com o role) e a atribuição no RBAC.</p>
+<ol>
+<li>No <code>UserForm</code> acrescenta o campo <code>role</code> (obrigatório, tem de ser um dos roles do RBAC) e a lista dos roles, lida do <code>authManager</code>:</li>
+</ol>
+<div class="codewrap"><div class="cap">backend/models/UserForm.php</div><pre data-src="c-r-roles"></pre></div>
+<ol start="2">
+<li>No <code>save()</code>, depois de gravar o utilizador, grava o perfil e atribui o role:</li>
+</ol>
+<div class="codewrap"><div class="cap">backend/models/UserForm.php</div><pre data-src="c-r-save"></pre></div>
+<ol start="3">
+<li>No <code>_form.php</code> acrescenta a lista:</li>
+</ol>
+<div class="codewrap"><div class="cap">backend/views/user/_form.php</div><pre data-src="c-r-form"></pre></div>
+<ol start="4">
+<li>Na listagem acrescenta a coluna Role (com filtro por lista), e no detalhe a linha Role:</li>
+</ol>
+<div class="codewrap"><div class="cap">backend/views/user/index.php</div><pre data-src="c-r-index"></pre></div>
+<ol start="5">
+<li>No <code>UserSearch</code>, o filtro por role consulta o perfil:</li>
+</ol>
+<div class="codewrap"><div class="cap">backend/models/UserSearch.php</div><pre data-src="c-r-search"></pre></div>
+<div class="lbl">Porquê</div>
+<ul>
+<li>A tabela <code>perfil</code> tem o <code>nome</code> obrigatório, mas o formulário não o pede. Ao criar o perfil, o <code>nome</code> fica igual ao <code>username</code> (a <b>opção A</b>); podes preencher o nome real mais tarde.</li>
+<li><code>revokeAll</code> tira o role anterior e <code>assign</code> põe o novo, por isso cada utilizador tem um só role. Ao editar, o role atual vem do <code>authManager</code> (a fonte de verdade).</li>
+<li>Se alguma das três gravações falhar, a transação desfaz tudo e aparece o erro no campo Role.</li>
+<li>O <code>assign</code> é o mesmo da Ficha 5 (passo 12), só que feito pelo administrador num formulário, em vez de no registo.</li>
+<li>Como só o administrador cria contas, o registo do frontend não atribui role (e, por agora, não lhe mexemos).</li>
+</ul>
+<div class="check">Verifica: na listagem, o filtro "Role" mostra só os utilizadores desse role; no detalhe aparece o Role; ao trocar o role no editar, mudam <code>perfil.role</code> e <code>auth_assignment</code>.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k14" aria-label="Passo 14 feito"><span class="num">14</span><span class="ttl">Dar o role administrador ao Admin</span><span class="where">backend, ?r=user/index</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<ol>
+<li>Entra no backend como Admin, abre <b>Utilizadores</b> e clica no lápis do <code>Admin</code>.</li>
+<li>Em <b>Role</b> escolhe <code>administrador</code> e guarda (a password pode ficar vazia: mantém a atual).</li>
+</ol>
+<div class="lbl">Porquê</div>
+<ul>
+<li>O Admin ainda não tem role: a <code>auth_assignment</code> está vazia. Quando o passo 15 ligar as permissões, uma conta sem role recebe <b>403</b> em tudo, incluindo no ecrã de utilizadores. Se esqueceres este passo, ficas sem forma de lhe atribuir o role pelo ecrã.</li>
+<li>Se isso acontecer, a saída é inserir uma linha na <code>auth_assignment</code> no phpMyAdmin (<code>item_name = administrador</code>, <code>user_id = 1</code>), como na Ficha 5 (passo 13).</li>
+<li>Guardar cria também o perfil do Admin, com o <code>nome</code> igual ao <code>username</code>.</li>
+</ul>
+<div class="check">Verifica: a listagem mostra <code>administrador</code> na linha do Admin, e a <code>auth_assignment</code> tem 1 linha.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k15" aria-label="Passo 15 feito"><span class="num">15</span><span class="ttl">Proteger os controladores com as permissões do RBAC</span><span class="where">backend/controllers/*Controller.php</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<p>É o <b>passo 11 da Ficha 5</b> (ACF com as permissões do RBAC). Em cada controlador, troca o <code>'roles' =&gt; ['@']</code> (qualquer pessoa com login) pelo nome da permissão, ligada às actions:</p>
+<div class="codewrap"><div class="cap">backend/controllers/ViaturaController.php</div><pre data-src="c-r-ctrl"></pre></div>
+<div class="scroll"><table>
+<tr><th>Controlador</th><th>Actions</th><th>Permissão</th></tr>
+<tr><td><code>SiteController</code></td><td><code>index</code> (Dashboard)</td><td><code>acederBackoffice</code></td></tr>
+<tr><td></td><td><code>login</code>, <code>error</code></td><td>públicas</td></tr>
+<tr><td></td><td><code>logout</code></td><td>qualquer utilizador com login</td></tr>
+<tr><td><code>ViaturaController</code></td><td>todas</td><td><code>gerirViaturas</code></td></tr>
+<tr><td><code>CondutorController</code></td><td>todas</td><td><code>gerirCondutores</code></td></tr>
+<tr><td><code>RequisicaoController</code></td><td><code>index</code>, <code>view</code></td><td><code>verRequisicao</code></td></tr>
+<tr><td><code>UserController</code></td><td>todas (incluindo <code>restore</code>)</td><td><code>gerirUtilizadores</code></td></tr>
+</table></div>
+<p>No <code>SiteController</code> o dashboard passa a pedir <code>acederBackoffice</code> e o <code>logout</code> fica para qualquer pessoa com login:</p>
+<div class="codewrap"><div class="cap">backend/controllers/SiteController.php</div><pre data-src="c-r-site"></pre></div>
+<p>Nas Requisições só se pode <b>ver</b>. Quem cria pedidos é o colaborador, no front-office. Por isso a regra só tem <code>index</code> e <code>view</code>, e as vistas perdem os botões:</p>
+<div class="codewrap"><div class="cap">backend/controllers/RequisicaoController.php</div><pre data-src="c-r-ctrl-req"></pre></div>
+<div class="codewrap"><div class="cap">backend/views/requisicao/index.php (e em view.php saem os botões Editar e Apagar)</div><pre data-src="c-r-reqview"></pre></div>
+<div class="lbl">Porquê</div>
+<ul>
+<li>O Yii corre estas regras <b>antes</b> da action. Pergunta ao <code>authManager</code>: "este utilizador tem a permissão?" (<code>auth_assignment</code> → role → <code>auth_item_child</code> → permissão). Se não tiver, a action nem chega a correr.</li>
+<li>Sem login vai para o ecrã de login. Com login mas sem a permissão aparece <b>403 Forbidden</b>.</li>
+<li>O AccessControl <b>nega o que não tem regra</b>. Por isso <code>create</code>, <code>update</code> e <code>delete</code> das requisições deixam de ser alcançáveis sem ser preciso apagar código.</li>
+<li>"Viaturas disponíveis" e "Requisições pendentes" usam a mesma permissão do controlador respetivo, porque são as mesmas listagens com um filtro.</li>
+<li>Faz isto <b>depois</b> do passo 14. Se for antes, o Admin fica com 403 no ecrã de utilizadores.</li>
+</ul>
+<div class="check">Verifica: <code>php -l</code> a cada controlador; num browser anónimo, <code>?r=viatura/index</code> continua a ir para o login.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k16" aria-label="Passo 16 feito"><span class="num">16</span><span class="ttl">Menu e Dashboard só com o que a pessoa pode ver (can)</span><span class="where">sidebar.php, views/site/index.php</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<p>É o <b>passo 14 da Ficha 5</b>: cada item do menu leva um <code>'visible'</code> com a pergunta ao RBAC:</p>
+<div class="codewrap"><div class="cap">backend/views/layouts/sidebar.php</div><pre data-src="c-r-menu"></pre></div>
+<p>E cada caixa do Dashboard fica dentro de um <code>if</code> com a mesma permissão:</p>
+<div class="codewrap"><div class="cap">backend/views/site/index.php</div><pre data-src="c-r-dash"></pre></div>
+<div class="lbl">Porquê</div>
+<ul>
+<li><code>Yii::$app-&gt;user-&gt;can('gerirViaturas')</code> é a verificação por código, a 2.ª parte do RBAC. Devolve <code>true</code> ou <code>false</code>.</li>
+<li>Isto só <b>esconde</b> links. Quem escrever o endereço à mão continua barrado pelo passo 15. A segurança está no controlador, o menu é só comodidade.</li>
+<li>As caixas do Dashboard são todas de frota. O Admin não tem essas permissões, por isso o <b>Dashboard dele fica sem caixas</b> e o menu só mostra <b>Utilizadores</b>.</li>
+</ul>
+<div class="check">Verifica: com cada role, o menu mostra só os links da tabela do passo 17.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k17" aria-label="Passo 17 feito"><span class="num">17</span><span class="ttl">Testar com um utilizador por role</span><span class="where">browser, ?r=user/create</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<ol>
+<li>Como Admin, em <b>Utilizadores</b> → <b>Criar utilizador</b>, cria um utilizador por role: <code>coordenador</code>, <code>tecnico</code> e <code>colaborador</code> (password com 8 ou mais caracteres).</li>
+<li>Entra com cada um (numa janela anónima) e confirma o que abre. Numa conta sem role, tudo dá 403.</li>
+</ol>
+<div class="lbl">Resultado esperado</div>
+<div class="scroll"><table>
+<tr><th>Role</th><th>Dashboard</th><th>Viaturas</th><th>Condutores</th><th>Requisições</th><th>Utilizadores</th></tr>
+<tr><td><b>administrador</b></td><td>abre (sem caixas)</td><td>403</td><td>403</td><td>403</td><td>abre</td></tr>
+<tr><td><b>coordenador</b></td><td>abre (4 caixas)</td><td>abre</td><td>abre</td><td>só ver</td><td>403</td></tr>
+<tr><td><b>tecnico</b></td><td>abre (sem caixas)</td><td>403</td><td>403</td><td>403</td><td>403</td></tr>
+<tr><td><b>colaborador</b></td><td>403</td><td>403</td><td>403</td><td>403</td><td>403</td></tr>
+<tr><td><b>sem role</b></td><td>403</td><td>403</td><td>403</td><td>403</td><td>403</td></tr>
+<tr><td><b>visitante</b></td><td colspan="5">vai para o login</td></tr>
+</table></div>
+<p>Nas Requisições, <b>criar</b>, <b>editar</b> e <b>apagar</b> dão 403 a toda a gente (nem o coordenador), e a listagem não mostra esses botões.</p>
+<div class="lbl">Porquê</div>
+<ul>
+<li>Este quadro saiu de um teste por script (um utilizador por role, a abrir cada rota), e o resultado foi o da tabela. Não o testei a clicar no browser com a tua sessão.</li>
+<li>O colaborador faz login mas não entra no backoffice: não tem <code>acederBackoffice</code>.</li>
+<li>No fim, apaga os utilizadores de teste (podes usar o apagar, que é soft delete) ou deixa-os desativados.</li>
+</ul>
+<div class="check">Verifica: a tabela acima bate certo com o que vês em cada conta.</div>
+
+</div></details>
 
 <button class="reset" id="reset" type="button">Limpar todo o progresso</button>
 
 <h2 id="falta">O que falta (não está feito)</h2>
 <ul>
+<li><b>Aprovar, recusar e atribuir viatura nas requisições.</b> As permissões (<code>aprovarRequisicao</code>, <code>recusarRequisicao</code>, <code>atribuirViatura</code>) já existem no RBAC, mas ainda não há essas actions.</li>
+<li><b>Registo no frontend.</b> O template ainda deixa registar contas, e criaria utilizadores sem role. Como só o administrador cria contas, convém desligá-lo.</li>
+<li><b>Nome do perfil.</b> Fica igual ao <code>username</code> até haver um ecrã de perfil.</li>
 <li><b>CRUD de categorias</b>. Hoje a categoria cria-se pelo phpMyAdmin.</li>
-<li><b>Role dos utilizadores.</b> Criar uma conta não lhe dá permissões; falta atribuir o role (RBAC) na gestão de utilizadores.</li>
-<li><b>RBAC no backend.</b> Só se pede login. Falta ligar o <code>acederBackoffice</code> e as permissões de cada CRUD (<code>gerirViaturas</code>, <code>gerirCondutores</code>…) aos controladores, e atribuir roles aos utilizadores.</li>
 <li><b>Campos com id.</b> As chaves estrangeiras aparecem como número (<code>categoria_id</code>). O ideal é uma lista com o nome (dropdown).</li>
 <li><b>Estados em texto livre.</b> <code>estado</code> aceita qualquer texto; devia ser uma lista (<code>disponivel</code>, <code>em manutencao</code>, …). Os filtros do menu dependem de os valores bater certo.</li>
 <li><b>Datas e uploads.</b> <code>data_pedido</code>, fotos e anexos são escritos à mão.</li>
@@ -379,6 +567,10 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </ul>
 
 <h2 id="duvidas">Perguntas para o estudo</h2>
+<div class="qa"><b>Onde ficam as permissões de cada utilizador?</b><p>Não ficam na tabela <code>user</code>. O utilizador tem um <b>role</b> na <code>auth_assignment</code>, e o role tem as permissões na <code>auth_item_child</code>, preenchida pelo <code>RbacController</code>.</p></div>
+<div class="qa"><b>Porque é que só existe o RbacController em console/controllers?</b><p>Porque é o único sítio onde se <b>definem</b> roles e permissões. O resto da aplicação só as consulta (<code>can()</code> ou <code>roles</code> do AccessControl), sem repetir a lista.</p></div>
+<div class="qa"><b>Porque é que o role aparece em <code>perfil.role</code> e na <code>auth_assignment</code>?</b><p>O <code>perfil.role</code> é uma cópia para consultar na listagem. O acesso decide-se sempre pela <code>auth_assignment</code>. O formulário de utilizadores grava as duas numa transação; se mudares uma à mão, ficam diferentes.</p></div>
+<div class="qa"><b>Qual a diferença entre o AccessControl e o can()?</b><p>O AccessControl (nos <code>behaviors()</code>) <b>bloqueia</b> a action e dá 403. O <code>can()</code> no menu só <b>esconde</b> o link. A segurança está no controlador.</p></div>
 <div class="qa"><b>O que é um CRUD?</b><p>O conjunto de ecrãs para Criar, Ler, Atualizar e Apagar registos de uma tabela. O Gii gera-o a partir de um modelo.</p></div>
 <div class="qa"><b>Que ficheiros gera o Gii por cada CRUD?</b><p>Um controlador (<code>ViaturaController</code>), um modelo de pesquisa (<code>ViaturaSearch</code>) e as vistas <code>index</code>, <code>view</code>, <code>create</code>, <code>update</code>, <code>_form</code> e <code>_search</code>.</p></div>
 <div class="qa"><b>Porque é que "Viaturas disponíveis" e "Requisições pendentes" não têm CRUD próprio?</b><p>Porque não são tabelas, são filtros. Usam o CRUD de viaturas e o de requisições, com o parâmetro <code>ViaturaSearch[estado]=disponivel</code> ou <code>RequisicaoSearch[estado]=pendente</code> no endereço.</p></div>
@@ -396,6 +588,10 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <div class="qa"><b>"Integrity constraint violation" ao gravar ou apagar</b><p>A tabela tem chaves estrangeiras. Para criar, o registo ligado (ex. a categoria) tem de existir; para apagar, não pode ter registos que dependam dele.</p></div>
 <div class="qa"><b>Qualquer pessoa abre o CRUD sem login</b><p>O controlador não tem o bloco <code>'access'</code> no <code>behaviors()</code> (passo 6).</p></div>
 <div class="qa"><b>Texto ainda em inglês numa página</b><p>Ou é texto fixo da vista/etiqueta do modelo (passo 8), ou falta o <code>'language' =&gt; 'pt'</code> no <code>main.php</code> do backend.</p></div>
+<div class="qa"><b>403 Forbidden em tudo, até no ecrã de utilizadores</b><p>A conta não tem role na <code>auth_assignment</code>. Atribui o role (passo 14) ou insere a linha no phpMyAdmin.</p></div>
+<div class="qa"><b>O Admin entra mas não vê Viaturas nem Condutores</b><p>É o esperado: o role <code>administrador</code> não herda o <code>coordenador</code> e não tem <code>gerirViaturas</code>. Usa uma conta <code>coordenador</code> para a frota.</p></div>
+<div class="qa"><b>"Nao foi possivel gravar o utilizador" no campo Role</b><p>Falhou a gravação do utilizador, do perfil ou do role e a transação desfez tudo. Confirma que o <code>rbac/init</code> foi corrido (têm de existir os 4 roles) e que a coluna <code>perfil.role</code> existe.</p></div>
+<div class="qa"><b><code>Declaration of ... UserSearch::rules() must be compatible</code></b><p>O <code>UserSearch</code> estende o <code>User</code>, por isso o <code>rules()</code> tem de ter o mesmo tipo de retorno: <code>public function rules(): array</code>.</p></div>
 
 </div>
 
@@ -513,6 +709,155 @@ public function actionRestore($id)
 
     return $this->redirect(['index']);
 }</script>
+<script type="text/plain" id="c-r-mig">    public function safeUp()
+    {
+        //role do utilizador (colaborador, coordenador, tecnico, administrador)
+        //e so uma copia para consultar; quem manda no acesso e a tabela auth_assignment
+        $this->addColumn('{{%perfil}}', 'role', $this->string(64)->null());
+    }
+
+    public function safeDown()
+    {
+        $this->dropColumn('{{%perfil}}', 'role');
+    }</script>
+<script type="text/plain" id="c-r-migcmd">php yii migrate/create add_role_to_perfil_table
+php yii migrate</script>
+<script type="text/plain" id="c-r-perfil">//common/models/perfil.php
+[['role'], 'string', 'max' => 64],         // nas rules()
+'role' => 'Role',                          // no attributeLabels()</script>
+<script type="text/plain" id="c-r-getperfil">//common/models/User.php
+    /**
+     * Perfil do utilizador (1 para 1); tem o role copiado para consulta
+     */
+    public function getPerfil(): \yii\db\ActiveQuery
+    {
+        return $this->hasOne(perfil::class, ['user_id' => 'id']);
+    }</script>
+<script type="text/plain" id="c-r-save">//backend/models/UserForm.php, no save()
+        //utilizador, perfil e role gravam juntos; se um falhar, nenhum fica gravado
+        $transacao = Yii::$app->db->beginTransaction();
+        try {
+            $user->save(false);
+
+            //o perfil e obrigatorio ter nome: ao criar, usa o username
+            $perfil = perfil::findOne(['user_id' => $user->id]);
+            if (!$perfil) {
+                $perfil = new perfil(['user_id' => $user->id, 'nome' => $user->username]);
+            }
+            $perfil->role = $this->role;
+            if (!$perfil->save()) {
+                throw new \Exception('Perfil invalido');
+            }
+
+            //o acesso decide-se pela auth_assignment: tira o role anterior e atribui o novo
+            $auth = Yii::$app->authManager;
+            $auth->revokeAll($user->id);
+            $auth->assign($auth->getRole($this->role), $user->id);
+
+            $transacao->commit();
+        } catch (\Throwable $e) {
+            $transacao->rollBack();
+            $this->addError('role', 'Nao foi possivel gravar o utilizador.');
+
+            return null;
+        }
+
+        return $user;</script>
+<script type="text/plain" id="c-r-roles">//backend/models/UserForm.php
+    //os roles que existem no RBAC (criados pelo RbacController)
+    public static function roleList()
+    {
+        $lista = [];
+        foreach (Yii::$app->authManager->getRoles() as $role) {
+            $lista[$role->name] = $role->name;
+        }
+
+        return $lista;
+    }</script>
+<script type="text/plain" id="c-r-form">//backend/views/user/_form.php
+    <?= $form->field($model, 'role')->dropDownList(UserForm::roleList(), ['prompt' => 'Escolher role...'])->hint('O role decide o que a pessoa pode fazer no sistema.') ?></script>
+<script type="text/plain" id="c-r-index">//backend/views/user/index.php, nas columns
+            [
+                'attribute' => 'role',
+                'label' => 'Role',
+                //o role esta guardado no perfil do utilizador
+                'value' => function ($model) {
+                    return $model->perfil ? $model->perfil->role : null;
+                },
+                'filter' => UserForm::roleList(),
+            ],</script>
+<script type="text/plain" id="c-r-search">//backend/models/UserSearch.php, no search()
+        //filtrar pelo role: so os utilizadores cujo perfil tem esse role
+        if ($this->role) {
+            $query->andWhere(['id' => perfil::find()->select('user_id')->where(['role' => $this->role])]);
+        }</script>
+<script type="text/plain" id="c-r-ctrl">//backend/controllers/ViaturaController.php
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                //controlo de acesso: cada action pede a permissao do RBAC
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                            'roles' => ['gerirViaturas'],
+                        ],
+                    ],
+                ],
+                'verbs' => [
+                    'class' => VerbFilter::className(),
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+            ]
+        );
+    }</script>
+<script type="text/plain" id="c-r-ctrl-req">//backend/controllers/RequisicaoController.php, so a regra
+                        [
+                            'allow' => true,
+                            'actions' => ['index', 'view'],
+                            'roles' => ['verRequisicao'],
+                        ],</script>
+<script type="text/plain" id="c-r-site">//backend/controllers/SiteController.php, nas rules
+                    [
+                        'actions' => ['logout'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        //o dashboard e do backoffice
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['acederBackoffice'],
+                    ],</script>
+<script type="text/plain" id="c-r-reqview">//backend/views/requisicao/index.php, na ActionColumn
+'template' => '{view}',   // so o olho: sem editar nem apagar</script>
+<script type="text/plain" id="c-r-menu">//backend/views/layouts/sidebar.php
+                'items' => [
+                    ['label' => 'Dashboard', 'icon' => 'tachometer-alt', 'url' => ['/site/index'], 'visible' => Yii::$app->user->can('acederBackoffice')],
+                    ['label' => 'Viaturas', 'icon' => 'car', 'url' => ['/viatura/index'], 'visible' => Yii::$app->user->can('gerirViaturas')],
+                    //a mesma listagem de viaturas, ja filtrada pelo estado
+                    ['label' => 'Viaturas disponíveis', 'icon' => 'check', 'url' => ['/viatura/index', 'ViaturaSearch[estado]' => 'disponivel'], 'visible' => Yii::$app->user->can('gerirViaturas')],
+                    //a listagem de requisicoes ja filtrada pelo estado
+                    ['label' => 'Requisições pendentes', 'icon' => 'clipboard-list', 'url' => ['/requisicao/index', 'RequisicaoSearch[estado]' => 'pendente'], 'visible' => Yii::$app->user->can('verRequisicao')],
+                    ['label' => 'Condutores', 'icon' => 'id-card', 'url' => ['/condutor/index'], 'visible' => Yii::$app->user->can('gerirCondutores')],
+                    ['label' => 'Utilizadores', 'icon' => 'users', 'url' => ['/user/index'], 'visible' => Yii::$app->user->can('gerirUtilizadores')],
+                ],</script>
+<script type="text/plain" id="c-r-dash">//backend/views/site/index.php, cada caixa fica entre um if e um endif
+<?php if (Yii::$app->user->can('gerirViaturas')): ?>
+    <div class="col-lg-3 col-6">
+        <?= SmallBox::widget([
+            'title' => (string) viatura::find()->count(),
+            'text' => 'Viaturas',
+            'icon' => 'fas fa-car',
+        ]) ?>
+    </div>
+<?php endif; ?></script>
 
 <script>
 (function(){

@@ -40,6 +40,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'username',
             'email',
             [
+                'label' => 'Role',
+                'value' => $model->perfil ? $model->perfil->role : null,
+            ],
+            [
                 'attribute' => 'status',
                 'value' => User::statusLabels()[$model->status],
             ],

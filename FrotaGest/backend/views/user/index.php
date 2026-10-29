@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\UserForm;
 use common\models\User;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -33,6 +34,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'username',
             'email',
+            [
+                'attribute' => 'role',
+                'label' => 'Role',
+                //o role esta guardado no perfil do utilizador
+                'value' => function ($model) {
+                    return $model->perfil ? $model->perfil->role : null;
+                },
+                'filter' => UserForm::roleList(),
+            ],
             [
                 'attribute' => 'status',
                 'value' => function ($model) {

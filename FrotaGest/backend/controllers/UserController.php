@@ -21,13 +21,14 @@ class UserController extends Controller
         return array_merge(
             parent::behaviors(),
             [
-                //so utilizadores com login entram
+                //controlo de acesso: cada action pede a permissao do RBAC
                 'access' => [
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
                             'allow' => true,
-                            'roles' => ['@'],
+                            'actions' => ['index', 'view', 'create', 'update', 'delete', 'restore'],
+                            'roles' => ['gerirUtilizadores'],
                         ],
                     ],
                 ],

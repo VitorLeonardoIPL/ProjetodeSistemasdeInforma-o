@@ -209,6 +209,14 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * Perfil do utilizador (1 para 1); tem o role copiado para consulta
+     */
+    public function getPerfil(): \yii\db\ActiveQuery
+    {
+        return $this->hasOne(perfil::class, ['user_id' => 'id']);
+    }
+
+    /**
      * Soft delete: a conta fica na BD com status apagado (as FKs de perfil e requisicao mantem-se)
      */
     public function softDelete(): bool

@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\perfil;
 use common\models\User;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -11,11 +12,14 @@ use yii\data\ActiveDataProvider;
  */
 class UserSearch extends User
 {
+    //o role esta no perfil, nao na tabela user
+    public $role;
+
     public function rules(): array
     {
         return [
             [['id', 'status'], 'integer'],
-            [['username', 'email'], 'safe'],
+            [['username', 'email', 'role'], 'safe'],
         ];
     }
 
@@ -26,7 +30,7 @@ class UserSearch extends User
 
     public function search($params)
     {
-        $query = User::find();
+        $query = User::find()->with('perfil');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -40,6 +44,11 @@ class UserSearch extends User
         $query->andFilterWhere(['id' => $this->id, 'status' => $this->status]);
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'email', $this->email]);
+
+        //filtrar pelo role: so os utilizadores cujo perfil tem esse role
+        if ($this->role) {
+            $query->andWhere(['id' => perfil::find()->select('user_id')->where(['role' => $this->role])]);
+        }
 
         return $dataProvider;
     }
