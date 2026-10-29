@@ -2,7 +2,7 @@
 
 Registo do que foi feito no backend em 2026-10-29 e depois **desfeito** a pedido, porque por agora só são precisos os 4 itens do Dashboard (Viaturas, Viaturas disponíveis, Requisições pendentes, Condutores). Fica aqui para repetir mais tarde, sem refazer o trabalho de descobrir.
 
-O manual passo a passo em HTML está em `Docs/FrotaGest-Backend-CRUDs-Manual.html` (descreve a versão completa, com os 21 CRUDs).
+O manual passo a passo em HTML está em `Docs/Manuais_Estudos/FrotaGest-Backend-CRUDs-Manual.html` (tem também o RBAC, o seed e a versão atual do soft delete). Este ficheiro guarda sobretudo o código dos 21 CRUDs e dos utilizadores.
 
 ## 1. CRUDs das 21 tabelas com o Gii (linha de comandos)
 
@@ -92,53 +92,31 @@ O menu é o `Menu::widget` do `hail812/adminlte`. Itens com `'header'` são tít
                 ],
 ```
 
-## 4. Utilizadores com soft delete
+## 4. Utilizadores com soft delete (versão simples)
 
-Ideia: "apagar" um utilizador muda `status` para `0` (`User::STATUS_DELETED`) em vez de remover a linha. Mantém as chaves estrangeiras (`perfil`, `requisicao`) e permite reativar. Não foi preciso mexer no login: `User::findByUsername()` e `findIdentity()` já só aceitam `status = 10`.
+Ideia: "apagar" um utilizador **não remove a linha**, só põe o `status` a 0 (`User::STATUS_DELETED`, constante que já vem no template). Mantém as chaves estrangeiras (`perfil`, `requisicao`). O login já só aceita `status = 10`, por isso a conta apagada deixa de entrar sem mexer no login.
 
-Ficheiros criados: `backend/controllers/UserController.php`, `backend/models/UserForm.php`, `backend/models/UserSearch.php`, `backend/views/user/{index,view,create,update,_form}.php`, mais o link `/user/index` no menu. Alteração ao modelo `common/models/User.php`:
+Não há `softDelete()`, `restore()` nem botão de reativar. **Reativar** faz-se editando o utilizador e mudando o **Estado** para Ativo. (Não se usa `deleted_at`: ficou de parte.)
 
-```diff
-@@ -209,4 +209,36 @@ class User extends ActiveRecord implements IdentityInterface
-     }
- 
-+    /**
-+     * Soft delete: a conta fica na BD com status apagado (as FKs de perfil e requisicao mantem-se)
-+     */
-+    public function softDelete(): bool
-+    {
-+        $this->status = self::STATUS_DELETED;
-+
-+        return $this->save(false, ['status', 'updated_at']);
-+    }
-+
-+    /**
-+     * Reativa uma conta apagada
-+     */
-+    public function restore(): bool
-+    {
-+        $this->status = self::STATUS_ACTIVE;
-+
-+        return $this->save(false, ['status', 'updated_at']);
-+    }
-+
-+    /**
-+     * Texto do estado da conta
-+     */
-+    public static function statusLabels(): array
-+    {
-+        return [
-+            self::STATUS_ACTIVE => 'Ativo',
-+            self::STATUS_INACTIVE => 'Inativo',
-+            self::STATUS_DELETED => 'Apagado',
-+        ];
-+    }
-+
-     /**
-      * Removes password reset token
+Ficheiros: `backend/controllers/UserController.php`, `backend/models/UserForm.php`, `backend/models/UserSearch.php`, `backend/views/user/{index,view,create,update,_form}.php`, mais o link `/user/index` no menu. No modelo `common/models/User.php` só é preciso o texto dos estados:
+
+```php
+    /**
+     * Texto do estado da conta
+     */
+    public static function statusLabels(): array
+    {
+        return [
+            self::STATUS_ACTIVE => 'Ativo',
+            self::STATUS_INACTIVE => 'Inativo',
+            self::STATUS_DELETED => 'Apagado',
+        ];
+    }
 ```
 
 Nota: o `UserSearch` estende `User`, por isso o seu `rules()` tem de ter `: array` (senão: `Declaration ... must be compatible`). O `php -l` não apanha isto, só correr a página.
+
+O `UserForm` e a listagem já incluem o **role** (ver o manual HTML, passos 12 a 14). O código dos ficheiros é o atual:
 
 ### backend/controllers/UserController.php
 
@@ -166,13 +144,14 @@ class UserController extends Controller
         return array_merge(
             parent::behaviors(),
             [
-                //so utilizadores com login entram
+                //controlo de acesso: cada action pede a permissao do RBAC
                 'access' => [
                     'class' => AccessControl::className(),
                     'rules' => [
                         [
                             'allow' => true,
-                            'roles' => ['@'],
+                            'actions' => ['index', 'view', 'create', 'update', 'delete'],
+                            'roles' => ['gerirUtilizadores'],
                         ],
                     ],
                 ],
@@ -180,7 +159,6 @@ class UserController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
-                        'restore' => ['POST'],
                     ],
                 ],
             ]
@@ -239,15 +217,9 @@ class UserController extends Controller
 
             return $this->redirect(['index']);
         }
-        $this->findModel($id)->softDelete();
-
-        return $this->redirect(['index']);
-    }
-
-    //reativar uma conta apagada
-    public function actionRestore($id)
-    {
-        $this->findModel($id)->restore();
+        $user = $this->findModel($id);
+        $user->status = User::STATUS_DELETED;
+        $user->save(false, ['status', 'updated_at']);
 
         return $this->redirect(['index']);
     }
@@ -270,7 +242,9 @@ class UserController extends Controller
 
 namespace backend\models;
 
+use common\models\perfil;
 use common\models\User;
+use Yii;
 use yii\base\Model;
 
 /**
@@ -281,6 +255,7 @@ class UserForm extends Model
     public $username;
     public $email;
     public $password;
+    public $role;
     public $status;
 
     private $_user;
@@ -293,17 +268,31 @@ class UserForm extends Model
             $this->username = $this->_user->username;
             $this->email = $this->_user->email;
             $this->status = $this->_user->status;
+            //o role atual vem do authManager (tabela auth_assignment)
+            $roles = Yii::$app->authManager->getRolesByUser($this->_user->id);
+            $this->role = $roles ? array_keys($roles)[0] : null;
         } else {
             $this->status = User::STATUS_ACTIVE;
         }
         parent::__construct($config);
     }
 
+    //os roles que existem no RBAC (criados pelo RbacController)
+    public static function roleList()
+    {
+        $lista = [];
+        foreach (Yii::$app->authManager->getRoles() as $role) {
+            $lista[$role->name] = $role->name;
+        }
+
+        return $lista;
+    }
+
     public function rules()
     {
         return [
             [['username', 'email'], 'trim'],
-            [['username', 'email', 'status'], 'required'],
+            [['username', 'email', 'status', 'role'], 'required'],
             [['username', 'email'], 'string', 'max' => 255],
             ['email', 'email'],
             //unico, ignorando o proprio utilizador quando se edita
@@ -318,6 +307,7 @@ class UserForm extends Model
             }],
             ['password', 'string', 'min' => 8],
             ['status', 'in', 'range' => array_keys(User::statusLabels())],
+            ['role', 'in', 'range' => array_keys(self::roleList())],
         ];
     }
 
@@ -327,6 +317,7 @@ class UserForm extends Model
             'username' => 'Username',
             'email' => 'Email',
             'password' => 'Password',
+            'role' => 'Role',
             'status' => 'Estado',
         ];
     }
@@ -348,7 +339,35 @@ class UserForm extends Model
             $user->generateAuthKey();
         }
 
-        return $user->save(false) ? $user : null;
+        //utilizador, perfil e role gravam juntos; se um falhar, nenhum fica gravado
+        $transacao = Yii::$app->db->beginTransaction();
+        try {
+            $user->save(false);
+
+            //o perfil e obrigatorio ter nome: ao criar, usa o username
+            $perfil = perfil::findOne(['user_id' => $user->id]);
+            if (!$perfil) {
+                $perfil = new perfil(['user_id' => $user->id, 'nome' => $user->username]);
+            }
+            $perfil->role = $this->role;
+            if (!$perfil->save()) {
+                throw new \Exception('Perfil invalido');
+            }
+
+            //o acesso decide-se pela auth_assignment: tira o role anterior e atribui o novo
+            $auth = Yii::$app->authManager;
+            $auth->revokeAll($user->id);
+            $auth->assign($auth->getRole($this->role), $user->id);
+
+            $transacao->commit();
+        } catch (\Throwable $e) {
+            $transacao->rollBack();
+            $this->addError('role', 'Nao foi possivel gravar o utilizador.');
+
+            return null;
+        }
+
+        return $user;
     }
 }
 ```
@@ -360,6 +379,7 @@ class UserForm extends Model
 
 namespace backend\models;
 
+use common\models\perfil;
 use common\models\User;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -369,11 +389,14 @@ use yii\data\ActiveDataProvider;
  */
 class UserSearch extends User
 {
+    //o role esta no perfil, nao na tabela user
+    public $role;
+
     public function rules(): array
     {
         return [
             [['id', 'status'], 'integer'],
-            [['username', 'email'], 'safe'],
+            [['username', 'email', 'role'], 'safe'],
         ];
     }
 
@@ -384,7 +407,7 @@ class UserSearch extends User
 
     public function search($params)
     {
-        $query = User::find();
+        $query = User::find()->with('perfil');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -399,6 +422,11 @@ class UserSearch extends User
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'email', $this->email]);
 
+        //filtrar pelo role: so os utilizadores cujo perfil tem esse role
+        if ($this->role) {
+            $query->andWhere(['id' => perfil::find()->select('user_id')->where(['role' => $this->role])]);
+        }
+
         return $dataProvider;
     }
 }
@@ -409,6 +437,7 @@ class UserSearch extends User
 ```php
 <?php
 
+use backend\models\UserForm;
 use common\models\User;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -443,6 +472,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'username',
             'email',
             [
+                'attribute' => 'role',
+                'label' => 'Role',
+                //o role esta guardado no perfil do utilizador
+                'value' => function ($model) {
+                    return $model->perfil ? $model->perfil->role : null;
+                },
+                'filter' => UserForm::roleList(),
+            ],
+            [
                 'attribute' => 'status',
                 'value' => function ($model) {
                     return User::statusLabels()[$model->status];
@@ -451,30 +489,20 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {delete} {restore}',
+                'template' => '{view} {update} {delete}',
                 'buttons' => [
                     //soft delete: so aparece nas contas que ainda nao estao apagadas
                     'delete' => function ($url, $model) {
                         return Html::a('<i class="fas fa-trash"></i>', Url::to(['delete', 'id' => $model->id]), [
                             'title' => 'Apagar (soft delete)',
                             'data-method' => 'post',
-                            'data-confirm' => 'Apagar este utilizador? A conta fica desativada e pode ser reativada.',
-                        ]);
-                    },
-                    //reativar: so aparece nas contas apagadas
-                    'restore' => function ($url, $model) {
-                        return Html::a('<i class="fas fa-undo"></i>', Url::to(['restore', 'id' => $model->id]), [
-                            'title' => 'Reativar',
-                            'data-method' => 'post',
+                            'data-confirm' => 'Apagar este utilizador? A conta fica com o estado Apagado (para a reativar, edita o Estado).',
                         ]);
                     },
                 ],
                 'visibleButtons' => [
                     'delete' => function ($model) {
                         return $model->status != User::STATUS_DELETED;
-                    },
-                    'restore' => function ($model) {
-                        return $model->status == User::STATUS_DELETED;
                     },
                 ],
             ],
@@ -506,16 +534,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?php if ($model->status == User::STATUS_DELETED): ?>
-            <?= Html::a('Reativar', ['restore', 'id' => $model->id], [
-                'class' => 'btn btn-success',
-                'data' => ['method' => 'post'],
-            ]) ?>
-        <?php else: ?>
+        <?php if ($model->status != User::STATUS_DELETED): ?>
             <?= Html::a('Apagar', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
                 'data' => [
-                    'confirm' => 'Apagar este utilizador? A conta fica desativada e pode ser reativada.',
+                    'confirm' => 'Apagar este utilizador? A conta fica com o estado Apagado (para a reativar, edita o Estado).',
                     'method' => 'post',
                 ],
             ]) ?>
@@ -528,6 +551,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'username',
             'email',
+            [
+                'label' => 'Role',
+                'value' => $model->perfil ? $model->perfil->role : null,
+            ],
             [
                 'attribute' => 'status',
                 'value' => User::statusLabels()[$model->status],
@@ -545,6 +572,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ```php
 <?php
 
+use backend\models\UserForm;
 use common\models\User;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -557,11 +585,14 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
+    <?php //autocomplete: impede o browser de preencher o username e a password com o login guardado ?>
+    <?= $form->field($model, 'username')->textInput(['maxlength' => true, 'autocomplete' => 'off']) ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'password')->passwordInput()->hint('Ao editar, deixa vazio para manter a password atual.') ?>
+    <?= $form->field($model, 'password')->passwordInput(['autocomplete' => 'new-password'])->hint('Ao editar, deixa vazio para manter a password atual.') ?>
+
+    <?= $form->field($model, 'role')->dropDownList(UserForm::roleList(), ['prompt' => 'Escolher role...'])->hint('O role decide o que a pessoa pode fazer no sistema.') ?>
 
     <?= $form->field($model, 'status')->dropDownList(User::statusLabels()) ?>
 
@@ -626,7 +657,7 @@ $this->params['breadcrumbs'][] = 'Editar';
 </div>
 ```
 
-Testado por script: criar, soft delete (a linha fica e o login falha), reativar, username duplicado recusado, editar sem mudar a password, e as 4 vistas a abrir.
+Testado por HTTP real (login com o Admin): apagar põe o `status` a 0 e a linha fica; o login dessa conta é recusado; a listagem mostra "Apagado" e esconde o botão do lixo; reativar pelo formulário (Estado = Ativo) repõe o login e mantém o role; apagar a própria conta é recusado; o delete por GET dá 405.
 
 ## 5. Ideias para depois
 

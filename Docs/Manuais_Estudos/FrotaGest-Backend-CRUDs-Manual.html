@@ -338,29 +338,30 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </table></div>
 <div class="lbl">O que fazer</div>
 <ol>
-<li>No modelo <code>common/models/User.php</code> acrescenta <code>softDelete()</code>, <code>restore()</code> e <code>statusLabels()</code> (os textos do estado):</li>
+<li>No modelo <code>common/models/User.php</code> acrescenta o <code>statusLabels()</code> (os textos do estado). A constante <code>STATUS_DELETED = 0</code> já vem no template:</li>
 </ol>
 <div class="codewrap"><div class="cap">common/models/User.php</div><pre data-src="c-soft-model"></pre></div>
 <ol start="2">
-<li>Cria <code>backend/controllers/UserController.php</code>. O <code>actionDelete</code> chama o <code>softDelete()</code> e há um <code>actionRestore</code>. Ambos só por POST (<code>VerbFilter</code>):</li>
+<li>Cria <code>backend/controllers/UserController.php</code>. O <code>actionDelete</code> não apaga a linha: só põe o <code>status</code> a 0. Só aceita POST (<code>VerbFilter</code>):</li>
 </ol>
 <div class="codewrap"><div class="cap">backend/controllers/UserController.php</div><pre data-src="c-soft-ctrl"></pre></div>
 <ol start="3">
 <li>Cria o <code>backend/models/UserForm.php</code> (criar e editar, com password; o role entra no passo 13), o <code>backend/models/UserSearch.php</code> (filtros) e as vistas em <code>backend/views/user/</code> (<code>index</code>, <code>view</code>, <code>create</code>, <code>update</code>, <code>_form</code>).</li>
-<li>Na listagem, o botão do lixo só aparece se a conta <b>não</b> está apagada, e o da seta (reativar) só se está apagada (<code>visibleButtons</code>).</li>
+<li>Na listagem, o botão do lixo só aparece se a conta <b>não</b> está apagada (<code>visibleButtons</code>). Para <b>reativar</b>, edita-se o utilizador e muda-se o <b>Estado</b> para Ativo no formulário.</li>
 <li>No <code>sidebar.php</code> acrescenta o link <code>['label' =&gt; 'Utilizadores', 'icon' =&gt; 'users', 'url' =&gt; ['/user/index']]</code>.</li>
 </ol>
 <div class="lbl">Porquê</div>
 <ul>
 <li>Um <code>DELETE</code> a sério falharia: <code>perfil</code> e <code>requisicao</code> têm chave estrangeira para <code>user</code>, e perdias o histórico de quem pediu cada viatura.</li>
 <li>Não foi preciso mexer no login: o template já só aceita contas com <code>status = 10</code> (<code>findByUsername</code> e <code>findIdentity</code>). Uma conta apagada não entra, e uma sessão já aberta cai no pedido seguinte.</li>
-<li>O <code>save(false, ['status', 'updated_at'])</code> grava só esses dois campos.</li>
+<li>O <code>save(false, ['status', 'updated_at'])</code> grava só esses dois campos, sem passar pela validação.</li>
+<li>Não há botão nem action de reativar: o formulário de editar já tem a lista Estado (Ativo, Inativo, Apagado).</li>
 <li>Não se pode apagar a própria conta, para ninguém ficar de fora do backend.</li>
 <li>O <code>UserForm</code> só muda a password se escreveres uma nova, e valida username e email únicos.</li>
 </ul>
 <div class="note"><b>Atenção:</b> o <code>UserSearch</code> estende o <code>User</code>, por isso o <code>rules()</code> tem de levar o mesmo tipo de retorno: <code>public function rules(): array</code>. Sem isso dá <code>Declaration of ... must be compatible</code>.</div>
 <div class="note">O código completo está também em <code>Docs/MD/FrotaGest-Backend-Historico.md</code>.</div>
-<div class="check">Verifica: apaga um utilizador de teste; fica na lista com estado "Apagado"; o login dele falha; clicas na seta, volta a "Ativo" e entra.</div>
+<div class="check">Verifica: apaga um utilizador de teste; fica na lista com estado "Apagado" e sem o botão do lixo; o login dele falha; editas e mudas o Estado para Ativo, e ele volta a entrar.</div>
 
 </div></details>
 <details class="step">
@@ -485,7 +486,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <tr><td><code>ViaturaController</code></td><td>todas</td><td><code>gerirViaturas</code></td></tr>
 <tr><td><code>CondutorController</code></td><td>todas</td><td><code>gerirCondutores</code></td></tr>
 <tr><td><code>RequisicaoController</code></td><td><code>index</code>, <code>view</code></td><td><code>verRequisicao</code></td></tr>
-<tr><td><code>UserController</code></td><td>todas (incluindo <code>restore</code>)</td><td><code>gerirUtilizadores</code></td></tr>
+<tr><td><code>UserController</code></td><td>todas</td><td><code>gerirUtilizadores</code></td></tr>
 </table></div>
 <p>No <code>SiteController</code> o dashboard passa a pedir <code>acederBackoffice</code> e o <code>logout</code> fica para qualquer pessoa com login:</p>
 <div class="codewrap"><div class="cap">backend/controllers/SiteController.php</div><pre data-src="c-r-site"></pre></div>
@@ -707,18 +708,13 @@ public function actionUpdate($id)     // formulario preenchido
 public function actionDelete($id)     // so por POST; volta ao index
 protected function findModel($id)     // procura por id; se nao existir, erro 404</script>
 <script type="text/plain" id="c-soft-model">//common/models/User.php
-public function softDelete(): bool
+public static function statusLabels(): array
 {
-    $this->status = self::STATUS_DELETED;   // 0
-
-    return $this->save(false, ['status', 'updated_at']);
-}
-
-public function restore(): bool
-{
-    $this->status = self::STATUS_ACTIVE;    // 10
-
-    return $this->save(false, ['status', 'updated_at']);
+    return [
+        self::STATUS_ACTIVE => 'Ativo',
+        self::STATUS_INACTIVE => 'Inativo',
+        self::STATUS_DELETED => 'Apagado',   // 0: a constante ja vinha no template
+    ];
 }</script>
 <script type="text/plain" id="c-soft-ctrl">//backend/controllers/UserController.php
 public function actionDelete($id)
@@ -729,14 +725,9 @@ public function actionDelete($id)
 
         return $this->redirect(['index']);
     }
-    $this->findModel($id)->softDelete();
-
-    return $this->redirect(['index']);
-}
-
-public function actionRestore($id)
-{
-    $this->findModel($id)->restore();
+    $user = $this->findModel($id);
+    $user->status = User::STATUS_DELETED;
+    $user->save(false, ['status', 'updated_at']);
 
     return $this->redirect(['index']);
 }</script>

@@ -52,30 +52,20 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {delete} {restore}',
+                'template' => '{view} {update} {delete}',
                 'buttons' => [
                     //soft delete: so aparece nas contas que ainda nao estao apagadas
                     'delete' => function ($url, $model) {
                         return Html::a('<i class="fas fa-trash"></i>', Url::to(['delete', 'id' => $model->id]), [
                             'title' => 'Apagar (soft delete)',
                             'data-method' => 'post',
-                            'data-confirm' => 'Apagar este utilizador? A conta fica desativada e pode ser reativada.',
-                        ]);
-                    },
-                    //reativar: so aparece nas contas apagadas
-                    'restore' => function ($url, $model) {
-                        return Html::a('<i class="fas fa-undo"></i>', Url::to(['restore', 'id' => $model->id]), [
-                            'title' => 'Reativar',
-                            'data-method' => 'post',
+                            'data-confirm' => 'Apagar este utilizador? A conta fica com o estado Apagado (para a reativar, edita o Estado).',
                         ]);
                     },
                 ],
                 'visibleButtons' => [
                     'delete' => function ($model) {
                         return $model->status != User::STATUS_DELETED;
-                    },
-                    'restore' => function ($model) {
-                        return $model->status == User::STATUS_DELETED;
                     },
                 ],
             ],

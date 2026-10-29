@@ -27,7 +27,7 @@ class UserController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'actions' => ['index', 'view', 'create', 'update', 'delete', 'restore'],
+                            'actions' => ['index', 'view', 'create', 'update', 'delete'],
                             'roles' => ['gerirUtilizadores'],
                         ],
                     ],
@@ -36,7 +36,6 @@ class UserController extends Controller
                     'class' => VerbFilter::className(),
                     'actions' => [
                         'delete' => ['POST'],
-                        'restore' => ['POST'],
                     ],
                 ],
             ]
@@ -95,15 +94,9 @@ class UserController extends Controller
 
             return $this->redirect(['index']);
         }
-        $this->findModel($id)->softDelete();
-
-        return $this->redirect(['index']);
-    }
-
-    //reativar uma conta apagada
-    public function actionRestore($id)
-    {
-        $this->findModel($id)->restore();
+        $user = $this->findModel($id);
+        $user->status = User::STATUS_DELETED;
+        $user->save(false, ['status', 'updated_at']);
 
         return $this->redirect(['index']);
     }

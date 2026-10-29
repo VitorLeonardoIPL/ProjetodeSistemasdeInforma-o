@@ -217,26 +217,6 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Soft delete: a conta fica na BD com status apagado (as FKs de perfil e requisicao mantem-se)
-     */
-    public function softDelete(): bool
-    {
-        $this->status = self::STATUS_DELETED;
-
-        return $this->save(false, ['status', 'updated_at']);
-    }
-
-    /**
-     * Reativa uma conta apagada
-     */
-    public function restore(): bool
-    {
-        $this->status = self::STATUS_ACTIVE;
-
-        return $this->save(false, ['status', 'updated_at']);
-    }
-
-    /**
      * Texto do estado da conta
      */
     public static function statusLabels(): array
