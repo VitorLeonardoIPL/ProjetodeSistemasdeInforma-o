@@ -64,16 +64,16 @@ class viatura extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'categoria_id' => 'Categoria ID',
-            'matricula' => 'Matricula',
+            'categoria_id' => 'Categoria',
+            'matricula' => 'Matrícula',
             'marca' => 'Marca',
             'modelo' => 'Modelo',
-            'combustivel' => 'Combustivel',
-            'caracteristicas' => 'Caracteristicas',
+            'combustivel' => 'Combustível',
+            'caracteristicas' => 'Características',
             'foto' => 'Foto',
-            'qr_code' => 'Qr Code',
+            'qr_code' => 'Código QR',
             'estado' => 'Estado',
-            'km_atual' => 'Km Atual',
+            'km_atual' => 'Km atuais',
         ];
     }
 
