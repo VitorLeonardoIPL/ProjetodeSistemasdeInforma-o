@@ -98,7 +98,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 
 <header class="hero">
   <h1>FrotaGest, backend: menu lateral e CRUDs, passo a passo</h1>
-  <p>Como pôr links no menu da esquerda e um CRUD completo (listar, ver, criar, editar, apagar) para cada uma das 21 tabelas do projeto, mais a gestão de utilizadores com soft delete, usando o Gii. Marca cada passo quando o tiveres feito e abre o código para veres o que escrever.</p>
+  <p>Como pôr os 4 links do Dashboard no menu da esquerda (Viaturas, Viaturas disponíveis, Requisições pendentes, Condutores) e os CRUDs que os suportam (viaturas, condutores e requisições), usando o Gii e em português de Portugal. No fim, a gestão de utilizadores com soft delete. Marca cada passo quando o tiveres feito e abre o código para veres o que escrever.</p>
   <ul class="toc">
     <li><a href="#pedido">O que se pede</a></li>
     <li><a href="#passos">Os passos</a></li>
@@ -109,16 +109,16 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </header>
 
 <h2 id="pedido">O que se pede</h2>
-<p>O backend já mostrava o Dashboard com as 4 caixas e um único link no menu. Falta o resto do back-office: um <b>link no menu</b> e um <b>CRUD</b> para cada tabela da base de dados <code>frotagest</code>.</p>
-<div class="flow"><span>Gii gera os CRUDs</span><i>→</i><span>AccessControl (só com login)</span><i>→</i><span>links no sidebar</span><i>→</i><span>testar</span></div>
+<p>O backend já mostrava o Dashboard com as 4 caixas e um único link no menu. Falta um <b>link no menu</b> para cada caixa e os <b>CRUDs</b> que esses links abrem.</p>
+<div class="flow"><span>Gii gera 3 CRUDs</span><i>→</i><span>AccessControl (só com login)</span><i>→</i><span>4 links no sidebar</span><i>→</i><span>português</span><i>→</i><span>testar</span></div>
 
 <div class="lbl">Como ficou organizado o código</div>
 <div class="er">
-  <div class="tbl"><b>common/models</b><span>viatura.php</span><span>requisicao.php</span><span>... (21 modelos)</span></div>
+  <div class="tbl"><b>common/models</b><span>viatura.php</span><span>condutor.php</span><span>requisicao.php</span></div>
   <div class="rel">o Gii lê o modelo e gera</div>
-  <div class="tbl"><b>backend/controllers</b><span>ViaturaController.php</span><span>RequisicaoController.php</span><span>...</span></div>
-  <div class="tbl"><b>backend/models</b><span>ViaturaSearch.php</span><span>RequisicaoSearch.php</span><span>...</span></div>
-  <div class="tbl"><b>backend/views/viatura</b><span>index, view</span><span>create, update</span><span>_form, _search</span></div>
+  <div class="tbl"><b>backend/controllers</b><span>ViaturaController.php</span><span>CondutorController.php</span><span>RequisicaoController.php</span></div>
+  <div class="tbl"><b>backend/models</b><span>ViaturaSearch.php</span><span>CondutorSearch.php</span><span>RequisicaoSearch.php</span></div>
+  <div class="tbl"><b>backend/views</b><span>viatura/</span><span>condutor/</span><span>requisicao/</span></div>
 </div>
 
 <h2 id="passos">Os passos</h2>
@@ -167,10 +167,11 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 
 </div></details>
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k3" aria-label="Passo 3 feito"><span class="num">3</span><span class="ttl">Gerar o CRUD de uma tabela (pelo browser)</span><span class="where">Gii, CRUD Generator</span></summary>
+<summary><input class="chk" type="checkbox" id="k3" aria-label="Passo 3 feito"><span class="num">3</span><span class="ttl">Gerar um CRUD pelo browser (alternativa)</span><span class="where">Gii, CRUD Generator</span></summary>
 <div class="body">
 
 <div class="lbl">O que fazer</div>
+<p>Esta é a forma "das aulas". <b>Não foi a que usámos</b> no projeto (usámos a linha de comandos do passo 4), por isso não foi testada aqui.</p>
 <ol>
 <li>Abre <code>http://localhost/2AnoProjeto/ProjetodeSistemasdeInformacao/FrotaGest/backend/web/index.php?r=gii</code> e clica em <b>CRUD Generator</b> → <b>Start</b>.</li>
 <li>Preenche os campos como abaixo, clica em <b>Preview</b> e depois em <b>Generate</b>.</li>
@@ -179,35 +180,31 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <div class="lbl">Porquê</div>
 <ul>
 <li>As classes escrevem-se com o namespace completo e barras <b>invertidas</b>.</li>
-<li>O nome do controlador segue o do modelo em <b>PascalCase</b>: <code>viatura</code> → <code>ViaturaController</code>. Se o modelo tiver sublinhado, cada parte fica com maiúscula: <code>ausencia_condutor</code> → <code>AusenciaCondutorController</code>.</li>
-<li>O <b>View Path</b> vazio faz o Gii usar <code>@backend/views/viatura</code>, o nome do controlador em minúsculas e com hífens.</li>
+<li>O nome do controlador segue o do modelo em <b>PascalCase</b>: <code>viatura</code> → <code>ViaturaController</code>.</li>
+<li>O <b>View Path</b> vazio faz o Gii usar <code>@backend/views/viatura</code>, o nome do controlador em minúsculas.</li>
 </ul>
-<div class="note"><b>Atenção:</b> isto é um ecrã por tabela. Com 21 tabelas é muito trabalho repetido, por isso no passo seguinte fazemos o mesmo por linha de comandos.</div>
-<div class="check">Verifica: abrir <code>?r=viatura/index</code> mostra a tabela de viaturas (vazia, com o botão "Create Viatura").</div>
+<div class="check">Verifica: abrir <code>?r=viatura/index</code> mostra a tabela de viaturas (vazia, com o botão de criar).</div>
 
 </div></details>
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k4" aria-label="Passo 4 feito"><span class="num">4</span><span class="ttl">Gerar os 21 CRUDs de uma vez (linha de comandos)</span><span class="where">terminal, pasta FrotaGest</span></summary>
+<summary><input class="chk" type="checkbox" id="k4" aria-label="Passo 4 feito"><span class="num">4</span><span class="ttl">Gerar os 3 CRUDs (linha de comandos)</span><span class="where">terminal, pasta FrotaGest</span></summary>
 <div class="body">
 
 <div class="lbl">O que fazer</div>
 <ol>
-<li>Abre o terminal na pasta <code>FrotaGest</code> (a que tem o ficheiro <code>yii</code>).</li>
-<li>Testa primeiro com uma tabela:</li>
+<li>Abre o terminal (Git Bash) na pasta <code>FrotaGest</code> (a que tem o ficheiro <code>yii</code>).</li>
+<li>Gera os três CRUDs. Podes testar primeiro só com o da viatura:</li>
 </ol>
-<div class="codewrap"><div class="cap">terminal (Git Bash): um CRUD</div><pre data-src="c-gii-cli"></pre></div>
-<ol start="3">
-<li>Se correr bem (<code>done!</code>), faz o ciclo para todos os modelos:</li>
-</ol>
-<div class="codewrap"><div class="cap">terminal (Git Bash): todos os modelos de common/models</div><pre data-src="c-gii-loop"></pre></div>
+<div class="codewrap"><div class="cap">terminal (Git Bash): viatura, condutor e requisicao</div><pre data-src="c-gii-3"></pre></div>
+<p>Cada comando termina com <code>done!</code>.</p>
 <div class="lbl">Porquê</div>
 <ul>
 <li>O <code>php yii gii/crud</code> é o mesmo CRUD Generator do browser, mas por comandos. Funciona porque o <code>console</code> tem o módulo <code>gii</code> em <code>environments/dev/console/config/main-local.php</code>.</li>
 <li><code>--interactive=0</code> não pergunta nada; <code>--overwrite=1</code> substitui ficheiros que já existam.</li>
-<li>O ciclo salta o <code>User</code> e o <code>LoginForm</code>, que não são tabelas do negócio.</li>
+<li>Só pedimos estes três modelos porque o Dashboard só precisa de viaturas, condutores e requisições. "Viaturas disponíveis" e "Requisições pendentes" <b>não têm CRUD próprio</b>: são as mesmas listagens com um filtro (passo 7).</li>
 </ul>
 <div class="note"><b>Erro 1:</b> usa <b>aspas simples</b> nas classes. Em aspas duplas o Git Bash come as barras e o Gii responde <code>Only word characters and backslashes are allowed</code>.<br><b>Erro 2:</b> as views são geradas em <code>console/views/</code> (e não no backend), porque o comando corre na app de consola. Faz o passo 5.</div>
-<div class="check">Verifica: existem 21 ficheiros novos em <code>backend/controllers</code> (além do <code>SiteController</code>) e 21 em <code>backend/models</code>.</div>
+<div class="check">Verifica: existem 3 controladores novos em <code>backend/controllers</code> (além do <code>SiteController</code>) e 3 modelos <code>...Search</code> em <code>backend/models</code>.</div>
 
 </div></details>
 <details class="step">
@@ -219,9 +216,8 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <div class="lbl">Porquê</div>
 <ul>
 <li>O controlador do backend procura as vistas em <code>backend/views/&lt;controlador&gt;/</code>. Se ficarem em <code>console/views</code>, o Yii dá "The view file does not exist".</li>
-<li>Se usares o Gii pelo browser (passo 3) isto já vem direito, porque o alias <code>@backend</code> existe.</li>
 </ul>
-<div class="check">Verifica: <code>backend/views/viatura/</code> tem <code>index.php</code>, <code>view.php</code>, <code>create.php</code>, <code>update.php</code>, <code>_form.php</code>, <code>_search.php</code> e a pasta <code>console/views</code> já não existe.</div>
+<div class="check">Verifica: <code>backend/views/viatura/</code> tem <code>index.php</code>, <code>view.php</code>, <code>create.php</code>, <code>update.php</code>, <code>_form.php</code>, <code>_search.php</code> (e o mesmo para <code>condutor</code> e <code>requisicao</code>) e a pasta <code>console/views</code> já não existe.</div>
 
 </div></details>
 <details class="step">
@@ -229,16 +225,16 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <div class="body">
 
 <div class="lbl">O que fazer</div>
-<p>Em <b>cada</b> um dos 21 controladores, acrescenta o <code>use</code> e o bloco <code>'access'</code> no início do <code>behaviors()</code>:</p>
+<p>Em <b>cada</b> um dos 3 controladores, acrescenta o <code>use</code> e o bloco <code>'access'</code> no início do <code>behaviors()</code>:</p>
 <div class="codewrap"><div class="cap">backend/controllers/ViaturaController.php</div><pre data-src="c-acf"></pre></div>
 <div class="lbl">Porquê</div>
 <ul>
 <li>O Gii <b>não</b> põe controlo de acesso. Sem este bloco, qualquer pessoa, sem login, abria <code>?r=viatura/index</code> e via, criava e apagava registos.</li>
 <li><code>'roles' =&gt; ['@']</code> quer dizer "utilizador autenticado". Quem não está logado é mandado para <code>?r=site/login</code>.</li>
-<li>É o mesmo ACF que já está no <code>SiteController</code>, só que sem as acções <code>login</code> e <code>error</code> (aqui não há acções públicas).</li>
+<li>É o mesmo ACF que já está no <code>SiteController</code>, só que sem as acções <code>login</code> e <code>error</code>.</li>
 </ul>
 <div class="note"><b>Erro:</b> se esqueceres o <code>use yii\filters\AccessControl;</code> aparece <code>Class "backend\controllers\AccessControl" not found</code> (erro 500).</div>
-<div class="note"><b>Falta fazer:</b> isto só pede login. Os roles do RBAC (<code>acederBackoffice</code>, <code>gerirViaturas</code>…) ainda não são verificados, por isso um colaborador com login também entraria. Fica para o passo a seguir do projeto.</div>
+<div class="note"><b>Falta fazer:</b> isto só pede login. Os roles do RBAC (<code>acederBackoffice</code>, <code>gerirViaturas</code>…) ainda não são verificados.</div>
 <div class="check">Verifica: numa janela anónima, <code>?r=viatura/index</code> redireciona para o login.</div>
 
 </div></details>
@@ -247,60 +243,89 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <div class="body">
 
 <div class="lbl">O que fazer</div>
-<p>No <code>sidebar.php</code>, dentro do <code>Menu::widget</code>, mantém o Dashboard e acrescenta um item por CRUD, agrupados com <code>'header'</code>:</p>
-<div class="codewrap"><div class="cap">backend/views/layouts/sidebar.php (excerto)</div><pre data-src="c-menu"></pre></div>
-<p>Cada item é sempre assim, com o <b>nome do controlador com hífens</b> e a action <code>index</code>:</p>
-<div class="codewrap"><div class="cap">um item</div><pre data-src="c-menu1"></pre></div>
+<p>No <code>sidebar.php</code>, dentro do <code>Menu::widget</code>, mantém o Dashboard e acrescenta os 4 links das caixas do Dashboard:</p>
+<div class="codewrap"><div class="cap">backend/views/layouts/sidebar.php</div><pre data-src="c-menu"></pre></div>
+<div class="lbl">O que cada link faz</div>
+<div class="scroll"><table>
+<tr><th>Link</th><th>Abre</th><th>Endereço</th></tr>
+<tr><td>Viaturas</td><td>listagem de todas as viaturas</td><td><code>?r=viatura/index</code></td></tr>
+<tr><td>Viaturas disponíveis</td><td>a mesma listagem, filtrada por <code>estado = disponivel</code></td><td><code>?r=viatura/index&amp;ViaturaSearch[estado]=disponivel</code></td></tr>
+<tr><td>Requisições pendentes</td><td>listagem de requisições, filtrada por <code>estado = pendente</code></td><td><code>?r=requisicao/index&amp;RequisicaoSearch[estado]=pendente</code></td></tr>
+<tr><td>Condutores</td><td>listagem de todos os condutores</td><td><code>?r=condutor/index</code></td></tr>
+</table></div>
 <div class="lbl">Porquê</div>
 <ul>
-<li><code>'label'</code> é o texto; <code>'icon'</code> é o nome de um ícone Font Awesome <b>sem</b> o prefixo <code>fa-</code> (o widget acrescenta); <code>'url'</code> é a rota.</li>
-<li>O <code>['header' =&gt; 'FROTA']</code> não é um link, é um título de grupo. Deixa o menu legível com 21 entradas.</li>
-<li>As rotas usam <code>'/'</code> à frente (<code>['/viatura/index']</code>) para ficarem absolutas, e funcionam com as pretty URLs desligadas (<code>?r=viatura/index</code>).</li>
-<li>O widget marca sozinho o item ativo, comparando a rota atual com o <code>url</code>.</li>
+<li><code>'label'</code> é o texto; <code>'icon'</code> é o nome de um ícone Font Awesome <b>sem</b> o prefixo <code>fa-</code>; <code>'url'</code> é a rota.</li>
+<li>Os pares a seguir à rota (<code>'ViaturaSearch[estado]' =&gt; 'disponivel'</code>) viram parâmetros GET. O <code>ViaturaSearch</code> lê-os e filtra a tabela, tal como se escrevesses "disponivel" na caixa de filtro da coluna Estado.</li>
+<li>As rotas usam <code>'/'</code> à frente (<code>['/viatura/index']</code>) para ficarem absolutas, e funcionam com as pretty URLs desligadas.</li>
+<li>Os valores do estado têm de bater certo com os da BD (<code>disponivel</code> na viatura, <code>pendente</code> na requisição, que são os valores por omissão das migrações).</li>
 </ul>
-<div class="lbl">Os grupos que usámos</div>
-<div class="scroll"><table>
-<tr><th>Grupo</th><th>Itens</th></tr>
-<tr><td>FROTA</td><td>Categorias, Viaturas, Condutores, Ausências de condutores</td></tr>
-<tr><td>REQUISIÇÕES</td><td>Requisições, Atribuições, Checklists, Anexos, Faturas de combustível, Localizações</td></tr>
-<tr><td>MANUTENÇÃO</td><td>Necessidades, Manutenções, Peças, Orçamentos de compra, Itens de orçamento</td></tr>
-<tr><td>AVISOS</td><td>Alertas, Notificações</td></tr>
-<tr><td>SISTEMA</td><td>Perfis, Parâmetros, Serviços externos, Logs de auditoria</td></tr>
-</table></div>
-<div class="check">Verifica: recarrega o Dashboard; o menu mostra os 5 grupos e cada link abre a listagem certa.</div>
+<div class="check">Verifica: recarrega o Dashboard; o menu mostra os 5 links e cada um abre a listagem certa.</div>
 
 </div></details>
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k8" aria-label="Passo 8 feito"><span class="num">8</span><span class="ttl">Testar cada CRUD</span><span class="where">browser, backend</span></summary>
+<summary><input class="chk" type="checkbox" id="k8" aria-label="Passo 8 feito"><span class="num">8</span><span class="ttl">Pôr tudo em português de Portugal</span><span class="where">backend/config/main.php, views, models</span></summary>
 <div class="body">
 
 <div class="lbl">O que fazer</div>
-<p>Entra com o <b>admin</b> e percorre as 21 rotas. Em cada uma testa o ciclo todo:</p>
 <ol>
-<li><b>Create</b>: "Create ..." → preenche → Save (vai para o detalhe).</li>
-<li><b>Read</b>: volta à listagem, vê a linha nova; clica no olho para o detalhe.</li>
-<li><b>Update</b>: ícone do lápis → muda um campo → Save.</li>
-<li><b>Delete</b>: ícone do lixo → confirma.</li>
+<li>Em <code>backend/config/main.php</code>, acrescenta a linha <code>'language' =&gt; 'pt'</code>:</li>
 </ol>
-<p>Cada tabela tem <b>chaves estrangeiras</b>: para criar uma <code>viatura</code> precisas de uma <code>categoria</code> e para criar uma <code>requisicao</code> precisas de uma <code>categoria</code> e de um <code>user</code>. Cria por esta ordem:</p>
-<div class="flow"><span>categoria</span><i>→</i><span>viatura</span><i>→</i><span>condutor</span><i>→</i><span>requisicao</span><i>→</i><span>atribuicao</span><i>→</i><span>checklist, anexo, fatura</span></div>
-<div class="lbl">Tabela das rotas</div>
+<div class="codewrap"><div class="cap">backend/config/main.php</div><pre data-src="c-lang"></pre></div>
+<ol start="2">
+<li>Nas vistas dos 3 CRUDs (<code>index</code>, <code>view</code>, <code>create</code>, <code>update</code>, <code>_form</code>, <code>_search</code>) traduz os botões e títulos que o Gii deixou em inglês:</li>
+</ol>
 <div class="scroll"><table>
-<tr><th>Modelo</th><th>Controlador</th><th>Rota</th></tr>
-<tr><td><code>categoria</code></td><td><code>CategoriaController</code></td><td><code>?r=categoria/index</code></td></tr><tr><td><code>viatura</code></td><td><code>ViaturaController</code></td><td><code>?r=viatura/index</code></td></tr><tr><td><code>condutor</code></td><td><code>CondutorController</code></td><td><code>?r=condutor/index</code></td></tr><tr><td><code>ausencia_condutor</code></td><td><code>AusenciaCondutorController</code></td><td><code>?r=ausencia-condutor/index</code></td></tr><tr><td><code>requisicao</code></td><td><code>RequisicaoController</code></td><td><code>?r=requisicao/index</code></td></tr><tr><td><code>atribuicao</code></td><td><code>AtribuicaoController</code></td><td><code>?r=atribuicao/index</code></td></tr><tr><td><code>checklist</code></td><td><code>ChecklistController</code></td><td><code>?r=checklist/index</code></td></tr><tr><td><code>anexo</code></td><td><code>AnexoController</code></td><td><code>?r=anexo/index</code></td></tr><tr><td><code>fatura_combustivel</code></td><td><code>FaturaCombustivelController</code></td><td><code>?r=fatura-combustivel/index</code></td></tr><tr><td><code>localizacao</code></td><td><code>LocalizacaoController</code></td><td><code>?r=localizacao/index</code></td></tr><tr><td><code>necessidade_manutencao</code></td><td><code>NecessidadeManutencaoController</code></td><td><code>?r=necessidade-manutencao/index</code></td></tr><tr><td><code>manutencao</code></td><td><code>ManutencaoController</code></td><td><code>?r=manutencao/index</code></td></tr><tr><td><code>peca</code></td><td><code>PecaController</code></td><td><code>?r=peca/index</code></td></tr><tr><td><code>orcamento_compra</code></td><td><code>OrcamentoCompraController</code></td><td><code>?r=orcamento-compra/index</code></td></tr><tr><td><code>item_orcamento</code></td><td><code>ItemOrcamentoController</code></td><td><code>?r=item-orcamento/index</code></td></tr><tr><td><code>alerta</code></td><td><code>AlertaController</code></td><td><code>?r=alerta/index</code></td></tr><tr><td><code>notificacao</code></td><td><code>NotificacaoController</code></td><td><code>?r=notificacao/index</code></td></tr><tr><td><code>perfil</code></td><td><code>PerfilController</code></td><td><code>?r=perfil/index</code></td></tr><tr><td><code>parametro</code></td><td><code>ParametroController</code></td><td><code>?r=parametro/index</code></td></tr><tr><td><code>servico_externo</code></td><td><code>ServicoExternoController</code></td><td><code>?r=servico-externo/index</code></td></tr><tr><td><code>log_auditoria</code></td><td><code>LogAuditoriaController</code></td><td><code>?r=log-auditoria/index</code></td></tr>
+<tr><th>Gii</th><th>Português</th></tr>
+<tr><td>Create Viatura / Condutor / Requisicao</td><td>Criar viatura / condutor / requisição</td></tr>
+<tr><td>Update ...: 1</td><td>Editar ...: 1</td></tr>
+<tr><td>Update, Delete, Save</td><td>Editar, Apagar, Guardar</td></tr>
+<tr><td>Search, Reset</td><td>Pesquisar, Limpar</td></tr>
+<tr><td>Condutors, Requisicaos (plurais errados)</td><td>Condutores, Requisições</td></tr>
+<tr><td>Are you sure you want to delete this item?</td><td>Tem a certeza de que quer apagar este registo?</td></tr>
 </table></div>
+<ol start="3">
+<li>Nos modelos <code>common/models/viatura.php</code>, <code>condutor.php</code> e <code>requisicao.php</code>, corrige as etiquetas em <code>attributeLabels()</code>:</li>
+</ol>
+<div class="codewrap"><div class="cap">common/models/viatura.php (excerto)</div><pre data-src="c-labels"></pre></div>
+<div class="lbl">Porquê</div>
+<ul>
+<li>O <code>'language' =&gt; 'pt'</code> traduz as mensagens do <b>próprio Yii</b>, que vêm em <code>vendor/yiisoft/yii2/messages/pt/yii.php</code>: "A exibir 1-1 de 1 item", "(não definido)", "Não foram encontrados resultados.", os tooltips dos ícones (Ver, Atualizar, Apagar) e as validações. <code>pt</code> é português de Portugal (<code>pt-BR</code> seria o do Brasil).</li>
+<li>Os botões e títulos que o Gii escreveu <b>nas vistas</b> não são traduzidos pelo Yii, porque são texto fixo. Por isso se mudam à mão.</li>
+<li>As etiquetas dos campos vêm do <code>attributeLabels()</code> do modelo. Uma só mudança serve a listagem, o detalhe e o formulário.</li>
+<li>Não se edita nada em <code>vendor</code>: o Composer pode apagar as alterações numa atualização.</li>
+</ul>
+<div class="codewrap"><div class="cap">se quiseres mudar o texto da tabela vazia, na GridView da vista</div><pre data-src="c-empty"></pre></div>
+<div class="note"><b>Atenção:</b> sempre que gerares mais CRUDs com o Gii, os textos voltam a vir em inglês e é preciso repetir a tradução das vistas.</div>
+<div class="check">Verifica: as listagens, o detalhe e os formulários não mostram nenhuma palavra em inglês.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k9" aria-label="Passo 9 feito"><span class="num">9</span><span class="ttl">Testar cada CRUD</span><span class="where">browser, backend</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<p>Entra com o <b>admin</b> e testa o ciclo todo em <b>Viaturas</b>, <b>Condutores</b> e <b>Requisições</b>:</p>
+<ol>
+<li><b>Criar</b>: "Criar ..." → preenche → Guardar (vai para o detalhe).</li>
+<li><b>Ver</b>: volta à listagem, vê a linha nova; clica no olho para o detalhe.</li>
+<li><b>Editar</b>: ícone do lápis → muda um campo → Guardar.</li>
+<li><b>Apagar</b>: ícone do lixo → confirma.</li>
+</ol>
+<p>Cada tabela tem <b>chaves estrangeiras</b>: para criar uma viatura precisas de uma <code>categoria</code>, e para uma requisição precisas de uma <code>categoria</code> e de um utilizador. Como ainda não há CRUD de categorias, cria-a pelo phpMyAdmin (tabela <code>categoria</code>):</p>
+<div class="flow"><span>categoria (phpMyAdmin)</span><i>→</i><span>viatura</span><i>→</i><span>condutor</span><i>→</i><span>requisicao</span></div>
 <div class="lbl">Teste de sintaxe</div>
 <div class="codewrap"><div class="cap">terminal, pasta FrotaGest</div><pre data-src="c-lint"></pre></div>
 <div class="lbl">Porquê</div>
 <ul>
-<li>Se a tabela tiver uma FK, o formulário pede o <b>número</b> (id) do registo ligado. Se esse id não existir, o <code>exist</code> das <code>rules()</code> recusa com "... is invalid".</li>
+<li>Se a tabela tiver uma FK, o formulário pede o <b>número</b> (id) do registo ligado. Se esse id não existir, o <code>exist</code> das <code>rules()</code> recusa.</li>
 <li>O <code>php -l</code> só verifica a sintaxe; o <code>No syntax errors detected</code> é o que queremos ver.</li>
 </ul>
-<div class="check">Verifica: criaste, editaste e apagaste pelo menos um registo em <code>categoria</code> e em <code>viatura</code>, e o Dashboard passou a mostrar "1" nas Viaturas.</div>
+<div class="check">Verifica: criaste, editaste e apagaste uma viatura, e o Dashboard passou a mostrar "1" em Viaturas e em Viaturas disponíveis.</div>
 
 </div></details>
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k9" aria-label="Passo 9 feito"><span class="num">9</span><span class="ttl">Soft delete nos utilizadores</span><span class="where">User.php, UserController, views/user</span></summary>
+<summary><input class="chk" type="checkbox" id="k10" aria-label="Passo 10 feito"><span class="num">10</span><span class="ttl">Utilizadores com soft delete</span><span class="where">User.php, UserController, views/user</span></summary>
 <div class="body">
 
 <div class="lbl">O que é</div>
@@ -313,30 +338,28 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </table></div>
 <div class="lbl">O que fazer</div>
 <ol>
-<li>No modelo <code>common/models/User.php</code> acrescenta <code>softDelete()</code> e <code>restore()</code> (e <code>statusLabels()</code> para os textos):</li>
+<li>No modelo <code>common/models/User.php</code> acrescenta <code>softDelete()</code>, <code>restore()</code> e <code>statusLabels()</code> (os textos do estado):</li>
 </ol>
 <div class="codewrap"><div class="cap">common/models/User.php</div><pre data-src="c-soft-model"></pre></div>
 <ol start="2">
-<li>Cria <code>backend/controllers/UserController.php</code> com o <code>actionDelete</code> a chamar o <code>softDelete()</code> e um <code>actionRestore</code>. Ambos só por POST (<code>VerbFilter</code>):</li>
+<li>Cria <code>backend/controllers/UserController.php</code>. O <code>actionDelete</code> chama o <code>softDelete()</code> e há um <code>actionRestore</code>. Ambos só por POST (<code>VerbFilter</code>):</li>
 </ol>
 <div class="codewrap"><div class="cap">backend/controllers/UserController.php</div><pre data-src="c-soft-ctrl"></pre></div>
 <ol start="3">
-<li>Cria o <code>UserForm</code> (criar/editar com password), o <code>UserSearch</code> (filtros) e as vistas em <code>backend/views/user/</code> (<code>index</code>, <code>view</code>, <code>create</code>, <code>update</code>, <code>_form</code>).</li>
-<li>Na listagem, o botão do lixo só aparece se a conta <b>não</b> está apagada, e o botão de reativar (seta) só se está apagada (<code>visibleButtons</code>).</li>
-<li>No <code>sidebar.php</code> acrescenta <code>['label' =&gt; 'Utilizadores', 'icon' =&gt; 'users', 'url' =&gt; ['/user/index']]</code>.</li>
+<li>Cria o <code>backend/models/UserForm.php</code> (criar e editar, com password), o <code>backend/models/UserSearch.php</code> (filtros) e as vistas em <code>backend/views/user/</code> (<code>index</code>, <code>view</code>, <code>create</code>, <code>update</code>, <code>_form</code>).</li>
+<li>Na listagem, o botão do lixo só aparece se a conta <b>não</b> está apagada, e o da seta (reativar) só se está apagada (<code>visibleButtons</code>).</li>
+<li>No <code>sidebar.php</code> acrescenta o link <code>['label' =&gt; 'Utilizadores', 'icon' =&gt; 'users', 'url' =&gt; ['/user/index']]</code>.</li>
 </ol>
 <div class="lbl">Porquê</div>
 <ul>
-<li>Um <code>DELETE</code> a sério falharia: <code>perfil</code> e <code>requisicao</code> têm chave estrangeira para <code>user</code>, e perderias o histórico de quem pediu e aprovou cada viatura.</li>
-<li>Não foi preciso mexer no login: o template já só aceita contas ativas.</li>
-</ul>
-<div class="codewrap"><div class="cap">common/models/User.php (já existia)</div><pre data-src="c-soft-find"></pre></div>
-<ul>
-<li>Por isso uma conta com <code>status = 0</code> não passa no <code>findByUsername</code> e o login falha, e uma sessão já aberta cai no próximo pedido (<code>findIdentity</code>).</li>
-<li>O <code>save(false, ['status', 'updated_at'])</code> grava só esses dois campos e salta a validação, porque o <code>User</code> não tem regras para os outros.</li>
-<li>Não deixamos apagar a própria conta, para ninguém ficar de fora do backend.</li>
+<li>Um <code>DELETE</code> a sério falharia: <code>perfil</code> e <code>requisicao</code> têm chave estrangeira para <code>user</code>, e perdias o histórico de quem pediu cada viatura.</li>
+<li>Não foi preciso mexer no login: o template já só aceita contas com <code>status = 10</code> (<code>findByUsername</code> e <code>findIdentity</code>). Uma conta apagada não entra, e uma sessão já aberta cai no pedido seguinte.</li>
+<li>O <code>save(false, ['status', 'updated_at'])</code> grava só esses dois campos.</li>
+<li>Não se pode apagar a própria conta, para ninguém ficar de fora do backend.</li>
+<li>O <code>UserForm</code> só muda a password se escreveres uma nova, e valida username e email únicos.</li>
 </ul>
 <div class="note"><b>Atenção:</b> o <code>UserSearch</code> estende o <code>User</code>, por isso o <code>rules()</code> tem de levar o mesmo tipo de retorno: <code>public function rules(): array</code>. Sem isso dá <code>Declaration of ... must be compatible</code>.</div>
+<div class="note">O código completo está também em <code>Docs/MD/FrotaGest-Backend-Historico.md</code>.</div>
 <div class="check">Verifica: apaga um utilizador de teste; fica na lista com estado "Apagado"; o login dele falha; clicas na seta, volta a "Ativo" e entra.</div>
 
 </div></details>
@@ -345,31 +368,34 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 
 <h2 id="falta">O que falta (não está feito)</h2>
 <ul>
+<li><b>CRUD de categorias</b>. Hoje a categoria cria-se pelo phpMyAdmin.</li>
+<li><b>Role dos utilizadores.</b> Criar uma conta não lhe dá permissões; falta atribuir o role (RBAC) na gestão de utilizadores.</li>
 <li><b>RBAC no backend.</b> Só se pede login. Falta ligar o <code>acederBackoffice</code> e as permissões de cada CRUD (<code>gerirViaturas</code>, <code>gerirCondutores</code>…) aos controladores, e atribuir roles aos utilizadores.</li>
-<li><b>Campos com id.</b> As chaves estrangeiras aparecem como número (<code>categoria_id</code>). O ideal é uma lista com o nome (dropdown) em vez de escrever o id.</li>
-<li><b>Estados em texto livre.</b> <code>estado</code> aceita qualquer texto; devia ser uma lista (<code>disponivel</code>, <code>em manutencao</code>, …).</li>
-<li><b>Datas e uploads.</b> <code>data_pedido</code>, fotos e anexos são escritos à mão; falta preencher a data sozinha e fazer o upload de ficheiros.</li>
+<li><b>Campos com id.</b> As chaves estrangeiras aparecem como número (<code>categoria_id</code>). O ideal é uma lista com o nome (dropdown).</li>
+<li><b>Estados em texto livre.</b> <code>estado</code> aceita qualquer texto; devia ser uma lista (<code>disponivel</code>, <code>em manutencao</code>, …). Os filtros do menu dependem de os valores bater certo.</li>
+<li><b>Datas e uploads.</b> <code>data_pedido</code>, fotos e anexos são escritos à mão.</li>
 <li><b>Regras de negócio</b> (duração máxima, sobreposição de atribuições) ainda não estão nas <code>rules()</code>.</li>
-<li><b>Caixas do Dashboard.</b> Os "More info" ainda não levam aos CRUDs.</li>
+<li><b>Caixas do Dashboard.</b> Os "More info" ainda não levam aos CRUDs, e o texto está em inglês.</li>
 </ul>
 
 <h2 id="duvidas">Perguntas para o estudo</h2>
-<div class="qa"><b>O que é um soft delete e porque se usa nos utilizadores?</b><p>É "apagar" mudando o <code>status</code> para 0 em vez de remover a linha. Mantém o histórico ligado por chaves estrangeiras (perfil, requisições) e permite reativar a conta.</p></div>
 <div class="qa"><b>O que é um CRUD?</b><p>O conjunto de ecrãs para Criar, Ler, Atualizar e Apagar registos de uma tabela. O Gii gera-o a partir de um modelo.</p></div>
 <div class="qa"><b>Que ficheiros gera o Gii por cada CRUD?</b><p>Um controlador (<code>ViaturaController</code>), um modelo de pesquisa (<code>ViaturaSearch</code>) e as vistas <code>index</code>, <code>view</code>, <code>create</code>, <code>update</code>, <code>_form</code> e <code>_search</code>.</p></div>
+<div class="qa"><b>Porque é que "Viaturas disponíveis" e "Requisições pendentes" não têm CRUD próprio?</b><p>Porque não são tabelas, são filtros. Usam o CRUD de viaturas e o de requisições, com o parâmetro <code>ViaturaSearch[estado]=disponivel</code> ou <code>RequisicaoSearch[estado]=pendente</code> no endereço.</p></div>
 <div class="qa"><b>Porque é que o <code>delete</code> só aceita POST?</b><p>Para um link ou um robô que abra a página não apagar registos. O <code>VerbFilter</code> do <code>behaviors()</code> trata disso, e o botão da listagem envia um formulário POST.</p></div>
 <div class="qa"><b>Para que serve o modelo de pesquisa (<code>...Search</code>)?</b><p>Alimenta os filtros por coluna da <code>GridView</code> da listagem. Tem <code>rules()</code> só de leitura e o método <code>search()</code>, que devolve um <code>ActiveDataProvider</code>.</p></div>
 <div class="qa"><b>O que quer dizer <code>roles =&gt; ['@']</code> no AccessControl?</b><p>Utilizador autenticado. <code>?</code> quer dizer visitante (sem login).</p></div>
+<div class="qa"><b>De onde vem o texto "Não foram encontrados resultados."?</b><p>Do Yii, não do projeto. É a tradução de "No results found." em <code>vendor/yiisoft/yii2/messages/pt/yii.php</code>, usada pela <code>GridView</code> quando não há linhas. Para o mudar usa <code>emptyText</code> na <code>GridView</code>.</p></div>
 <div class="qa"><b>Onde se muda o menu da esquerda?</b><p>Em <code>backend/views/layouts/sidebar.php</code>, no array <code>items</code> do <code>Menu::widget</code>.</p></div>
-<div class="qa"><b>Porque é que <code>ausencia_condutor</code> vira <code>ausencia-condutor</code> na rota?</b><p>O Yii converte o nome do controlador de PascalCase para minúsculas com hífen: <code>AusenciaCondutorController</code> → <code>ausencia-condutor</code>.</p></div>
 
 <h2 id="erros">Erros que podem aparecer</h2>
 <div class="qa"><b><code>Only word characters and backslashes are allowed</code> ao correr o Gii</b><p>Usaste aspas duplas e o Git Bash apagou as barras. Põe as classes entre <b>aspas simples</b> (passo 4).</p></div>
 <div class="qa"><b><code>The view file does not exist: .../backend/views/viatura/index.php</code></b><p>As vistas foram geradas em <code>console/views</code>. Move-as para <code>backend/views</code> (passo 5).</p></div>
 <div class="qa"><b>Erro 500 com <code>Class "backend\controllers\AccessControl" not found</code></b><p>Falta o <code>use yii\filters\AccessControl;</code> no topo do controlador (passo 6).</p></div>
-<div class="qa"><b>O link do menu abre "Not Found (#404)"</b><p>Escreveste mal a rota. Tem de ser o nome do controlador com hífens: <code>['/ausencia-condutor/index']</code>, e não <code>ausencia_condutor</code> nem <code>AusenciaCondutor</code>.</p></div>
+<div class="qa"><b>O link do menu abre "Not Found (#404)"</b><p>Escreveste mal a rota. Tem de ser o nome do controlador em minúsculas: <code>['/viatura/index']</code>.</p></div>
 <div class="qa"><b>"Integrity constraint violation" ao gravar ou apagar</b><p>A tabela tem chaves estrangeiras. Para criar, o registo ligado (ex. a categoria) tem de existir; para apagar, não pode ter registos que dependam dele.</p></div>
 <div class="qa"><b>Qualquer pessoa abre o CRUD sem login</b><p>O controlador não tem o bloco <code>'access'</code> no <code>behaviors()</code> (passo 6).</p></div>
+<div class="qa"><b>Texto ainda em inglês numa página</b><p>Ou é texto fixo da vista/etiqueta do modelo (passo 8), ou falta o <code>'language' =&gt; 'pt'</code> no <code>main.php</code> do backend.</p></div>
 
 </div>
 
@@ -380,12 +406,9 @@ View Path:           (deixar vazio)
 Base Controller Class: yii\web\Controller
 Widget Used in Index Page: GridView</script>
 <script type="text/plain" id="c-gii-cli">php yii gii/crud --modelClass='common\models\viatura' --controllerClass='backend\controllers\ViaturaController' --searchModelClass='backend\models\ViaturaSearch' --interactive=0 --overwrite=1</script>
-<script type="text/plain" id="c-gii-loop">for f in common/models/*.php; do
-  m=$(basename $f .php)
-  case $m in User|LoginForm) continue;; esac
-  P=$(echo $m | sed -E 's/(^|_)([a-z])/\U\2/g')
-  php yii gii/crud --modelClass='common\models\'$m --controllerClass='backend\controllers\'${P}Controller --searchModelClass='backend\models\'${P}Search --interactive=0 --overwrite=1
-done</script>
+<script type="text/plain" id="c-gii-3">php yii gii/crud --modelClass='common\models\viatura' --controllerClass='backend\controllers\ViaturaController' --searchModelClass='backend\models\ViaturaSearch' --interactive=0 --overwrite=1
+php yii gii/crud --modelClass='common\models\condutor' --controllerClass='backend\controllers\CondutorController' --searchModelClass='backend\models\CondutorSearch' --interactive=0 --overwrite=1
+php yii gii/crud --modelClass='common\models\requisicao' --controllerClass='backend\controllers\RequisicaoController' --searchModelClass='backend\models\RequisicaoSearch' --interactive=0 --overwrite=1</script>
 <script type="text/plain" id="c-move">cp -r console/views/* backend/views/
 rm -rf console/views</script>
 <script type="text/plain" id="c-acf">use yii\filters\AccessControl;
@@ -418,19 +441,35 @@ public function behaviors()
 <script type="text/plain" id="c-menu"><?= Menu::widget([
     'items' => [
         ['label' => 'Dashboard', 'icon' => 'tachometer-alt', 'url' => ['/site/index']],
-
-        ['header' => 'FROTA'],
-        ['label' => 'Categorias', 'icon' => 'tags', 'url' => ['/categoria/index']],
         ['label' => 'Viaturas', 'icon' => 'car', 'url' => ['/viatura/index']],
+        //a mesma listagem de viaturas, ja filtrada pelo estado
+        ['label' => 'Viaturas disponíveis', 'icon' => 'check', 'url' => ['/viatura/index', 'ViaturaSearch[estado]' => 'disponivel']],
+        //a listagem de requisicoes ja filtrada pelo estado
+        ['label' => 'Requisições pendentes', 'icon' => 'clipboard-list', 'url' => ['/requisicao/index', 'RequisicaoSearch[estado]' => 'pendente']],
         ['label' => 'Condutores', 'icon' => 'id-card', 'url' => ['/condutor/index']],
-        ['label' => 'Ausências de condutores', 'icon' => 'user-clock', 'url' => ['/ausencia-condutor/index']],
-
-        ['header' => 'REQUISIÇÕES'],
-        ['label' => 'Requisições', 'icon' => 'clipboard-list', 'url' => ['/requisicao/index']],
-        //... uma linha por CRUD, sempre ['/controlador/index']
     ],
 ]) ?></script>
-<script type="text/plain" id="c-menu1">['label' => 'Peças', 'icon' => 'cog', 'url' => ['/peca/index']],</script>
+<script type="text/plain" id="c-lang">return [
+    'id' => 'app-backend',
+    'name' => 'FrotaGest',
+    //portugues de Portugal: traduz as mensagens do Yii (paginacao, validacoes, botoes da tabela)
+    'language' => 'pt',
+    'basePath' => dirname(__DIR__),
+    // ...
+];</script>
+<script type="text/plain" id="c-labels">//common/models/viatura.php, dentro de attributeLabels()
+'categoria_id' => 'Categoria',
+'matricula' => 'Matrícula',
+'combustivel' => 'Combustível',
+'caracteristicas' => 'Características',
+'qr_code' => 'Código QR',
+'km_atual' => 'Km atuais',</script>
+<script type="text/plain" id="c-empty">GridView::widget([
+    'dataProvider' => $dataProvider,
+    'filterModel' => $searchModel,
+    'emptyText' => 'Ainda não há viaturas.',
+    // ...
+])</script>
 <script type="text/plain" id="c-lint">php -l backend/controllers/ViaturaController.php
 php -l backend/models/ViaturaSearch.php
 php -l backend/views/layouts/sidebar.php</script>
@@ -474,15 +513,6 @@ public function actionRestore($id)
 
     return $this->redirect(['index']);
 }</script>
-<script type="text/plain" id="c-soft-find">public static function findIdentity($id)
-{
-    return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
-}
-
-public static function findByUsername($username)
-{
-    return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
-}</script>
 
 <script>
 (function(){
@@ -510,7 +540,7 @@ public static function findByUsername($username)
 
   // progresso: caixas guardadas no browser (so uma comodidade, a pagina funciona sem isto)
   var boxes = Array.prototype.slice.call(document.querySelectorAll('.chk'));
-  var KEY = 'frotagest-backend-crud-v1';
+  var KEY = 'frotagest-backend-crud-v2';
   function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } }
   function save(){
     var o = {}; boxes.forEach(function(c){ if (c.checked) o[c.id] = 1; });
