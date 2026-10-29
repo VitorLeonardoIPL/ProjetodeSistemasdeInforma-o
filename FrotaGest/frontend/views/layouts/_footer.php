@@ -6,36 +6,61 @@ declare(strict_types=1);
 
 use yii\helpers\Html;
 
+//email de contacto definido em common/config/params.php
+$email = Yii::$app->params['adminEmail'];
 ?>
-<footer id="footer" class="mt-auto py-3 bg-body-tertiary">
+<!-- Footer Start (copiado do index.html do Cental e adaptado ao Yii) -->
+<div class="container-fluid footer py-5 mt-5">
+    <div class="container py-5">
+        <div class="row g-5">
+
+            <!-- coluna 1: sobre a aplicacao -->
+            <div class="col-md-6 col-lg-4">
+                <div class="footer-item d-flex flex-column">
+                    <h4 class="text-white mb-4"><?= Html::encode(Yii::$app->name) ?></h4>
+                    <p class="mb-3">Plataforma de gestão da frota de viaturas: consulte as viaturas disponíveis, faça requisições e acompanhe o seu estado.</p>
+                </div>
+            </div>
+
+            <!-- coluna 2: links rapidos (as mesmas rotas do menu) -->
+            <div class="col-md-6 col-lg-4">
+                <div class="footer-item d-flex flex-column">
+                    <h4 class="text-white mb-4">Links Rápidos</h4>
+                    <?= Html::a('<i class="fas fa-angle-right me-2"></i> Início', ['/site/index']) ?>
+                    <?= Html::a('<i class="fas fa-angle-right me-2"></i> Sobre', ['/site/about']) ?>
+                    <?= Html::a('<i class="fas fa-angle-right me-2"></i> Contacto', ['/site/contact']) ?>
+                </div>
+            </div>
+
+            <!-- coluna 3: contactos -->
+            <div class="col-md-6 col-lg-4">
+                <div class="footer-item d-flex flex-column">
+                    <h4 class="text-white mb-4">Contactos</h4>
+                    <?= Html::mailto('<i class="fas fa-envelope me-2"></i> ' . Html::encode($email), $email) ?>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Footer End -->
+
+<!-- Copyright Start -->
+<div class="container-fluid copyright py-4">
     <div class="container">
-        <div class="row text-body-secondary">
-            <div class="col-md-6 text-center text-md-start">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></div>
-            <div class="col-md-6 text-center text-md-end">
-                <a href="https://www.yiiframework.com/" rel="external" class="text-body-secondary text-decoration-none">
-                    <?= Yii::t(
-                        'yii',
-                        'Powered by {yii}',
-                        ['yii' => ''],
-                    ) ?>
-                    <?= Html::img(
-                        '@web/images/yii3_full_for_light.svg',
-                        [
-                            'alt' => 'Yii Framework',
-                            'class' => 'align-text-bottom footer-logo-light',
-                            'height' => '28',
-                        ],
-                    ) ?>
-                    <?= Html::img(
-                        '@web/images/yii3_full_for_dark.svg',
-                        [
-                            'alt' => 'Yii Framework',
-                            'class' => 'align-text-bottom footer-logo-dark',
-                            'height' => '28',
-                        ],
-                    ) ?>
-                </a>
+        <div class="row g-4 align-items-center">
+            <!-- nome da aplicacao + ano atual (date('Y') muda sozinho todos os anos) -->
+            <div class="col-md-6 text-center text-md-start mb-md-0">
+                <span class="text-body"><i class="fas fa-copyright text-light me-2"></i><?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?>, todos os direitos reservados.</span>
+            </div>
+            <!-- credito obrigatorio pela licenca do template (CC BY 4.0): NAO REMOVER -->
+            <div class="col-md-6 text-center text-md-end text-body">
+                Designed By <a class="border-bottom text-white" href="https://htmlcodex.com">HTML Codex</a>
             </div>
         </div>
     </div>
-</footer>
+</div>
+<!-- Copyright End -->
+
+<!-- botao "voltar ao topo": aparece ao fazer scroll (o main.js trata do resto) -->
+<a href="#" class="btn btn-secondary btn-lg-square rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
