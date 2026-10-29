@@ -17,16 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Editar', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?php if ($model->status == User::STATUS_DELETED): ?>
-            <?= Html::a('Reativar', ['restore', 'id' => $model->id], [
-                'class' => 'btn btn-success',
-                'data' => ['method' => 'post'],
-            ]) ?>
-        <?php else: ?>
+        <?php if ($model->status != User::STATUS_DELETED): ?>
             <?= Html::a('Apagar', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
                 'data' => [
-                    'confirm' => 'Apagar este utilizador? A conta fica desativada e pode ser reativada.',
+                    'confirm' => 'Apagar este utilizador? A conta fica com o estado Apagado (para a reativar, edita o Estado).',
                     'method' => 'post',
                 ],
             ]) ?>
