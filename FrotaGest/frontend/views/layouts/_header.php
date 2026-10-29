@@ -42,7 +42,6 @@ $items = [
 
                 <!-- botoes a direita: dependem de haver ou nao sessao iniciada -->
                 <?php if (Yii::$app->user->isGuest): ?>
-                    <?= Html::a('Registar', ['/site/signup'], ['class' => 'btn btn-light rounded-pill py-2 px-4 me-2']) ?>
                     <?= Html::a('Entrar', ['/site/login'], ['class' => 'btn btn-primary rounded-pill py-2 px-4']) ?>
                 <?php else: ?>
                     <!-- nome do utilizador com sessao iniciada -->
