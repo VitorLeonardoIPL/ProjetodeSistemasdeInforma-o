@@ -1,0 +1,729 @@
+<meta charset="utf-8">
+<title>FrotaGest - Frontend: template Cental</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: coluna de leitura unica; indice no topo; barra de progresso fixa; cada passo abre e fecha; checklists com caixas guardadas no browser */
+:root{
+  --bg:#f6f7f4; --surface:#ffffff; --fg:#1d2420; --muted:#5c665f; --line:#dfe3dc;
+  --accent:#1f6f5b; --accent-soft:#e1f0ea; --accent-fg:#ffffff;
+  --code-bg:#14201b; --code-fg:#e4efe9; --warn:#9a5b00; --warn-soft:#fbf0dc;
+  --font-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101613; --surface:#18211c; --fg:#e6ede8; --muted:#9aa89f; --line:#2a362f;
+    --accent:#4fc2a0; --accent-soft:#183328; --accent-fg:#06231a;
+    --code-bg:#0b110e; --code-fg:#dcebe3; --warn:#f0b45c; --warn-soft:#35280f;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101613; --surface:#18211c; --fg:#e6ede8; --muted:#9aa89f; --line:#2a362f;
+  --accent:#4fc2a0; --accent-soft:#183328; --accent-fg:#06231a;
+  --code-bg:#0b110e; --code-fg:#dcebe3; --warn:#f0b45c; --warn-soft:#35280f;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.6;padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:780px;margin-inline:auto}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:clamp(1.9rem,5vw,2.6rem);font-weight:700}
+h2{font-size:1.5rem;margin-block:52px 16px;scroll-margin-top:60px}
+h3{font-size:1.1rem;margin-block:20px 8px}
+p{margin:0 0 12px;max-width:68ch}
+a{color:var(--accent)}
+code{font-family:var(--font-mono);font-size:.88em;background:var(--accent-soft);padding:1px 6px;border-radius:4px;overflow-wrap:anywhere}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-16px;padding:10px 16px}
+.top-in{max-width:780px;margin-inline:auto;display:flex;align-items:center;gap:12px;font-size:.85rem;color:var(--muted)}
+.bar{flex:1;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+.hero{padding-block:36px 8px}
+.hero p{color:var(--muted);font-size:1.05rem;margin-top:12px}
+.toc{display:flex;flex-wrap:wrap;gap:6px 14px;margin:20px 0 0;padding:0;list-style:none;font-size:.88rem}
+.toc a{text-decoration:none;border-bottom:1px solid var(--line)}
+.toc a:hover{border-color:var(--accent)}
+.er{display:flex;flex-wrap:wrap;gap:12px 40px;align-items:center;margin-block:20px}
+.tbl{border:1px solid var(--line);background:var(--surface);border-radius:6px;min-width:190px;font-family:var(--font-mono);font-size:.82rem}
+.tbl b{display:block;padding:6px 12px;background:var(--accent-soft);font-weight:500;border-bottom:1px solid var(--line)}
+.tbl span{display:block;padding:2px 12px}
+.tbl span:last-child{padding-bottom:8px}
+.rel{font-size:.85rem;color:var(--muted);max-width:22ch}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px;margin-bottom:12px}
+.order{display:grid;gap:8px;counter-reset:o;padding:0;list-style:none;margin:0}
+.order li{counter-increment:o;display:flex;gap:12px;align-items:baseline}
+.order li::before{content:counter(o);font-family:var(--font-mono);font-size:.8rem;min-width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--accent);color:var(--accent-fg);flex:none}
+details.step{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin-bottom:12px}
+details.step[open]{border-color:var(--accent)}
+details.step>summary{list-style:none;cursor:pointer;display:flex;gap:12px;align-items:center;padding:14px 16px}
+details.step>summary::-webkit-details-marker{display:none}
+details.step>summary:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-family:var(--font-mono);font-size:.78rem;color:var(--muted);min-width:2.2em}
+.ttl{flex:1;min-width:0;font-weight:600}
+.where{font-family:var(--font-mono);font-size:.75rem;color:var(--muted);display:none}
+@media (min-width:660px){.where{display:block}}
+.chk{width:20px;height:20px;accent-color:var(--accent);flex:none}
+.body{padding:4px 16px 18px;border-top:1px solid var(--line)}
+.lbl{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin:18px 0 6px}
+.body ul,.body ol{margin:0 0 12px;padding-left:22px}
+.body li{margin-bottom:5px}
+.codewrap{position:relative;margin:8px 0 14px}
+pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--font-mono);font-size:.82rem;line-height:1.55;padding:14px 16px;border-radius:6px;overflow-x:auto;white-space:pre}
+.cap{font-family:var(--font-mono);font-size:.75rem;color:var(--muted);margin-bottom:4px}
+.copy{position:absolute;top:8px;right:8px;font:inherit;font-size:.72rem;padding:3px 9px;border-radius:4px;border:1px solid #3a4a41;background:#1f2e26;color:#cfe3d9;cursor:pointer}
+.copy:hover{background:#2a3d33}
+.note{background:var(--warn-soft);color:var(--fg);border-left:3px solid var(--warn);padding:10px 14px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.92rem}
+.note b{color:var(--warn)}
+.check{background:var(--accent-soft);padding:10px 14px;border-radius:6px;font-size:.92rem;margin-top:12px}
+.flow{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-family:var(--font-mono);font-size:.78rem;margin:10px 0 16px}
+.flow span{background:var(--surface);border:1px solid var(--line);padding:4px 10px;border-radius:5px}
+.flow i{color:var(--muted);font-style:normal}
+.qa{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:10px}
+.qa b{display:block;margin-bottom:4px}
+.qa p{margin:0;color:var(--muted)}
+.cl{list-style:none;padding:0;margin:0 0 12px;display:grid;gap:2px}
+.cl li{display:flex;gap:10px;align-items:flex-start;padding:6px 10px;border-radius:6px}
+.cl li:hover{background:var(--accent-soft)}
+.cl label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;width:100%}
+.cl .chk{margin-top:3px}
+.reset{margin-top:20px;font:inherit;font-size:.85rem;background:none;border:1px solid var(--line);color:var(--muted);padding:6px 12px;border-radius:6px;cursor:pointer}
+</style>
+<div class="top"><div class="top-in"><span id="pt">0 de 0 itens</span><div class="bar"><i id="pb"></i></div></div></div>
+
+<div class="wrap">
+
+<header class="hero">
+  <h1>FrotaGest, frontend: template Cental, passo a passo</h1>
+  <p>Como trocar o aspeto do frontend do Yii pelo template <b>Cental</b> (HTML Codex): copiar os ficheiros do template, carregá-los com o <code>AppAsset</code>, usar o Bootstrap do template, refazer o layout (menu, rodapé, banner) e começar a página inicial com os textos da especificação. Marca cada passo quando o tiveres feito e abre o código para veres o que escrever.</p>
+  <ul class="toc">
+    <li><a href="#pedido">O que se pede</a></li>
+    <li><a href="#passos">Os passos</a></li>
+    <li><a href="#falta">O que falta</a></li>
+    <li><a href="#duvidas">Perguntas</a></li>
+    <li><a href="#erros">Erros</a></li>
+  </ul>
+</header>
+
+<h2 id="pedido">O que se pede</h2>
+<p>O frontend é o <b>front-office</b>: o site que o <b>Colaborador</b> usa para iniciar sessão, consultar viaturas e fazer requisições. Ainda tinha o aspeto e os textos de exemplo do Yii ("My Application", "Build with Yii Framework"). O enunciado pede que o front-office use um template do <b>HTML Codex</b>. Escolhemos o <b>Cental</b>.</p>
+<div class="flow"><span>copiar css/js/img/lib</span><i>→</i><span>AppAsset</span><i>→</i><span>Bootstrap do template</span><i>→</i><span>menu</span><i>→</i><span>rodapé</span><i>→</i><span>main.php</span><i>→</i><span>banner</span><i>→</i><span>página inicial</span></div>
+
+<div class="lbl">Como ficou organizado o código</div>
+<div class="er">
+  <div class="tbl"><b>frontend/web</b><span>css/bootstrap.min.css</span><span>css/style.css</span><span>css/site.css</span><span>js/main.js</span><span>img/ , lib/</span></div>
+  <div class="rel">o AppAsset carrega-os em todas as páginas</div>
+  <div class="tbl"><b>frontend/assets</b><span>AppAsset.php</span></div>
+  <div class="tbl"><b>frontend/views/layouts</b><span>main.php</span><span>_header.php</span><span>_footer.php</span><span>_head.php</span></div>
+  <div class="tbl"><b>frontend/views/site</b><span>index.php</span></div>
+</div>
+<div class="note"><b>Antes de começar:</b> há <b>dois clones</b> do projeto no PC. O WAMP só mostra o de <code>C:\wamp64\www\2_Ano\Projeto\ProjetodeSistemasdeInforma-o</code>. O de <code>Documents\GitHub</code> está desatualizado e o WAMP não o vê. Trabalha sempre no do WAMP (no GitHub Desktop: <i>File → Add local repository</i> e escolhe essa pasta).</div>
+
+<h2 id="passos">Os passos</h2>
+<p>Abre cada passo, faz o que diz e marca a caixa. O progresso fica guardado no browser. Depois de cada passo testa com <b>Ctrl + F5</b> (recarrega sem usar a cache).</p>
+
+<details class="step" open>
+<summary><input class="chk" type="checkbox" id="k1" aria-label="Passo 1 feito"><span class="num">1</span><span class="ttl">Escolher o template e perceber a licença</span><span class="where">htmlcodex.com</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<ol>
+<li>Descarrega o <b>Cental – Car Rent Website Template</b> em <code>https://htmlcodex.com/car-rent-website-template/</code> (botão <b>DOWNLOAD NOW</b>).</li>
+<li>Extrai o <code>Cental.zip</code> (botão direito → <b>Extrair tudo</b>). Lá dentro, a pasta <code>Cental</code> tem os <code>.html</code> e as pastas <code>css</code>, <code>js</code>, <code>img</code> e <code>lib</code>.</li>
+</ol>
+<div class="lbl">Porquê</div>
+<ul>
+<li>O Cental usa <b>Bootstrap 5</b>, tal como o Yii (<code>yii\bootstrap5</code>). Assim os formulários e widgets do Yii ficam com bom aspeto sem conflitos.</li>
+<li>Tem páginas de viaturas e um carrossel, que encaixam no catálogo do FrotaGest.</li>
+<li>É gratuito com licença <b>CC BY 4.0</b>: o crédito <b>"Designed By HTML Codex"</b> no rodapé <b>não se pode remover</b>.</li>
+<li>Os <code>.html</code> do template <b>nunca se alteram</b>. Servem só de modelo para copiar pedaços de HTML.</li>
+</ul>
+<div class="check">Verifica: tens a pasta <code>Cental</code> extraída (por exemplo, nas Transferências).</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k2" aria-label="Passo 2 feito"><span class="num">2</span><span class="ttl">Copiar os ficheiros do template para o projeto</span><span class="where">frontend/web</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<ol>
+<li>Copia as 4 pastas <code>css</code>, <code>js</code>, <code>img</code> e <code>lib</code> do Cental para <code>FrotaGest\frontend\web\</code>. Já existe uma pasta <code>css</code> (com o <code>site.css</code>): aceita juntar as pastas.</li>
+<li>Apaga <code>lib\waypoints\links.php</code>.</li>
+<li><b>Não</b> copies os <code>.html</code>.</li>
+</ol>
+<div class="lbl">Porquê</div>
+<ul>
+<li>No Yii, a única pasta que o browser vê é a <code>frontend/web</code> (a pasta pública). CSS, JS e imagens têm de estar lá.</li>
+<li>O <code>links.php</code> não é usado e é PHP dentro da pasta pública: mais vale não o deixar lá.</li>
+<li>O <code>img\Thumbs.db</code> (cache do Windows) é um ficheiro oculto e o <code>FrotaGest/.gitignore</code> já o ignora. Não é preciso apagá-lo.</li>
+</ul>
+<div class="check">Verifica: o GitHub Desktop mostra <b>46</b> ficheiros novos, todos dentro de <code>FrotaGest/frontend/web/</code>.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k3" aria-label="Passo 3 feito"><span class="num">3</span><span class="ttl">Carregar o CSS e o JS do template (AppAsset)</span><span class="where">frontend/assets/AppAsset.php</span></summary>
+<div class="body">
+
+<div class="lbl">O que é</div>
+<p>Num site HTML escreves os <code>&lt;link&gt;</code> e <code>&lt;script&gt;</code> à mão. No Yii há uma classe, o <b>Asset Bundle</b>, com a lista dos CSS e JS. O layout regista-a e o Yii escreve as tags sozinho: os CSS em <code>$this-&gt;head()</code> e os JS em <code>$this-&gt;endBody()</code>.</p>
+<div class="lbl">O que fazer</div>
+<p>No <code>AppAsset.php</code>, troca o <code>$css</code> e acrescenta o <code>$js</code>. Os itens vêm do <code>&lt;head&gt;</code> e do fim do <code>index.html</code> do Cental:</p>
+<div class="codewrap"><div class="cap">frontend/assets/AppAsset.php</div><pre data-src="c-asset"></pre></div>
+<div class="lbl">Porquê</div>
+<ul>
+<li>Os caminhos sem <code>https://</code> são relativos a <code>frontend/web</code>, porque a classe tem <code>$basePath = '@webroot'</code> e <code>$baseUrl = '@web'</code>.</li>
+<li><b>A ordem conta:</b> quando dois CSS mudam a mesma coisa, ganha o último. O <code>site.css</code> fica no fim para poder alterar o template.</li>
+<li>O jQuery e o <code>bootstrap.bundle</code> do <code>index.html</code> <b>não</b> se põem: o Yii já os carrega pelo <code>$depends</code> (<code>YiiAsset</code> e Bootstrap). Ficariam duplicados.</li>
+<li>O <code>$depends</code> diz que bundles têm de ser carregados <b>antes</b> deste.</li>
+</ul>
+<div class="check">Verifica: no browser, <b>Ctrl + U</b> e <b>Ctrl + F</b> por <code>style.css</code>; tem de aparecer um <code>&lt;link&gt;</code> para <code>css/style.css</code> e, no fim, os <code>&lt;script&gt;</code> do <code>wow.min.js</code> e do <code>main.js</code>.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k4" aria-label="Passo 4 feito"><span class="num">4</span><span class="ttl">Usar o Bootstrap personalizado do template</span><span class="where">frontend/config/main.php</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<p>Em <code>components</code>, logo a seguir ao <code>errorHandler</code>, acrescenta o <code>assetManager</code>:</p>
+<div class="codewrap"><div class="cap">frontend/config/main.php</div><pre data-src="c-bs"></pre></div>
+<div class="lbl">Porquê</div>
+<ul>
+<li>O <code>css/bootstrap.min.css</code> do Cental é um Bootstrap com as cores do template: <code>primary</code> = vermelho <code>#EA001E</code>, <code>secondary</code> = azul-escuro <code>#1F2E4E</code>. O <code>style.css</code> depende delas.</li>
+<li>Pô-lo só no <code>AppAsset</code> não chega: a página carregava <b>os dois</b> Bootstraps (o do Yii e o do template). E os widgets do Yii (<code>ActiveForm</code>, <code>Nav</code>, <code>Breadcrumbs</code>) pedem o <code>BootstrapAsset</code> sozinhos.</li>
+<li>Configurando o bundle no <code>assetManager</code>, <b>sempre</b> que alguém pedir o <code>BootstrapAsset</code>, o Yii usa o ficheiro do template.</li>
+<li><code>'sourcePath' =&gt; null</code>: não copiar nada do <code>vendor/</code> para <code>web/assets/xxxx/</code>, porque o ficheiro já está numa pasta pública.</li>
+</ul>
+<div class="check">Verifica: no <b>Ctrl + U</b>, o primeiro CSS é <code>css/bootstrap.min.css</code> (e não <code>assets/.../bootstrap.css</code>); os botões passam a vermelho.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k5" aria-label="Passo 5 feito"><span class="num">5</span><span class="ttl">Perceber como funciona o layout no Yii</span><span class="where">frontend/views/layouts</span></summary>
+<div class="body">
+
+<div class="lbl">O que é</div>
+<div class="flow"><span>SiteController::actionIndex()</span><i>→</i><span>render('index')</span><i>→</i><span>views/site/index.php</span><i>→</i><span>$content</span><i>→</i><span>layouts/main.php</span></div>
+<ul>
+<li>A <b>view</b> só tem o conteúdo daquela página. O <b>layout</b> é a moldura igual em todas as páginas (<code>&lt;html&gt;</code>, menu, rodapé). A view entra no <code>&lt;?= $content ?&gt;</code>.</li>
+<li>Por isso, mudar o menu <b>uma vez</b> no layout muda-o em todas as páginas.</li>
+</ul>
+<div class="scroll"><table>
+<tr><th>Ficheiro</th><th>O que faz</th></tr>
+<tr><td><code>main.php</code></td><td>esqueleto: <code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, <code>&lt;body&gt;</code>, <code>$content</code></td></tr>
+<tr><td><code>_head.php</code></td><td>regista o <code>AppAsset</code> e as meta tags</td></tr>
+<tr><td><code>_header.php</code></td><td>menu de cima</td></tr>
+<tr><td><code>_footer.php</code></td><td>rodapé</td></tr>
+</table></div>
+<div class="lbl">Onde está cada parte do Cental</div>
+<div class="scroll"><table>
+<tr><th>Parte do index.html</th><th>Vai para</th></tr>
+<tr><td><code>&lt;head&gt;</code> e <code>&lt;script&gt;</code> do fim</td><td><code>AppAsset</code> (passos 3 e 4)</td></tr>
+<tr><td>Navbar</td><td><code>_header.php</code> (passo 6)</td></tr>
+<tr><td>Footer, Copyright, Back to Top</td><td><code>_footer.php</code> (passo 7)</td></tr>
+<tr><td>Spinner</td><td><code>main.php</code> (passo 8)</td></tr>
+<tr><td>Header (<code>about.html</code>)</td><td><code>main.php</code> (passo 9)</td></tr>
+<tr><td>Carrossel, secções</td><td>views (<code>site/index.php</code>, passo 10)</td></tr>
+<tr><td>Topbar (telefone, email)</td><td>não usado</td></tr>
+</table></div>
+<div class="note"><b>Nunca apagar</b> no <code>main.php</code>: <code>beginPage()</code>, <code>head()</code>, <code>beginBody()</code>, <code>endBody()</code> e <code>endPage()</code>. Sem elas a página fica sem CSS nem JS.</div>
+<div class="check">Verifica: consegues dizer onde entra a view no <code>main.php</code> e onde o Yii escreve os CSS e os JS.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k6" aria-label="Passo 6 feito"><span class="num">6</span><span class="ttl">O menu (navbar do Cental)</span><span class="where">frontend/views/layouts/_header.php</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<p>Apaga o conteúdo do <code>_header.php</code> e escreve a navbar do Cental com as partes dinâmicas do Yii:</p>
+<div class="codewrap"><div class="cap">frontend/views/layouts/_header.php</div><pre data-src="c-header"></pre></div>
+<div class="lbl">Porquê</div>
+<ul>
+<li>O widget <code>Nav</code> recebe o <code>$items</code>, gera os <code>&lt;a class="nav-link"&gt;</code> com as rotas do Yii e marca como <code>active</code> (vermelho) o da página atual. O CSS do Cental usa essas classes.</li>
+<li>Sai o <code>NavBar</code> do Yii (escrevemos o HTML do Cental) e o botão 🌙 do modo escuro.</li>
+<li><b>Não há "Registar":</b> segundo a especificação, só o Administrador cria contas, no back-office. O Colaborador só inicia sessão.</li>
+<li>O <b>logout</b> tem de ser POST (o <code>SiteController</code> só o aceita assim), por isso é um formulário com um botão.</li>
+<li><code>Html::encode()</code> sempre que se mostra texto vindo da BD (ex.: o username), para não deixar entrar HTML malicioso.</li>
+</ul>
+<div class="check">Verifica: menu branco com o carro vermelho, os links Início / Sobre / Contacto (o da página atual a vermelho) e o botão de iniciar sessão à direita.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k7" aria-label="Passo 7 feito"><span class="num">7</span><span class="ttl">O rodapé</span><span class="where">frontend/views/layouts/_footer.php</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<div class="codewrap"><div class="cap">frontend/views/layouts/_footer.php</div><pre data-src="c-footer"></pre></div>
+<div class="lbl">Porquê</div>
+<ul>
+<li>Das 4 colunas do Cental ficaram 2 que fazem sentido: <b>sobre</b> e <b>links rápidos</b>. Cada uma com <code>col-lg-6</code>, porque uma linha do Bootstrap tem 12 partes (6 + 6).</li>
+<li>A coluna de contactos saiu. O <code>Yii::$app-&gt;params['adminEmail']</code> era um valor fixo do <code>params.php</code> (<code>admin@example.com</code>) e não o email do admin da BD. O contacto faz-se pela página <b>Contacto</b>.</li>
+<li><code>Html::a('texto', ['/rota'])</code> cria um link com o URL certo para a rota. <code>date('Y')</code> dá o ano atual.</li>
+<li>O botão "voltar ao topo" é ligado pelo <code>main.js</code>.</li>
+</ul>
+<div class="note"><b>Licença:</b> o "Designed By HTML Codex" fica sempre.</div>
+<div class="check">Verifica: no fim de qualquer página aparece o rodapé azul-escuro com 2 colunas, a barra de copyright e o botão com a seta para cima (quando se desce a página).</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k8" aria-label="Passo 8 feito"><span class="num">8</span><span class="ttl">Nome FrotaGest, spinner e tirar o modo escuro</span><span class="where">config/main.php, AppAsset, main.php, site.css</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<ol>
+<li><b>Nome:</b> em <code>frontend/config/main.php</code>, a seguir a <code>'id' =&gt; 'app-frontend',</code>:</li>
+</ol>
+<div class="codewrap"><div class="cap">frontend/config/main.php</div><pre data-src="c-name"></pre></div>
+<ol start="2">
+<li><b>Modo escuro:</b> no <code>AppAsset.php</code> apaga o <code>use common\assets\ColorModeAsset;</code> e o <code>ColorModeAsset::class</code> do <code>$depends</code>. No <code>main.php</code>, o <code>&lt;html&gt;</code> fica só com o <code>lang</code>:</li>
+</ol>
+<div class="codewrap"><div class="cap">frontend/views/layouts/main.php</div><pre data-src="c-html"></pre></div>
+<ol start="3">
+<li><b>Spinner:</b> no <code>main.php</code>, logo a seguir a <code>&lt;?php $this-&gt;beginBody() ?&gt;</code>:</li>
+</ol>
+<div class="codewrap"><div class="cap">frontend/views/layouts/main.php</div><pre data-src="c-spinner"></pre></div>
+<div class="lbl">Porquê</div>
+<ul>
+<li>O menu, o rodapé e o título usam <code>Yii::$app-&gt;name</code>. Sem <code>'name'</code>, o Yii usa "My Application".</li>
+<li>O Bootstrap 5.0 do template não tem modo escuro, e o botão já tinha saído no passo 6. O script e o <code>data-bs-theme</code> eram código morto.</li>
+<li>Não se apaga o <code>common/assets/ColorModeAsset.php</code>: o backend pode usá-lo.</li>
+<li>O <code>main.js</code> esconde o spinner quando a página acaba de carregar. Sem este HTML não havia nada para esconder.</li>
+</ul>
+<div class="check">Verifica: "FrotaGest" no menu e no rodapé; uma rodinha vermelha por instantes ao carregar.</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k9" aria-label="Passo 9 feito"><span class="num">9</span><span class="ttl">Título do separador e banner das páginas interiores</span><span class="where">main.php, site.css</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<ol>
+<li>No <code>main.php</code>, o <code>&lt;title&gt;</code>:</li>
+</ol>
+<div class="codewrap"><div class="cap">frontend/views/layouts/main.php</div><pre data-src="c-title"></pre></div>
+<ol start="2">
+<li>No <code>main.php</code>, substitui o bloco <code>&lt;main&gt;</code> todo. Tem o banner (o "Header" do <code>about.html</code> do Cental) e o conteúdo:</li>
+</ol>
+<div class="codewrap"><div class="cap">frontend/views/layouts/main.php</div><pre data-src="c-main"></pre></div>
+<ol start="3">
+<li>No <code>site.css</code>, a primeira regra fica com <code>padding: 0 15px 20px;</code> (era <code>70px</code> em cima).</li>
+</ol>
+<div class="lbl">Porquê</div>
+<ul>
+<li>A view é processada <b>antes</b> do layout. O <code>$this-&gt;title</code> e o <code>$this-&gt;params[...]</code> são "recados" que a view deixa e o layout lê.</li>
+<li>Todas as views do <code>site</code> já definem o <code>title</code> e os <code>breadcrumbs</code>, por isso o banner aparece sozinho em todas.</li>
+<li>O <code>semBanner</code> é um recado nosso: a página inicial põe-no a <code>true</code> para não ter banner (tem o carrossel) e ficar <b>a toda a largura</b>. O <code>container</code> do Bootstrap limita a largura e centra; as secções do Cental já trazem o seu próprio <code>container</code>.</li>
+<li>Os 70px do <code>site.css</code> eram para o menu antigo do Yii (<code>fixed-top</code>, que fica a flutuar por cima da página). O menu do Cental é <code>sticky-top</code> e ocupa o seu espaço; o banner já tem margem (<code>mb-5</code>).</li>
+</ul>
+<div class="check">Verifica: Sobre/Contacto/Login mostram o banner escuro com o título e "Início / ...", e o separador diz "About - FrotaGest".</div>
+
+</div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k10" aria-label="Passo 10 feito"><span class="num">10</span><span class="ttl">Página inicial: carrossel com os textos da especificação</span><span class="where">frontend/views/site/index.php</span></summary>
+<div class="body">
+
+<div class="lbl">O que fazer</div>
+<p>Apaga o conteúdo de exemplo do Yii e põe o carrossel do Cental com os textos do mockup da página inicial (Figura 2 da especificação):</p>
+<div class="codewrap"><div class="cap">frontend/views/site/index.php</div><pre data-src="c-index"></pre></div>
+<div class="lbl">Porquê</div>
+<ul>
+<li>O FrotaGest <b>não é aluguer de carros</b>: é gestão de frota <b>interna</b> de uma empresa (ver <code>Docs/IPL-TeSP-PSI-PSI-2627-FrotaGest_Especificacao_SI.docx</code>). Por isso os textos do template ("Get 15% off your rental") saem e entram os do mockup.</li>
+<li>O formulário de reserva do template saiu: as requisições vão ter um formulário próprio, em 4 passos (RF-FO-06).</li>
+<li>Sem sessão só aparece <b>Iniciar sessão</b> (não há registo público). Com sessão aparece uma mensagem com o nome.</li>
+<li><code>Html::img('@web/img/...')</code> em vez de <code>&lt;img src="img/..."&gt;</code>: o <code>@web</code> dá sempre o URL certo da pasta <code>frontend/web</code>, seja qual for o URL da página.</li>
+<li>O botão <b>Requisitar viatura</b> ainda não está: tem de levar ao catálogo, que ainda não existe.</li>
+</ul>
+<div class="check">Verifica: a foto do carrossel ocupa a largura toda, com a caixa azul "GESTÃO DE FROTA INTERNA" e o título "A viatura da empresa, a um pedido de distância."; o separador diz "Início - FrotaGest".</div>
+
+</div></details>
+
+<div class="lbl">Commits feitos hoje (GitHub Desktop)</div>
+<ul class="cl">
+<li><label><input class="chk" type="checkbox" id="c1"><span>Ficheiros do template (passo 2)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c2"><span>AppAsset e Bootstrap do template (passos 3 e 4)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c3"><span>Menu, rodapé e main.php (passos 6 a 9)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c4"><span>Página inicial (passo 10)</span></label></li>
+</ul>
+
+<button class="reset" id="reset" type="button">Limpar todo o progresso</button>
+
+<h2 id="falta">O que falta (não está feito)</h2>
+<ul>
+<li><b>Secção "Como funciona"</b> na página inicial: etiqueta, título "Do pedido à entrega, tudo registado" e os 4 cartões (Faça o pedido, Receba a aprovação, Levante com o QR, Registe e entregue), mais o botão <b>Ver como funciona</b> no carrossel.</li>
+<li><b>Restantes secções do mockup</b> da página inicial: a frota, a aplicação móvel e os contactos (Figuras 3 e 4).</li>
+<li><b>Botão Requisitar viatura</b>, quando houver o catálogo (RF-FO-04).</li>
+<li><b>Desligar o registo público.</b> A rota <code>site/signup</code> continua a existir no <code>SiteController</code> e criaria contas sem role.</li>
+<li><b>Login por email</b> (RF-FO-01). O do template ainda é por nome de utilizador.</li>
+<li><b>Páginas Sobre, Contacto, Login, Erro e recuperação de palavra-passe:</b> já têm o menu, o rodapé e o banner, mas o conteúdo ainda é o do Yii, em inglês (e com o título repetido).</li>
+<li><b>Textos do botão:</b> o menu diz "Entrar"; o mockup diz "Iniciar sessão".</li>
+<li><b>Comentário solto</b> na linha 9 do <code>_footer.php</code> (<code>//email de contacto...</code>), que já não corresponde a código.</li>
+<li><b>Testes do Codeception</b> do frontend (<code>frontend/tests</code>) ainda procuram os textos antigos.</li>
+</ul>
+
+<h2 id="duvidas">Perguntas para o estudo</h2>
+<div class="qa"><b>Porque é que os ficheiros do template vão para <code>frontend/web</code>?</b><p>É a única pasta pública do frontend: o browser só consegue carregar CSS, JS e imagens que estejam lá.</p></div>
+<div class="qa"><b>O que é um Asset Bundle?</b><p>Uma classe com a lista dos CSS e JS (e das dependências). O layout regista-a e o Yii escreve as tags <code>&lt;link&gt;</code> no <code>head()</code> e os <code>&lt;script&gt;</code> no <code>endBody()</code>, pela ordem certa e sem repetir.</p></div>
+<div class="qa"><b>Para que serve o <code>$depends</code>?</b><p>Diz que bundles têm de ser carregados antes deste. O <code>YiiAsset</code> traz o jQuery, de que o <code>main.js</code> do template precisa.</p></div>
+<div class="qa"><b>Porque é que o Bootstrap do template se troca no <code>config/main.php</code> e não no <code>AppAsset</code>?</b><p>Porque os widgets do Yii também pedem o <code>BootstrapAsset</code>. Configurado no <code>assetManager</code>, todos passam a receber o ficheiro do template, e não há dois Bootstraps na página.</p></div>
+<div class="qa"><b>Qual a diferença entre a view e o layout?</b><p>A view é o conteúdo de uma página; o layout é a moldura comum. A view entra no layout pela variável <code>$content</code>.</p></div>
+<div class="qa"><b>Como é que o layout sabe o título e os breadcrumbs de cada página?</b><p>A view define <code>$this-&gt;title</code> e <code>$this-&gt;params['breadcrumbs']</code>. Como a view corre antes do layout, quando o <code>main.php</code> corre os valores já estão preenchidos.</p></div>
+<div class="qa"><b>Para que serve o <code>semBanner</code>?</b><p>É um parâmetro nosso: a página inicial põe-no a <code>true</code> e o <code>main.php</code> não mostra o banner e deixa o conteúdo a toda a largura (sem o <code>container</code>).</p></div>
+<div class="qa"><b>Porque é que não há botão "Registar"?</b><p>Pela especificação, só o Administrador cria contas, no back-office, e atribui o role. O Colaborador só inicia sessão.</p></div>
+<div class="qa"><b>Porque <code>Html::img('@web/img/x.jpg')</code> e não <code>&lt;img src="img/x.jpg"&gt;</code>?</b><p>O caminho relativo depende do URL da página. O <code>@web</code> é substituído pelo URL da pasta <code>frontend/web</code>, e fica sempre certo.</p></div>
+<div class="qa"><b>Para que serve o <code>Html::encode()</code>?</b><p>Transforma <code>&lt;</code> e <code>&gt;</code> em texto, para que dados vindos da BD (ex.: um username) não sejam interpretados como HTML.</p></div>
+
+<h2 id="erros">Erros que podem aparecer</h2>
+<div class="qa"><b>Mudei um ficheiro e no browser nada muda</b><p>Ou o ficheiro não foi gravado (<b>Ctrl + S</b>), ou foi alterado no clone de <code>Documents\GitHub</code> em vez do clone do WAMP, ou o browser usou a cache (faz <b>Ctrl + F5</b>).</p></div>
+<div class="qa"><b>As pastas não aparecem / o GitHub Desktop mostra um número diferente</b><p>Foram copiadas para o clone errado. Confirma em <i>Repository → Show in Explorer</i> que o GitHub Desktop abre a pasta do WAMP.</p></div>
+<div class="qa"><b>Não encontro o <code>Thumbs.db</code></b><p>É um ficheiro oculto do Windows e o <code>.gitignore</code> já o ignora. Não é preciso apagá-lo.</p></div>
+<div class="qa"><b>404 na consola (F12) com <code>bootstrap.min.css.map</code></b><p>O CSS do template aponta para um ficheiro <code>.map</code> que não vem no ZIP. Só serve para depurar CSS; não afeta nada.</p></div>
+<div class="qa"><b>Cores e fontes misturadas depois do passo 3</b><p>É normal até ao passo 4: o Yii ainda carrega o Bootstrap dele, e o HTML ainda é o do Yii.</p></div>
+<div class="qa"><b>Espaço vazio grande por baixo do menu</b><p>É o <code>padding</code> de 70px do <code>site.css</code>, feito para o menu antigo. Passa a <code>0</code> (passo 9).</p></div>
+<div class="qa"><b>Buraco à direita no rodapé</b><p>As colunas não somam 12. Com 2 colunas, as duas levam <code>col-lg-6</code>.</p></div>
+<div class="qa"><b>O carrossel tem margens dos lados</b><p>O conteúdo está dentro do <code>container</code>. A página inicial precisa do <code>$this-&gt;params['semBanner'] = true;</code> e do <code>if</code> do <code>main.php</code> (passo 9).</p></div>
+<div class="qa"><b>O título aparece repetido (no banner e na página)</b><p>O do banner vem do layout; o outro é da própria view, que ainda é a do Yii. Sai quando se adaptar cada página.</p></div>
+
+</div>
+
+<script type="text/plain" id="c-asset">use yii\bootstrap5\BootstrapAsset;
+use yii\web\AssetBundle;
+use yii\web\YiiAsset;
+
+class AppAsset extends AssetBundle
+{
+    public $basePath = '@webroot';
+    public $baseUrl = '@web';
+    //CSS carregados em todas as paginas (pela ordem da lista)
+    public $css = [
+        //fontes do template Cental (Lato e Montserrat), vindas do Google Fonts
+        'https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap',
+        //icones Font Awesome (ex: <i class="fas fa-car"></i>)
+        'https://use.fontawesome.com/releases/v5.15.4/css/all.css',
+        //icones Bootstrap Icons (ex: <i class="bi bi-house"></i>)
+        'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css',
+        //animacoes de entrada dos elementos (fadeIn, slide, ...)
+        'lib/animate/animate.min.css',
+        //estilo do carrossel de viaturas
+        'lib/owlcarousel/assets/owl.carousel.min.css',
+        //estilo principal do template Cental
+        'css/style.css',
+        //estilos nossos; fica em ultimo para poder alterar os do template
+        'css/site.css',
+    ];
+
+    //JS carregados no fim de todas as paginas
+    //(o jQuery e o Bootstrap JS ja vem do $depends, por isso nao estao aqui)
+    public $js = [
+        //faz os elementos aparecerem com animacao ao fazer scroll
+        'lib/wow/wow.min.js',
+        //efeitos de movimento suave (usado no botao "voltar ao topo")
+        'lib/easing/easing.min.js',
+        //deteta quando um elemento entra no ecra ao fazer scroll
+        'lib/waypoints/waypoints.min.js',
+        //carrossel de viaturas
+        'lib/owlcarousel/owl.carousel.min.js',
+        //script do template: liga o spinner, as animacoes, o carrossel e o "voltar ao topo"
+        'js/main.js',
+    ];
+    public $depends = [
+        YiiAsset::class,
+        BootstrapAsset::class,
+    ];
+}</script>
+<script type="text/plain" id="c-bs">        'errorHandler' => [
+            'errorAction' => 'site/error',
+        ],
+        //gestor de assets: aqui podemos alterar bundles que vem do Yii
+        'assetManager' => [
+            'bundles' => [
+                //sempre que alguem pedir o BootstrapAsset (o AppAsset, o ActiveForm, ...),
+                //o Yii usa o bootstrap.min.css personalizado do template Cental
+                \yii\bootstrap5\BootstrapAsset::class => [
+                    //nao copiar do vendor/; o ficheiro ja esta em frontend/web
+                    'sourcePath' => null,
+                    //pasta no disco e URL onde esta o ficheiro (ambos = frontend/web)
+                    'basePath' => '@webroot',
+                    'baseUrl' => '@web',
+                    //o CSS a carregar em vez do bootstrap.css do Yii
+                    'css' => ['css/bootstrap.min.css'],
+                ],
+            ],
+        ],</script>
+<script type="text/plain" id="c-header"><?php
+
+declare(strict_types=1);
+
+/** @var yii\web\View $this */
+
+use yii\bootstrap5\Nav;
+use yii\helpers\Html;
+
+//links do menu principal
+//o widget Nav transforma cada item num <a class="nav-link"> e marca o da pagina atual como "active"
+$items = [
+    ['label' => 'Início', 'url' => ['/site/index']],
+    ['label' => 'Sobre', 'url' => ['/site/about']],
+    ['label' => 'Contacto', 'url' => ['/site/contact']],
+];
+
+?>
+<!-- Navbar Start (copiado do index.html do Cental e adaptado ao Yii) -->
+<div class="container-fluid nav-bar sticky-top px-0 px-lg-4 py-2 py-lg-0">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light">
+
+            <!-- logotipo: icone de carro + nome da aplicacao; leva a pagina inicial -->
+            <a href="<?= Yii::$app->homeUrl ?>" class="navbar-brand p-0">
+                <h1 class="display-6 text-primary"><i class="fas fa-car-alt me-3"></i><?= Html::encode(Yii::$app->name) ?></h1>
+            </a>
+
+            <!-- botao "hamburguer" que aparece em ecras pequenos -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+
+                <!-- links do menu, ao centro (mx-auto) -->
+                <?= Nav::widget([
+                    'options' => ['class' => 'navbar-nav mx-auto py-0'],
+                    'items' => $items,
+                ]) ?>
+
+                <!-- botoes a direita: dependem de haver ou nao sessao iniciada -->
+                <?php if (Yii::$app->user->isGuest): ?>
+                    <!-- so ha login: as contas sao criadas pelo administrador no back-office -->
+                    <?= Html::a('Entrar', ['/site/login'], ['class' => 'btn btn-primary rounded-pill py-2 px-4']) ?>
+                <?php else: ?>
+                    <!-- nome do utilizador com sessao iniciada -->
+                    <span class="me-3"><i class="fas fa-user text-primary me-2"></i><?= Html::encode(Yii::$app->user->identity->username) ?></span>
+                    <!-- o logout tem de ser um POST (o SiteController so o aceita assim), por isso e um formulario -->
+                    <?= Html::beginForm(['/site/logout'], 'post', ['class' => 'd-inline']) ?>
+                    <?= Html::submitButton('Sair', ['class' => 'btn btn-primary rounded-pill py-2 px-4']) ?>
+                    <?= Html::endForm() ?>
+                <?php endif ?>
+
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- Navbar End --></script>
+<script type="text/plain" id="c-footer"><?php
+
+declare(strict_types=1);
+
+/** @var yii\web\View $this */
+
+use yii\helpers\Html;
+
+?>
+<!-- Footer Start (copiado do index.html do Cental e adaptado ao Yii) -->
+<div class="container-fluid footer py-5 mt-5">
+    <div class="container py-5">
+        <div class="row g-5">
+
+            <!-- coluna 1: sobre a aplicacao -->
+            <div class="col-md-6 col-lg-6">
+                <div class="footer-item d-flex flex-column">
+                    <h4 class="text-white mb-4"><?= Html::encode(Yii::$app->name) ?></h4>
+                    <p class="mb-3">Plataforma de gestão da frota de viaturas: consulte as viaturas disponíveis, faça requisições e acompanhe o seu estado.</p>
+                </div>
+            </div>
+
+            <!-- coluna 2: links rapidos (as mesmas rotas do menu) -->
+            <div class="col-md-6 col-lg-6">
+                <div class="footer-item d-flex flex-column">
+                    <h4 class="text-white mb-4">Links Rápidos</h4>
+                    <?= Html::a('<i class="fas fa-angle-right me-2"></i> Início', ['/site/index']) ?>
+                    <?= Html::a('<i class="fas fa-angle-right me-2"></i> Sobre', ['/site/about']) ?>
+                    <?= Html::a('<i class="fas fa-angle-right me-2"></i> Contacto', ['/site/contact']) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Footer End -->
+
+<!-- Copyright Start -->
+<div class="container-fluid copyright py-4">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <!-- nome da aplicacao + ano atual (date('Y') muda sozinho todos os anos) -->
+            <div class="col-md-6 text-center text-md-start mb-md-0">
+                <span class="text-body"><i class="fas fa-copyright text-light me-2"></i><?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?>, todos os direitos reservados.</span>
+            </div>
+            <!-- credito obrigatorio pela licenca do template (CC BY 4.0): NAO REMOVER -->
+            <div class="col-md-6 text-center text-md-end text-body">
+                Designed By <a class="border-bottom text-white" href="https://htmlcodex.com">HTML Codex</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Copyright End -->
+
+<!-- botao "voltar ao topo": aparece ao fazer scroll (o main.js trata do resto) -->
+<a href="#" class="btn btn-secondary btn-lg-square rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a></script>
+<script type="text/plain" id="c-name">    'id' => 'app-frontend',
+    //nome da aplicacao (aparece no menu, no rodape e no titulo do separador)
+    'name' => 'FrotaGest',</script>
+<script type="text/plain" id="c-html"><html lang="<?= Yii::$app->language ?>"></script>
+<script type="text/plain" id="c-spinner"><?php $this->beginBody() ?>
+<!-- Spinner Start: rodinha de carregamento; o main.js esconde-a quando a pagina acaba de carregar -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">A carregar...</span>
+    </div>
+</div>
+<!-- Spinner End --></script>
+<script type="text/plain" id="c-title">    <!-- titulo do separador: "Pagina - FrotaGest" (ou so "FrotaGest" se a pagina nao tiver titulo) -->
+    <title><?= Html::encode($this->title ? $this->title . ' - ' . Yii::$app->name : Yii::$app->name) ?></title></script>
+<script type="text/plain" id="c-main"><main id="main" role="main">
+
+    <?php //a pagina inicial usa $this->params['semBanner'] = true; -> sem banner e conteudo a toda a largura ?>
+    <?php if (empty($this->params['semBanner'])): ?>
+        <!-- Header Start: banner escuro com o titulo e os breadcrumbs (copiado do about.html do Cental) -->
+        <div class="container-fluid bg-breadcrumb mb-5">
+            <div class="container text-center py-5" style="max-width: 900px;">
+                <h4 class="text-white display-4 mb-4"><?= Html::encode($this->title) ?></h4>
+                <?= Breadcrumbs::widget([
+                    //primeiro link dos breadcrumbs (em vez de "Home")
+                    'homeLink' => ['label' => 'Início', 'url' => Yii::$app->homeUrl],
+                    //os restantes vem da view; se a view nao definir, usa o titulo
+                    'links' => $this->params['breadcrumbs'] ?? [$this->title],
+                    //classes do Cental: centrado e sem margem em baixo
+                    'options' => ['class' => 'breadcrumb d-flex justify-content-center mb-0'],
+                    //o ultimo item (pagina atual) fica a vermelho, como no template
+                    'activeItemTemplate' => "<li class=\"breadcrumb-item active text-primary\">{link}</li>\n",
+                ]) ?>
+            </div>
+        </div>
+        <!-- Header End -->
+    <?php endif ?>
+
+    <?php if (empty($this->params['semBanner'])): ?>
+        <!-- paginas interiores: conteudo dentro do container (largura limitada e centrada) -->
+        <div class="container">
+            <!-- mensagens de sucesso/erro (ex: "Obrigado pelo seu contacto") -->
+            <?= Alert::widget() ?>
+            <?= $content ?>
+        </div>
+    <?php else: ?>
+        <!-- pagina inicial: conteudo a toda a largura (cada seccao do Cental traz o seu container) -->
+        <div class="container">
+            <?= Alert::widget() ?>
+        </div>
+        <?= $content ?>
+    <?php endif ?>
+</main></script>
+<script type="text/plain" id="c-index"><?php
+
+declare(strict_types=1);
+
+/** @var yii\web\View $this */
+
+use yii\helpers\Html;
+
+$this->title = 'Início';
+//a pagina inicial nao mostra o banner (tem o carrossel)
+$this->params['semBanner'] = true;
+?>
+<div class="site-index">
+
+    <!-- Carousel Start (estrutura do Cental, textos do mockup da especificacao - Figura 2) -->
+    <div class="header-carousel mb-5">
+        <div id="carouselId" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
+            <div class="carousel-inner" role="listbox">
+
+                <div class="carousel-item active">
+                    <!-- @web = URL da pasta frontend/web (onde copiamos a pasta img) -->
+                    <?= Html::img('@web/img/carousel-2.jpg', ['class' => 'img-fluid w-100', 'alt' => 'Viatura da frota']) ?>
+                    <div class="carousel-caption">
+                        <div class="container py-4">
+                            <div class="row g-5">
+
+                                <!-- caixa azul a esquerda: apresentacao e botoes -->
+                                <div class="col-lg-6 fadeInLeft animated" data-animation="fadeInLeft" data-delay="1s" style="animation-delay: 1s;">
+                                    <div class="bg-secondary rounded p-5 text-start">
+                                        <h4 class="text-primary mb-3">GESTÃO DE FROTA INTERNA</h4>
+                                        <p class="text-white mb-4">Requisite uma viatura em quatro passos, acompanhe a aprovação em tempo real e registe quilómetros e combustível sem papel, na web ou no telemóvel.</p>
+
+                                        <?php if (Yii::$app->user->isGuest): ?>
+                                            <!-- sem sessao: so ha login (as contas sao criadas pelo administrador no back-office) -->
+                                            <?= Html::a('Iniciar sessão', ['/site/login'], ['class' => 'btn btn-light w-100 py-2']) ?>
+                                        <?php else: ?>
+                                            <!-- com sessao: boas-vindas (o botao "Requisitar viatura" entra quando houver o catalogo) -->
+                                            <p class="text-white mb-0">Bem-vindo, <strong><?= Html::encode(Yii::$app->user->identity->username) ?></strong>!</p>
+                                        <?php endif ?>
+                                    </div>
+                                </div>
+
+                                <!-- titulo grande a direita (so em ecras grandes: d-none d-lg-flex) -->
+                                <div class="col-lg-6 d-none d-lg-flex fadeInRight animated" data-animation="fadeInRight" data-delay="1s" style="animation-delay: 1s;">
+                                    <div class="text-start">
+                                        <h1 class="display-5 text-white">A viatura da empresa, a um pedido de distância.</h1>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- Carousel End -->
+
+</div></script>
+
+<script>
+(function(){
+  // preencher cada bloco de codigo a partir do seu <script type="text/plain">, sem escapar nada
+  document.querySelectorAll('pre[data-src]').forEach(function(pre){
+    var src = document.getElementById(pre.getAttribute('data-src'));
+    var code = document.createElement('code');
+    code.style.cssText = 'background:none;padding:0;font-size:inherit;color:inherit';
+    code.textContent = src ? src.textContent : '';
+    pre.appendChild(code);
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copy'; b.textContent = 'Copiar';
+    b.addEventListener('click', function(){
+      var txt = code.textContent;
+      var ok = function(){ b.textContent = 'Copiado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 1500); };
+      var fail = function(){
+        var r = document.createRange(); r.selectNodeContents(code);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        b.textContent = 'Selecionado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 1500);
+      };
+      try { navigator.clipboard.writeText(txt).then(ok, fail); } catch(e){ fail(); }
+    });
+    pre.parentNode.appendChild(b);
+  });
+
+  // progresso: caixas guardadas no browser (so uma comodidade, a pagina funciona sem isto)
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.chk'));
+  var KEY = 'frotagest-frontend-template-v1';
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } }
+  function save(){
+    var o = {}; boxes.forEach(function(c){ if (c.checked) o[c.id] = 1; });
+    try { localStorage.setItem(KEY, JSON.stringify(o)); } catch(e){}
+  }
+  function paint(){
+    var n = boxes.filter(function(c){ return c.checked; }).length;
+    document.getElementById('pt').textContent = n + ' de ' + boxes.length + ' itens';
+    document.getElementById('pb').style.width = (n / boxes.length * 100) + '%';
+  }
+  var saved = load();
+  boxes.forEach(function(c){
+    if (saved[c.id]) c.checked = true;
+    // clicar na caixa de um passo nao deve abrir/fechar o passo
+    c.addEventListener('click', function(e){ e.stopPropagation(); });
+    c.addEventListener('change', function(){ save(); paint(); });
+  });
+  document.getElementById('reset').addEventListener('click', function(){
+    boxes.forEach(function(c){ c.checked = false; }); save(); paint();
+  });
+  paint();
+})();
+</script>
