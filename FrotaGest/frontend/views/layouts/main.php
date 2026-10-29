@@ -31,8 +31,8 @@ $this->render('_head');
 <?= $this->render('_header') ?>
 
 <main id="main" role="main">
-
-    <?php //a pagina inicial desliga o banner com: $this->params['semBanner'] = true; ?>
+    
+    <?php //a pagina inicial usa $this->params['semBanner'] = true; -> sem banner e conteudo a toda a largura ?>
     <?php if (empty($this->params['semBanner'])): ?>
         <!-- Header Start: banner escuro com o titulo e os breadcrumbs (copiado do about.html do Cental) -->
         <div class="container-fluid bg-breadcrumb mb-5">
@@ -53,11 +53,20 @@ $this->render('_head');
         <!-- Header End -->
     <?php endif ?>
 
-    <div class="container">
-        <!-- mensagens de sucesso/erro (ex: "Obrigado pelo seu contacto") -->
-        <?= Alert::widget() ?>
+    <?php if (empty($this->params['semBanner'])): ?>
+        <!-- paginas interiores: conteudo dentro do container (largura limitada e centrada) -->
+        <div class="container">
+            <!-- mensagens de sucesso/erro (ex: "Obrigado pelo seu contacto") -->
+            <?= Alert::widget() ?>
+            <?= $content ?>
+        </div>
+    <?php else: ?>
+        <!-- pagina inicial: conteudo a toda a largura (cada seccao do Cental traz o seu container) -->
+        <div class="container">
+            <?= Alert::widget() ?>
+        </div>
         <?= $content ?>
-    </div>
+    <?php endif ?>
 </main>
 
 <?= $this->render('_footer') ?>
