@@ -59,15 +59,15 @@ class requisicao extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'utilizador_id' => 'Utilizador ID',
-            'categoria_id' => 'Categoria ID',
-            'data_inicio' => 'Data Inicio',
-            'data_fim' => 'Data Fim',
+            'utilizador_id' => 'Utilizador',
+            'categoria_id' => 'Categoria',
+            'data_inicio' => 'Data de início',
+            'data_fim' => 'Data de fim',
             'destino' => 'Destino',
             'motivo' => 'Motivo',
             'estado' => 'Estado',
-            'motivo_recusa' => 'Motivo Recusa',
-            'data_pedido' => 'Data Pedido',
+            'motivo_recusa' => 'Motivo da recusa',
+            'data_pedido' => 'Data do pedido',
         ];
     }
 

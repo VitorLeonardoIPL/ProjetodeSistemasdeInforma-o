@@ -52,8 +52,8 @@ class condutor extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'nome' => 'Nome',
-            'n_carta' => 'N Carta',
-            'validade_carta' => 'Validade Carta',
+            'n_carta' => 'N.º da carta',
+            'validade_carta' => 'Validade da carta',
             'telefone' => 'Telefone',
             'ativo' => 'Ativo',
         ];

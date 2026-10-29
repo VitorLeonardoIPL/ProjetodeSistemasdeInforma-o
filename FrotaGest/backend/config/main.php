@@ -10,6 +10,8 @@ $params = array_merge(
 return [
     'id' => 'app-backend',
     'name' => 'FrotaGest',
+    //portugues de Portugal: traduz as mensagens do Yii (paginacao, validacoes, botoes da tabela)
+    'language' => 'pt',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
