@@ -550,6 +550,36 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <div class="check">Verifica: a tabela acima bate certo com o que vês em cada conta.</div>
 
 </div></details>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k18" aria-label="Passo 18 feito"><span class="num">18</span><span class="ttl">Utilizadores de teste com o SeedController</span><span class="where">console/controllers/SeedController.php</span></summary>
+<div class="body">
+
+<div class="lbl">O problema</div>
+<p>O role de cada utilizador é um <b>dado da base de dados</b>, não código. Quem faz <code>git pull</code> noutro PC leva os ficheiros mas não a BD: o Admin existe, mas sem role. Como o backend passou a exigir permissões, aparece <b>403 Forbidden</b> logo no dashboard.</p>
+<div class="lbl">O que fazer</div>
+<p>Cria <code>console/controllers/SeedController.php</code>. O comando <code>php yii seed/init</code> cria os utilizadores de teste e liga cada um ao RBAC:</p>
+<div class="codewrap"><div class="cap">console/controllers/SeedController.php</div><pre data-src="c-s-seed"></pre></div>
+<p>A ordem ao instalar o projeto num PC novo:</p>
+<div class="codewrap"><div class="cap">terminal (Git Bash), pasta FrotaGest</div><pre data-src="c-s-cmds"></pre></div>
+<div class="scroll"><table>
+<tr><th>Utilizador</th><th>Role</th><th>Email</th></tr>
+<tr><td><code>Admin</code></td><td>administrador</td><td>admin@ulo.pt</td></tr>
+<tr><td><code>coordenador</code></td><td>coordenador</td><td>coordenador@ulo.pt</td></tr>
+<tr><td><code>tecnico</code></td><td>tecnico</td><td>tecnico@ulo.pt</td></tr>
+<tr><td><code>colaborador</code></td><td>colaborador</td><td>colaborador@ulo.pt</td></tr>
+</table></div>
+<p>Todos com a password <code>12345678</code>.</p>
+<div class="lbl">Porquê</div>
+<ul>
+<li>Um comando de consola é o sítio certo para isto. A Ficha 5 avisa para <b>não fixar as atribuições dentro das migrações</b>.</li>
+<li><b>Pode correr-se mais do que uma vez</b>: se o utilizador já existe, não o duplica nem muda a password; só garante que tem o perfil e o role. Serve também para <b>reparar</b> um PC onde o Admin ficou sem role.</li>
+<li>Se o role não existir, o comando avisa "corre primeiro <code>php yii rbac/init</code>" e pára. O seed depende do <code>rbac/init</code>.</li>
+<li>Em cada utilizador grava, numa transação, o utilizador, o perfil (com o role copiado) e a <code>auth_assignment</code>, tal como o formulário do passo 13. O <code>revokeAll</code> garante um só role por pessoa.</li>
+</ul>
+<div class="note"><b>Atenção:</b> a password <code>12345678</code> fica escrita no código (e no GitHub). É só para testes e o comando deve ser <b>apagado mais tarde</b>, antes de qualquer utilização a sério.</div>
+<div class="check">Verifica: <code>php yii seed/init</code> lista os 4 utilizadores; correr outra vez diz "ja existia"; e cada um abre só o que a tabela do passo 17 diz.</div>
+
+</div></details>
 
 <button class="reset" id="reset" type="button">Limpar todo o progresso</button>
 
@@ -588,6 +618,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <div class="qa"><b>"Integrity constraint violation" ao gravar ou apagar</b><p>A tabela tem chaves estrangeiras. Para criar, o registo ligado (ex. a categoria) tem de existir; para apagar, não pode ter registos que dependam dele.</p></div>
 <div class="qa"><b>Qualquer pessoa abre o CRUD sem login</b><p>O controlador não tem o bloco <code>'access'</code> no <code>behaviors()</code> (passo 6).</p></div>
 <div class="qa"><b>Texto ainda em inglês numa página</b><p>Ou é texto fixo da vista/etiqueta do modelo (passo 8), ou falta o <code>'language' =&gt; 'pt'</code> no <code>main.php</code> do backend.</p></div>
+<div class="qa"><b>403 Forbidden no Admin depois de um <code>git pull</code> noutro PC</b><p>A base de dados não viaja no git. Nesse PC corre <code>php yii migrate</code>, <code>php yii rbac/init</code> e <code>php yii seed/init</code> (passo 18). O seed volta a dar o role ao Admin.</p></div>
 <div class="qa"><b>403 Forbidden em tudo, até no ecrã de utilizadores</b><p>A conta não tem role na <code>auth_assignment</code>. Atribui o role (passo 14) ou insere a linha no phpMyAdmin.</p></div>
 <div class="qa"><b>O Admin entra mas não vê Viaturas nem Condutores</b><p>É o esperado: o role <code>administrador</code> não herda o <code>coordenador</code> e não tem <code>gerirViaturas</code>. Usa uma conta <code>coordenador</code> para a frota.</p></div>
 <div class="qa"><b>"Nao foi possivel gravar o utilizador" no campo Role</b><p>Falhou a gravação do utilizador, do perfil ou do role e a transação desfez tudo. Confirma que o <code>rbac/init</code> foi corrido (têm de existir os 4 roles) e que a coluna <code>perfil.role</code> existe.</p></div>
@@ -858,6 +889,71 @@ php yii migrate</script>
         ]) ?>
     </div>
 <?php endif; ?></script>
+<script type="text/plain" id="c-s-seed">//console/controllers/SeedController.php
+    public function actionInit()
+    {
+        //ponto de acesso ao RBAC: o componente authManager (common/config/main.php)
+        $auth = Yii::$app->authManager;
+
+        //utilizadores de teste: username => [email, role]
+        $utilizadores = [
+            'Admin' => ['admin@ulo.pt', 'administrador'],
+            'coordenador' => ['coordenador@ulo.pt', 'coordenador'],
+            'tecnico' => ['tecnico@ulo.pt', 'tecnico'],
+            'colaborador' => ['colaborador@ulo.pt', 'colaborador'],
+        ];
+
+        //os roles tem de existir: foram criados pelo rbac/init
+        foreach ($utilizadores as $dados) {
+            if (!$auth->getRole($dados[1])) {
+                echo "O role {$dados[1]} nao existe. Corre primeiro: php yii rbac/init\n";
+                return;
+            }
+        }
+
+        foreach ($utilizadores as $username => $dados) {
+            //utilizador, perfil e role gravam juntos; se um falhar, nenhum fica gravado
+            $transacao = Yii::$app->db->beginTransaction();
+            try {
+                //se o utilizador ja existe nao o duplica nem muda a password
+                $user = User::findOne(['username' => $username]);
+                $estado = 'ja existia';
+                if (!$user) {
+                    $user = new User();
+                    $user->username = $username;
+                    $user->email = $dados[0];
+                    $user->setPassword('12345678');
+                    $user->generateAuthKey();
+                    $user->status = User::STATUS_ACTIVE;
+                    $user->save(false);
+                    $estado = 'criado';
+                }
+
+                //o perfil guarda o role (copia para consulta); o nome fica igual ao username
+                $perfil = perfil::findOne(['user_id' => $user->id]);
+                if (!$perfil) {
+                    $perfil = new perfil(['user_id' => $user->id, 'nome' => $username]);
+                }
+                $perfil->role = $dados[1];
+                $perfil->save();
+
+                //o acesso decide-se pela auth_assignment: um so role por utilizador
+                $auth->revokeAll($user->id);
+                $auth->assign($auth->getRole($dados[1]), $user->id);
+
+                $transacao->commit();
+                echo "$username ($estado): role {$dados[1]}\n";
+            } catch (\Throwable $e) {
+                $transacao->rollBack();
+                echo "$username: erro ({$e->getMessage()})\n";
+            }
+        }
+
+        echo "Utilizadores de teste prontos. Password de todos: 12345678\n";
+    }</script>
+<script type="text/plain" id="c-s-cmds">php yii migrate
+php yii rbac/init
+php yii seed/init</script>
 
 <script>
 (function(){
