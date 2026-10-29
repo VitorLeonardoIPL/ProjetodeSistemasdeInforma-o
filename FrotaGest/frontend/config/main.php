@@ -39,6 +39,22 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        //gestor de assets: aqui podemos alterar bundles que vem do Yii
+        'assetManager' => [
+            'bundles' => [
+                //sempre que alguem pedir o BootstrapAsset (o AppAsset, o ActiveForm, ...),
+                //o Yii usa o bootstrap.min.css personalizado do template Cental
+                \yii\bootstrap5\BootstrapAsset::class => [
+                    //nao copiar do vendor/; o ficheiro ja esta em frontend/web
+                    'sourcePath' => null,
+                    //pasta no disco e URL onde esta o ficheiro (ambos = frontend/web)
+                    'basePath' => '@webroot',
+                    'baseUrl' => '@web',
+                    //o CSS a carregar em vez do bootstrap.css do Yii
+                    'css' => ['css/bootstrap.min.css'],
+                ],
+            ],
+        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
