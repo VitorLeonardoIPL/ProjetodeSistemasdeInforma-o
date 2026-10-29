@@ -104,6 +104,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
     <li><a href="#projeto">O projeto</a></li>
     <li><a href="#conceitos">Conceitos</a></li>
     <li><a href="#decisoes">Decisões</a></li>
+    <li><a href="#estado">Estado atual</a></li>
     <li><a href="#passos">Os passos</a></li>
     <li><a href="#uses">Os use</a></li>
     <li><a href="#testes">Testes</a></li>
@@ -149,12 +150,49 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <p>O relatório diz que ainda não está decidido se os estados são texto ou enumerados. Usamos <code>string</code> (por exemplo <code>pendente</code>, <code>aprovada</code>). Os valores possíveis ficam em comentário em cada migração, e podem passar a constantes do modelo mais tarde.</p>
 <h3>3. Colunas que podem ficar vazias</h3>
 <p>O diagrama não diz o que é obrigatório. Deduzimos pela especificação: ficam vazias, por exemplo, <code>requisicao.motivo_recusa</code> (só nos pedidos recusados), <code>anexo.checklist_id</code> (só nas fotos) e <code>anexo.data_validade</code> (só nos documentos), <code>manutencao.orcamento_id</code> (nem toda a manutenção nasce de um orçamento). Está tudo comentado nas migrações.</p>
+<h2 id="estado">Estado atual do projeto</h2>
+<p>Ponto de situação em <b>2026-10-29</b>. A lógica é a de sempre: <b>feito</b> são os passos que já estão no projeto e com a caixa marcada; <b>parcial</b> tem uma nota no passo a dizer o que falta; <b>por fazer</b> é o que vem a seguir. O trabalho do back-office (CRUDs, menu, RBAC ligado, utilizadores) está descrito com mais detalhe em <code>FrotaGest-Backend-CRUDs-Manual.html</code>, e o do aspeto do front-office (template Cental, feito pelo Gustavo) em <code>FrotaGest-Frontend-Template-Manual.html</code>.</p>
+<div class="scroll"><table>
+<tr><th>Fase</th><th>Passos</th><th>Estado</th><th>O que ficou feito</th></tr>
+<tr><td>1. Ambiente</td><td>1 a 7</td><td><b>Feito</b></td><td>Repositório, base de dados <code>frotagest</code>, <code>php init</code>, migrações do template, <code>authManager</code> e as 4 tabelas <code>auth_*</code>.</td></tr>
+<tr><td>2. RBAC</td><td>8 a 11</td><td><b>Feito</b></td><td><code>IsRequisicaoOwnerRule</code> e <code>RbacController</code> corridos: 4 roles e 39 permissões. Utilizadores de teste criados com <code>php yii seed/init</code> (passo 11).</td></tr>
+<tr><td>3. Migrações</td><td>12 a 20</td><td><b>Feito</b></td><td>As 21 tabelas, os parâmetros iniciais e uma migração extra: a coluna <code>role</code> na tabela <code>perfil</code>.</td></tr>
+<tr><td>4. Modelos</td><td>21 a 23</td><td><b>Feito</b></td><td>21 modelos do Gii (com o nome em minúsculas, por exemplo <code>viatura</code>) e a relação <code>User</code> → <code>perfil</code>. O passo 22 é de leitura.</td></tr>
+<tr><td>5. Acesso por role</td><td>24 a 28</td><td><b>Feito</b> para os CRUDs que existem</td><td>Viaturas, condutores, requisições (só ver), utilizadores e Dashboard protegidos pelas permissões do RBAC; menu e caixas do Dashboard escondidos por permissão. As outras permissões ficam por aplicar, à medida que os ecrãs aparecerem (passo 24).</td></tr>
+<tr><td>Front-office: aspeto</td><td>fora dos passos</td><td><b>Feito em parte</b></td><td>Template <b>Cental</b> (HTML Codex) aplicado ao frontend: menu, rodapé, banner das páginas interiores, nome FrotaGest e <b>carrossel da página inicial</b> com os textos da especificação. Faltam a secção "Como funciona", as restantes secções do mockup e traduzir as páginas interiores (ver "O que falta").</td></tr>
+<tr><td>6. Funcionalidades</td><td>29 a 44</td><td><b>Por fazer</b>, com o 42 e o 44 em parte</td><td>Passo 42: gestão de utilizadores com role e soft delete. Passo 44: o Dashboard com 4 caixas.</td></tr>
+</table></div>
+
+<div class="lbl">Feito além do plano, ou de forma diferente</div>
+<ul>
+<li><b>Utilizadores de teste com o <code>SeedController</code></b> (<code>php yii seed/init</code>), em vez do registo do frontend e do phpMyAdmin. Cria o Admin, o coordenador, o técnico e o colaborador, com a password <code>12345678</code>. É só para testes: <b>apagar mais tarde</b>.</li>
+<li><b>O role não está só no RBAC.</b> A tabela <code>perfil</code> ganhou a coluna <code>role</code> (uma cópia, para a listagem). O que decide o acesso é sempre a <code>auth_assignment</code>. O formulário de utilizadores grava as duas numa só transação.</li>
+<li><b>Soft delete dos utilizadores</b> só com o <code>status</code> a 0 (a constante <code>STATUS_DELETED</code> já vinha no template). Reativar faz-se editando o Estado. Não se usa <code>deleted_at</code>.</li>
+<li><b>Aspeto do front-office com o template Cental</b> (feito pelo Gustavo): os ficheiros do template estão em <code>frontend/web</code> (<code>css</code>, <code>js</code>, <code>img</code>, <code>lib</code>), o <code>AppAsset</code> carrega-os, o <code>frontend/config/main.php</code> troca o Bootstrap do Yii pelo do template, e o <code>_header.php</code>, o <code>_footer.php</code> e o <code>main.php</code> foram refeitos. Os passos estão em <code>FrotaGest-Frontend-Template-Manual.html</code>.</li>
+<li><b>Interface em português de Portugal</b> (<code>'language' =&gt; 'pt'</code> no backend, mais os botões e etiquetas dos CRUDs).</li>
+<li>O administrador <b>não herda</b> os outros roles (como no PDF). Por isso o Admin só vê o Dashboard (sem caixas) e os Utilizadores. Para ver a frota, usa-se uma conta de coordenador.</li>
+<li>Depois de um <code>git pull</code> noutro PC, a base de dados não vem: é preciso <code>php yii migrate</code>, <code>php yii rbac/init</code> e <code>php yii seed/init</code>.</li>
+</ul>
+
+<div class="lbl">O que falta, por ordem</div>
+<ol class="order">
+<li><span>Acabar o aspeto do front-office (manual do frontend): a secção "Como funciona" e as restantes do mockup da página inicial (frota, aplicação móvel e contactos), e as páginas Sobre, Contacto, Login, Erro e recuperação de palavra-passe, que ainda têm o conteúdo do Yii em inglês.</span></li>
+<li><span>Front-office: catálogo, pedir viatura, os meus pedidos e cancelar (passos 29 a 32).</span></li>
+<li><span>Back-office das requisições: aprovar, atribuir viatura e condutor, recusar com motivo (passos 33 e 34). Hoje só se pode ver a lista.</span></li>
+<li><span>Check-in e check-out, faturas e condutores indisponíveis (passos 35 a 37).</span></li>
+<li><span>Documentos legais e alertas, manutenção e orçamentos (passos 38 a 40).</span></li>
+<li><span>Notificações e auditoria (passo 41).</span></li>
+<li><span>O que resta da administração (passo 42): redefinir a password, gerir as permissões por role e desligar o registo do frontend, que criaria contas sem role.</span></li>
+<li><span>Parâmetros, serviços externos e logs (passo 43); ocupação, mapa e QR (passo 44).</span></li>
+<li><span>Melhorias dos formulários: listas com o nome nas chaves estrangeiras, estados como lista, CRUD de categorias, datas automáticas. E apagar o <code>SeedController</code> no fim.</span></li>
+</ol>
+
 <h2 id="passos">Os passos</h2>
 <div class="note"><b>Atenção:</b> o código deste manual foi <b>testado</b> numa base de dados temporária: as 21 migrações aplicam-se e desfazem-se sem erros, o <code>rbac/init</code> cria 43 itens (4 roles e 39 permissões), 47 ligações e 1 regra, a regra do dono devolve o esperado, e os métodos <code>estaLivre</code> e <code>podeConduzir</code> passam em 13 cenários. Os esqueletos das actions (controladores) só foram verificados quanto à sintaxe, por isso testa-os no browser.</div>
-<p>Os passos 1 a 7 já estão feitos no teu projeto. Estão aqui para perceberes o que cada um fez, e para repetires noutra máquina. O que falta fazer começa no <b>passo 8</b>.</p>
+<p>Os passos <b>1 a 28</b> já estão feitos no teu projeto (ver o quadro do estado atual). Estão aqui para perceberes o que cada um fez, e para repetires noutra máquina. Os passos 24, 42 e 44 estão em parte, com uma nota. O que falta fazer começa no <b>passo 29</b>.</p>
 <h3>Fase 1: o ambiente (feito)</h3>
 <details class="step" open>
-<summary><input class="chk" type="checkbox" id="k1" aria-label="Passo 1 feito"><span class="num">1</span><span class="ttl">Repositório, pasta e GitKraken</span><span class="where">GitKraken, FrotaGest/</span></summary>
+<summary><input class="chk" type="checkbox" id="k1" checked aria-label="Passo 1 feito"><span class="num">1</span><span class="ttl">Repositório, pasta e GitKraken</span><span class="where">GitKraken, FrotaGest/</span></summary>
 <div class="body">
 <div class="lbl">O que está feito</div>
 <ul><li>O repositório local está em <code>C:\wamp64\www\2AnoProjeto\ProjetodeSistemasdeInformacao</code>, com o remote <code>origin</code> apontado para o GitHub. O projeto Yii está na pasta <code>FrotaGest/</code> lá dentro.</li><li>O repositório do GitHub estava vazio, por isso o primeiro passo é um <b>push</b> da <code>main</code> no GitKraken.</li></ul>
@@ -166,7 +204,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k2" aria-label="Passo 2 feito"><span class="num">2</span><span class="ttl">Criar a base de dados e ligar o projeto</span><span class="where">phpMyAdmin, common/config/main-local.php</span></summary>
+<summary><input class="chk" type="checkbox" id="k2" checked aria-label="Passo 2 feito"><span class="num">2</span><span class="ttl">Criar a base de dados e ligar o projeto</span><span class="where">phpMyAdmin, common/config/main-local.php</span></summary>
 <div class="body">
 <div class="lbl">O que fazer</div>
 <ol><li>Liga o WAMP e abre <code>http://localhost/phpmyadmin</code>.</li><li>Cria a base <code>frotagest</code> (agrupamento utf8, o que o projeto usa), vazia.</li><li>No <code>dsn</code> do componente <code>db</code> o nome tem de ser esse. Está em <code>environments/dev/common/config/main-local.php</code> (a fonte) e em <code>common/config/main-local.php</code> (a cópia gerada pelo <code>php init</code>).</li></ol>
@@ -177,7 +215,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k3" aria-label="Passo 3 feito"><span class="num">3</span><span class="ttl">Inicializar com php init</span><span class="where">terminal, pasta FrotaGest</span></summary>
+<summary><input class="chk" type="checkbox" id="k3" checked aria-label="Passo 3 feito"><span class="num">3</span><span class="ttl">Inicializar com php init</span><span class="where">terminal, pasta FrotaGest</span></summary>
 <div class="body">
 <div class="codewrap"><div class="cap">dentro da pasta FrotaGest</div><pre data-src="c3"></pre></div>
 <ol><li>Escolhe <code>0</code> (Development) e responde <code>yes</code>.</li><li>Aparece "initialization completed".</li></ol>
@@ -187,7 +225,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k4" aria-label="Passo 4 feito"><span class="num">4</span><span class="ttl">Aplicar as migrações do template</span><span class="where">terminal</span></summary>
+<summary><input class="chk" type="checkbox" id="k4" checked aria-label="Passo 4 feito"><span class="num">4</span><span class="ttl">Aplicar as migrações do template</span><span class="where">terminal</span></summary>
 <div class="body">
 <div class="codewrap"><pre data-src="c4"></pre></div>
 <p>São aplicadas duas migrações: <code>m130524_201442_init</code> (cria a tabela <code>user</code>) e <code>m190124_110200_add_verification_token...</code> (coluna para a verificação do email). A tabela <code>migration</code> é criada pelo Yii e regista as migrações já aplicadas.</p>
@@ -197,7 +235,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k5" aria-label="Passo 5 feito"><span class="num">5</span><span class="ttl">Ler o que já está feito: User, LoginForm e ACF</span><span class="where">common/models, backend/controllers</span></summary>
+<summary><input class="chk" type="checkbox" id="k5" checked aria-label="Passo 5 feito"><span class="num">5</span><span class="ttl">Ler o que já está feito: User, LoginForm e ACF</span><span class="where">common/models, backend/controllers</span></summary>
 <div class="body">
 <p>Este passo não escreve código. É perceber o que já vem pronto, porque vais escrever coisas parecidas.</p>
 <div class="lbl">O que ver</div>
@@ -208,7 +246,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k6" aria-label="Passo 6 feito"><span class="num">6</span><span class="ttl">Configurar o authManager (DbManager)</span><span class="where">common/config/main.php</span></summary>
+<summary><input class="chk" type="checkbox" id="k6" checked aria-label="Passo 6 feito"><span class="num">6</span><span class="ttl">Configurar o authManager (DbManager)</span><span class="where">common/config/main.php</span></summary>
 <div class="body">
 <div class="codewrap"><div class="cap">common/config/main.php, dentro de 'components', ao lado do 'cache'</div><pre data-src="c6"></pre></div>
 <div class="lbl">Porquê</div>
@@ -217,16 +255,16 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k7" aria-label="Passo 7 feito"><span class="num">7</span><span class="ttl">Criar as 4 tabelas do RBAC</span><span class="where">terminal</span></summary>
+<summary><input class="chk" type="checkbox" id="k7" checked aria-label="Passo 7 feito"><span class="num">7</span><span class="ttl">Criar as 4 tabelas do RBAC</span><span class="where">terminal</span></summary>
 <div class="body">
 <div class="codewrap"><pre data-src="c7"></pre></div>
 <ul><li><code>--migrationPath=@yii/rbac/migrations</code> manda o <code>migrate</code> buscar as migrações à pasta do próprio Yii, e não à tua <code>console/migrations</code>.</li><li>Aparecem <code>auth_item</code> (roles e permissões, a coluna <code>type</code> distingue: 1 role, 2 permissão), <code>auth_item_child</code> (quem tem o quê), <code>auth_assignment</code> (utilizador-role) e <code>auth_rule</code> (regras).</li><li>Estas tabelas são geridas pelo Yii. Não se mexem à mão (exceto para testar, como se vê mais à frente).</li></ul>
 <div class="check">Verifica: as 4 tabelas existem e estão vazias.</div>
 </div></details>
 
-<h3>Fase 2: o RBAC do FrotaGest</h3>
+<h3>Fase 2: o RBAC do FrotaGest (feito)</h3>
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k8" aria-label="Passo 8 feito"><span class="num">8</span><span class="ttl">Perceber a tabela de permissões do PDF</span><span class="where">Docs/FrotaGest_Permissoes_RBAC.pdf</span></summary>
+<summary><input class="chk" type="checkbox" id="k8" checked aria-label="Passo 8 feito"><span class="num">8</span><span class="ttl">Perceber a tabela de permissões do PDF</span><span class="where">Docs/FrotaGest_Permissoes_RBAC.pdf</span></summary>
 <div class="body">
 <p>O PDF é o equivalente à tabela que o professor desenhou no quadro na Ficha 5, mas com <b>39 permissões</b> e <b>4 roles</b>. Cada permissão é uma coisa concreta que se pode fazer. Resumo, por role:</p>
 <div class="scroll"><table><tr><th>Role</th><th>Permissões (nº)</th><th>Quais</th></tr><tr><td><b>colaborador</b> (10)</td><td>canais, catálogo e os seus pedidos</td><td><code>acederFrontoffice</code>, <code>acederApp</code>, <code>verCatalogo</code>, <code>criarRequisicao</code>, <code>verPropriaRequisicao</code>*, <code>cancelarRequisicao</code>*, <code>registarChecklist</code>*, <code>anexarFatura</code>*, <code>enviarLocalizacao</code>*, <code>verNotificacoes</code></td></tr><tr><td><b>coordenador</b> (20)</td><td>gestão da frota e dos pedidos</td><td><code>acederBackoffice</code>, <code>acederApp</code>, <code>verRequisicao</code>, <code>aprovarRequisicao</code>, <code>recusarRequisicao</code>, <code>atribuirViatura</code>, <code>assinalarRisco</code>, <code>gerirViaturas</code>, <code>gerirCondutores</code>, <code>gerirIndisponibilidades</code>, <code>verCondutoresDisponiveis</code>, <code>gerirDocumentos</code>, <code>configurarAlertas</code>, <code>gerirOrcamentos</code>, <code>verFaturas</code>, <code>verDashboard</code>, <code>verTrilhaAprovacoes</code>, <code>verMapa</code>, <code>registarNecessidade</code>, <code>verNotificacoes</code></td></tr><tr><td><b>tecnico</b> (7)</td><td>manutenção</td><td><code>acederBackoffice</code>, <code>registarNecessidade</code>, <code>registarManutencao</code>, <code>editarManutencao</code>, <code>concluirManutencao</code>, <code>verHistoricoManutencoes</code>, <code>verNotificacoes</code></td></tr><tr><td><b>administrador</b> (10)</td><td>sistema e utilizadores</td><td><code>acederBackoffice</code>, <code>acederApp</code>, <code>gerirUtilizadores</code>, <code>redefinirPassword</code>, <code>gerirPermissoes</code>, <code>configurarParametros</code>, <code>gerirServicosExternos</code>, <code>verLogs</code>, <code>verEstadoSistema</code>, <code>verNotificacoes</code></td></tr></table></div>
@@ -236,7 +274,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k9" aria-label="Passo 9 feito"><span class="num">9</span><span class="ttl">A regra do dono: IsRequisicaoOwnerRule</span><span class="where">common/rbac/IsRequisicaoOwnerRule.php</span></summary>
+<summary><input class="chk" type="checkbox" id="k9" checked aria-label="Passo 9 feito"><span class="num">9</span><span class="ttl">A regra do dono: IsRequisicaoOwnerRule</span><span class="where">common/rbac/IsRequisicaoOwnerRule.php</span></summary>
 <div class="body">
 <p>Cinco permissões do colaborador só valem para os <b>seus</b> pedidos. Para isso o RBAC tem as <b>regras</b> (a tabela <code>auth_rule</code> que ficou vazia na Ficha 5). Já criaste o ficheiro:</p>
 <div class="codewrap"><div class="cap">common/rbac/IsRequisicaoOwnerRule.php</div><pre data-src="c8"></pre></div>
@@ -246,7 +284,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k10" aria-label="Passo 10 feito"><span class="num">10</span><span class="ttl">RbacController: criar roles e permissões</span><span class="where">console/controllers/RbacController.php</span></summary>
+<summary><input class="chk" type="checkbox" id="k10" checked aria-label="Passo 10 feito"><span class="num">10</span><span class="ttl">RbacController: criar roles e permissões</span><span class="where">console/controllers/RbacController.php</span></summary>
 <div class="body">
 <p>O <code>RbacController</code> está feito. Não o copio aqui (são 250 linhas, repetitivas). Percebe a estrutura, que se repete 39 vezes:</p>
 <div class="codewrap"><div class="cap">a estrutura do RbacController</div><pre data-src="c9"></pre></div>
@@ -259,8 +297,9 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k11" aria-label="Passo 11 feito"><span class="num">11</span><span class="ttl">Criar um utilizador de teste por role</span><span class="where">frontend signup, phpMyAdmin</span></summary>
+<summary><input class="chk" type="checkbox" id="k11" checked aria-label="Passo 11 feito"><span class="num">11</span><span class="ttl">Criar um utilizador de teste por role</span><span class="where">frontend signup, phpMyAdmin</span></summary>
 <div class="body">
+<div class="check"><b>Estado no projeto: feito, de outra forma.</b> Em vez do registo do template, os utilizadores de teste criam-se com <code>php yii seed/init</code> (<code>SeedController</code>): Admin, coordenador, técnico e colaborador, password <code>12345678</code>, cada um com o perfil e o role. Corre-se quantas vezes quiseres (não duplica) e repõe o role de um Admin que ficou sem ele. Depois também se criam contas pelo formulário do backend (passo 42). O <code>SeedController</code> é só para testes e apaga-se mais tarde.</div>
 <p>Precisas de pelo menos um utilizador por role para testar. O relatório diz que as contas as cria o administrador, mas essa parte ainda não existe. Por agora usa o registo do template e atribui os roles à mão.</p>
 <div class="lbl">O que fazer</div>
 <ol><li>Abre o <b>frontend</b> (<code>?r=site/signup</code>) e cria quatro utilizadores. Sugestão de nomes: <code>colab1</code>, <code>coord1</code>, <code>tec1</code> e <code>admin1</code>, com palavra-passe de pelo menos 8 caracteres.</li><li>Ficam com <code>status</code> 9 (inativos), à espera de verificar o email. O mailer está em modo ficheiro: os emails ficam em <code>frontend/runtime/mail/</code>. Abre o <code>.eml</code> de cada um e copia o link <code>?r=site/verify-email&amp;token=...</code> para o browser.</li><li><b>Atalho só para testes:</b> no phpMyAdmin, na tabela <code>user</code>, muda o <code>status</code> para 10 em cada um.</li><li>Vê os IDs na tabela <code>user</code> e, em <code>auth_assignment</code>, clica em <b>Inserir</b> e cria uma linha por utilizador: <code>item_name</code> = o role (<code>colaborador</code>, <code>coordenador</code>, <code>tecnico</code>, <code>administrador</code>) e <code>user_id</code> = o ID. O <code>created_at</code> pode ficar vazio.</li></ol>
@@ -270,9 +309,9 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <!-- PARTE B -->
-<h3>Fase 3: as migrações (21 tabelas)</h3>
+<h3>Fase 3: as migrações (21 tabelas) (feito)</h3>
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k12" aria-label="Passo 12 feito"><span class="num">12</span><span class="ttl">Como se escreve uma migração com chave estrangeira</span><span class="where">console/migrations/</span></summary>
+<summary><input class="chk" type="checkbox" id="k12" checked aria-label="Passo 12 feito"><span class="num">12</span><span class="ttl">Como se escreve uma migração com chave estrangeira</span><span class="where">console/migrations/</span></summary>
 <div class="body">
 <p>É o que fizemos na Ficha 4 com <code>post</code> e <code>comment</code>. Cada tabela do FrotaGest segue o mesmo molde:</p>
 <ul><li><code>createTable('{{%viatura}}', [...])</code>: o <code>{{%...}}</code> é o prefixo de tabelas do Yii (vazio no nosso caso). A coluna <code>id</code> é <code>$this-&gt;primaryKey()</code>, com auto increment.</li><li><code>$this-&gt;string()</code>, <code>text()</code>, <code>integer()</code>, <code>date()</code>, <code>dateTime()</code>, <code>float()</code> e <code>boolean()</code> são os tipos. <code>-&gt;notNull()</code> torna a coluna obrigatória, <code>-&gt;defaultValue(...)</code> dá um valor por omissão, <code>-&gt;unique()</code> impede repetidos.</li><li>Uma <b>chave estrangeira</b> (FK) é uma coluna que guarda o <code>id</code> de outra tabela. Precisa de <code>createIndex</code> (índice) e <code>addForeignKey</code> (a ligação). Os nomes seguem o padrão <code>idx-tabela-coluna</code> e <code>fk-tabela-coluna</code>.</li><li><code>CASCADE</code> no fim do <code>addForeignKey</code> significa que, se o registo pai for apagado, os filhos também. Usamos só onde faz sentido: as ausências de um condutor, os itens de um orçamento, as peças de uma manutenção e o perfil de um utilizador.</li><li>Sem <code>CASCADE</code> (o normal), o MySQL <b>recusa</b> apagar um registo que ainda tem filhos. É o que queremos: não se apaga uma viatura que tem requisições.</li><li>O <code>safeDown()</code> desfaz o <code>safeUp()</code> pela ordem inversa: primeiro a chave estrangeira, depois o índice, depois a tabela.</li></ul>
@@ -281,7 +320,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k13" aria-label="Passo 13 feito"><span class="num">13</span><span class="ttl">Migrações: categoria e viatura</span><span class="where">console/migrations/</span></summary>
+<summary><input class="chk" type="checkbox" id="k13" checked aria-label="Passo 13 feito"><span class="num">13</span><span class="ttl">Migrações: categoria e viatura</span><span class="where">console/migrations/</span></summary>
 <div class="body">
 <div class="lbl">O que fazer</div>
 <p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
@@ -296,7 +335,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k14" aria-label="Passo 14 feito"><span class="num">14</span><span class="ttl">Migrações: condutor e ausencia_condutor</span><span class="where">console/migrations/</span></summary>
+<summary><input class="chk" type="checkbox" id="k14" checked aria-label="Passo 14 feito"><span class="num">14</span><span class="ttl">Migrações: condutor e ausencia_condutor</span><span class="where">console/migrations/</span></summary>
 <div class="body">
 <div class="lbl">O que fazer</div>
 <p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
@@ -311,7 +350,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k15" aria-label="Passo 15 feito"><span class="num">15</span><span class="ttl">Migrações: requisicao e atribuicao</span><span class="where">console/migrations/</span></summary>
+<summary><input class="chk" type="checkbox" id="k15" checked aria-label="Passo 15 feito"><span class="num">15</span><span class="ttl">Migrações: requisicao e atribuicao</span><span class="where">console/migrations/</span></summary>
 <div class="body">
 <div class="lbl">O que fazer</div>
 <p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
@@ -326,7 +365,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k16" aria-label="Passo 16 feito"><span class="num">16</span><span class="ttl">Migrações: checklist, anexo, fatura_combustivel e localizacao</span><span class="where">console/migrations/</span></summary>
+<summary><input class="chk" type="checkbox" id="k16" checked aria-label="Passo 16 feito"><span class="num">16</span><span class="ttl">Migrações: checklist, anexo, fatura_combustivel e localizacao</span><span class="where">console/migrations/</span></summary>
 <div class="body">
 <div class="lbl">O que fazer</div>
 <p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
@@ -345,7 +384,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k17" aria-label="Passo 17 feito"><span class="num">17</span><span class="ttl">Migrações: alerta e notificacao</span><span class="where">console/migrations/</span></summary>
+<summary><input class="chk" type="checkbox" id="k17" checked aria-label="Passo 17 feito"><span class="num">17</span><span class="ttl">Migrações: alerta e notificacao</span><span class="where">console/migrations/</span></summary>
 <div class="body">
 <div class="lbl">O que fazer</div>
 <p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
@@ -360,7 +399,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k18" aria-label="Passo 18 feito"><span class="num">18</span><span class="ttl">Migrações: o circuito da manutenção</span><span class="where">console/migrations/</span></summary>
+<summary><input class="chk" type="checkbox" id="k18" checked aria-label="Passo 18 feito"><span class="num">18</span><span class="ttl">Migrações: o circuito da manutenção</span><span class="where">console/migrations/</span></summary>
 <div class="body">
 <div class="lbl">O que fazer</div>
 <p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
@@ -381,7 +420,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k19" aria-label="Passo 19 feito"><span class="num">19</span><span class="ttl">Migrações: perfil, log_auditoria, parametro e servico_externo</span><span class="where">console/migrations/</span></summary>
+<summary><input class="chk" type="checkbox" id="k19" checked aria-label="Passo 19 feito"><span class="num">19</span><span class="ttl">Migrações: perfil, log_auditoria, parametro e servico_externo</span><span class="where">console/migrations/</span></summary>
 <div class="body">
 <div class="lbl">O que fazer</div>
 <p>Faz <b>uma tabela de cada vez, pela ordem desta lista</b>: cria a migração, abre o ficheiro novo em <code>console/migrations/</code>, apaga o que o Yii lá pôs dentro do <code>safeUp()</code> e do <code>safeDown()</code> e cola o código. Só depois de as teres todas preenchidas corres <code>php yii migrate</code>.</p>
@@ -400,7 +439,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k20" aria-label="Passo 20 feito"><span class="num">20</span><span class="ttl">Parâmetros iniciais (opcional, mas útil)</span><span class="where">console/migrations/</span></summary>
+<summary><input class="chk" type="checkbox" id="k20" checked aria-label="Passo 20 feito"><span class="num">20</span><span class="ttl">Parâmetros iniciais (opcional, mas útil)</span><span class="where">console/migrations/</span></summary>
 <div class="body">
 <p>Os parâmetros do sistema (RF-BO-49) e os dias de antecedência dos alertas (RF-BO-26) vivem na tabela <code>parametro</code>. Para o sistema funcionar logo, convém ter valores por omissão. Uma migração só de dados resolve:</p>
 <div class="codewrap"><div class="cap">terminal</div><pre data-src="c60"></pre></div>
@@ -410,10 +449,11 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <div class="check">Verifica: a tabela <code>parametro</code> tem 10 linhas depois do <code>php yii migrate</code>.</div>
 </div></details>
 
-<h3>Fase 4: os modelos (Gii)</h3>
+<h3>Fase 4: os modelos (Gii) (feito)</h3>
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k21" aria-label="Passo 21 feito"><span class="num">21</span><span class="ttl">Gerar os modelos</span><span class="where">terminal ou backend ?r=gii</span></summary>
+<summary><input class="chk" type="checkbox" id="k21" checked aria-label="Passo 21 feito"><span class="num">21</span><span class="ttl">Gerar os modelos</span><span class="where">terminal ou backend ?r=gii</span></summary>
 <div class="body">
+<div class="check"><b>Estado no projeto: feito.</b> Os 21 modelos foram gerados e ficaram com o nome em <b>minúsculas</b> (<code>viatura.php</code>, <code>requisicao.php</code>, <code>ausencia_condutor.php</code>…). Os exemplos deste manual escrevem <code>Viatura</code>; no projeto lê <code>viatura</code>. Não geres o modelo da tabela <code>user</code>.</div>
 <p>Gera os modelos <b>só depois de todas as tabelas existirem</b>. O Gii escreve as relações (<code>getCategoria()</code>, <code>getViaturas()</code>...) olhando para as chaves estrangeiras. Se gerares o <code>Viatura</code> antes de existir a <code>requisicao</code>, não fica a relação para ela.</p>
 <div class="lbl">O que fazer, pela interface (a da Ficha 5)</div>
 <ol><li>Abre <code>http://localhost/2AnoProjeto/ProjetodeSistemasdeInformacao/FrotaGest/backend/web/index.php?r=gii</code> e clica em <b>Start</b> no <b>Model Generator</b>.</li><li>Table Name: <code>categoria</code>. Model Class Name: <code>Categoria</code> (preenche-se sozinho). **Namespace: <code>common\models</code>** (por defeito vem <code>app\models</code>).</li><li><b>Preview</b> e <b>Generate</b>.</li></ol>
@@ -435,8 +475,9 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k23" aria-label="Passo 23 feito"><span class="num">23</span><span class="ttl">Ligar o User ao Perfil</span><span class="where">common/models/User.php</span></summary>
+<summary><input class="chk" type="checkbox" id="k23" checked aria-label="Passo 23 feito"><span class="num">23</span><span class="ttl">Ligar o User ao Perfil</span><span class="where">common/models/User.php</span></summary>
 <div class="body">
+<div class="check"><b>Estado no projeto: feito.</b> O <code>User.php</code> tem o <code>getPerfil()</code> (relação 1 para 1 pelo <code>user_id</code>). O <code>perfil</code> ganhou a coluna <code>role</code> (migração <code>m261029_190000_add_role_to_perfil_table</code>), que é uma <b>cópia</b> do role para a listagem. O acesso decide-se pela <code>auth_assignment</code>.</div>
 <p>O <code>Perfil</code> tem <code>user_id</code>. Para ires do utilizador ao perfil, acrescenta <b>só um método</b> ao <code>User</code> (não mexe na tabela):</p>
 <div class="codewrap"><div class="cap">common/models/User.php, junto dos outros métodos</div><pre data-src="c64"></pre></div>
 <div class="codewrap"><div class="cap">common/models/Perfil.php (confirma que já existe)</div><pre data-src="c65"></pre></div>
@@ -444,18 +485,20 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <div class="check">Verifica: <code>php -l common/models/User.php</code> sem erros.</div>
 </div></details>
 
-<h3>Fase 5: o acesso por role (ACF + menu)</h3>
+<h3>Fase 5: o acesso por role (ACF + menu) (feito para os CRUDs existentes)</h3>
 <details class="step">
 <summary><input class="chk" type="checkbox" id="k24" aria-label="Passo 24 feito"><span class="num">24</span><span class="ttl">Mapa: onde se usa cada uma das 39 permissões</span><span class="where">o desenho dos controladores</span></summary>
 <div class="body">
+<div class="check"><b>Estado no projeto: parcial.</b> Estão aplicadas 5 das 39 permissões: <code>acederBackoffice</code> (Dashboard), <code>gerirViaturas</code>, <code>gerirCondutores</code>, <code>verRequisicao</code> (só listar e ver) e <code>gerirUtilizadores</code>. As restantes (aprovar, recusar, atribuir viatura, manutenção, orçamentos, logs, parâmetros…) aplicam-se quando os ecrãs forem feitos.</div>
 <p>Antes de gerar controladores, decide <b>onde</b> cada permissão vai ser verificada. É uma <b>sugestão de organização</b> (a especificação não fixa os nomes dos controladores). Tem o mesmo espírito do quadro da Ficha 5: cada action liga a uma permissão.</p>
 <div class="scroll"><table><tr><th>Permissão</th><th>Onde se verifica</th><th>Role</th></tr><tr><td><code>acederBackoffice</code></td><td>backend, <code>SiteController</code> (index)</td><td>coord., téc., admin</td></tr><tr><td><code>acederFrontoffice</code></td><td>frontend, controladores do colaborador</td><td>colab.</td></tr><tr><td><code>acederApp</code></td><td>só a API e a app (SIS e AMSI), não se usa na web</td><td>colab., coord., admin</td></tr><tr><td><code>verCatalogo</code></td><td>frontend <code>ViaturaController</code> (index, view)</td><td>colab.</td></tr><tr><td><code>criarRequisicao</code></td><td>frontend <code>RequisicaoController</code> create</td><td>colab.</td></tr><tr><td><code>verPropriaRequisicao</code>*</td><td>frontend <code>RequisicaoController</code> index, view</td><td>colab.</td></tr><tr><td><code>cancelarRequisicao</code>*</td><td>frontend <code>RequisicaoController</code> cancelar</td><td>colab.</td></tr><tr><td><code>registarChecklist</code>*</td><td>frontend <code>RequisicaoController</code> checklist (check-in e check-out, km, fotos)</td><td>colab.</td></tr><tr><td><code>anexarFatura</code>*</td><td>frontend <code>RequisicaoController</code> fatura</td><td>colab.</td></tr><tr><td><code>enviarLocalizacao</code>*</td><td>só a app (API)</td><td>colab.</td></tr><tr><td><code>verRequisicao</code></td><td>backend <code>RequisicaoController</code> index, view</td><td>coord.</td></tr><tr><td><code>aprovarRequisicao</code></td><td>backend <code>RequisicaoController</code> pendentes, aprovar</td><td>coord.</td></tr><tr><td><code>recusarRequisicao</code></td><td>backend <code>RequisicaoController</code> recusar</td><td>coord.</td></tr><tr><td><code>atribuirViatura</code></td><td>backend <code>RequisicaoController</code> aprovar (escolher viatura e condutor)</td><td>coord.</td></tr><tr><td><code>assinalarRisco</code></td><td>backend <code>RequisicaoController</code> risco (fotos do check-in e check-out)</td><td>coord.</td></tr><tr><td><code>gerirViaturas</code></td><td>backend <code>ViaturaController</code> e <code>CategoriaController</code></td><td>coord.</td></tr><tr><td><code>gerirCondutores</code></td><td>backend <code>CondutorController</code></td><td>coord.</td></tr><tr><td><code>gerirIndisponibilidades</code></td><td>backend <code>AusenciaCondutorController</code></td><td>coord.</td></tr><tr><td><code>verCondutoresDisponiveis</code></td><td>backend <code>CondutorController</code> disponiveis</td><td>coord.</td></tr><tr><td><code>gerirDocumentos</code></td><td>backend <code>DocumentoController</code> (anexos de categoria documento)</td><td>coord.</td></tr><tr><td><code>configurarAlertas</code></td><td>backend <code>AlertaController</code> (os dias de antecedência, em <code>parametro</code>)</td><td>coord.</td></tr><tr><td><code>gerirOrcamentos</code></td><td>backend <code>OrcamentoCompraController</code></td><td>coord.</td></tr><tr><td><code>verFaturas</code></td><td>backend <code>FaturaCombustivelController</code> index</td><td>coord.</td></tr><tr><td><code>verDashboard</code></td><td>backend <code>DashboardController</code></td><td>coord.</td></tr><tr><td><code>verTrilhaAprovacoes</code></td><td>backend <code>LogAuditoriaController</code> trilha</td><td>coord.</td></tr><tr><td><code>verMapa</code></td><td>backend <code>MapaController</code></td><td>coord.</td></tr><tr><td><code>registarNecessidade</code></td><td>backend <code>NecessidadeManutencaoController</code></td><td>coord., téc.</td></tr><tr><td><code>registarManutencao</code></td><td>backend <code>ManutencaoController</code> create</td><td>téc.</td></tr><tr><td><code>editarManutencao</code></td><td>backend <code>ManutencaoController</code> update e <code>PecaController</code></td><td>téc.</td></tr><tr><td><code>concluirManutencao</code></td><td>backend <code>ManutencaoController</code> concluir</td><td>téc.</td></tr><tr><td><code>verHistoricoManutencoes</code></td><td>backend <code>ManutencaoController</code> historico</td><td>téc.</td></tr><tr><td><code>gerirUtilizadores</code></td><td>backend <code>UserController</code></td><td>admin</td></tr><tr><td><code>redefinirPassword</code></td><td>backend <code>UserController</code> redefinir-password</td><td>admin</td></tr><tr><td><code>gerirPermissoes</code></td><td>backend <code>PermissaoController</code></td><td>admin</td></tr><tr><td><code>configurarParametros</code></td><td>backend <code>ParametroController</code></td><td>admin</td></tr><tr><td><code>gerirServicosExternos</code></td><td>backend <code>ServicoExternoController</code></td><td>admin</td></tr><tr><td><code>verLogs</code></td><td>backend <code>LogAuditoriaController</code> index</td><td>admin</td></tr><tr><td><code>verEstadoSistema</code></td><td>backend <code>SistemaController</code> estado (e a app)</td><td>admin</td></tr><tr><td><code>verNotificacoes</code></td><td>backend e frontend, <code>NotificacaoController</code></td><td>todos</td></tr></table></div>
 <p>As marcadas com * são as do dono. No ACF não se consegue passar o pedido ao <code>can()</code>, por isso essas verificam-se <b>dentro da action</b>, com <code>can('x', ['requisicao' =&gt; $model])</code>. O resto verifica-se no <code>behaviors()</code>.</p>
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k25" aria-label="Passo 25 feito"><span class="num">25</span><span class="ttl">Gerar o CRUD de uma tabela (o exemplo da viatura)</span><span class="where">backend, ?r=gii</span></summary>
+<summary><input class="chk" type="checkbox" id="k25" checked aria-label="Passo 25 feito"><span class="num">25</span><span class="ttl">Gerar o CRUD de uma tabela (o exemplo da viatura)</span><span class="where">backend, ?r=gii</span></summary>
 <div class="body">
+<div class="check"><b>Estado no projeto: feito para viatura, condutor e requisição</b>, gerados com <code>php yii gii/crud</code> (linha de comandos, com as classes entre aspas simples). As vistas saem em <code>console/views</code> e têm de ser movidas para <code>backend/views</code>. Os botões e etiquetas foram traduzidos para português de Portugal. Os passos detalhados estão no <code>FrotaGest-Backend-CRUDs-Manual.html</code>.</div>
 <p>O Gii escreve o controlador, a pesquisa e as vistas. Fazemo-lo na **<code>Viatura</code>** e repete-se para as outras tabelas do mapa anterior.</p>
 <ol><li>Gii, <b>CRUD Generator</b>, <b>Start</b>.</li><li>Preenche os campos da tabela abaixo. <b>Preview</b> e <b>Generate</b>.</li></ol>
 <div class="scroll"><table><tr><th>Campo</th><th>Valor</th></tr><tr><td>Model Class</td><td><code>common\models\Viatura</code></td></tr><tr><td>Search Model Class</td><td><code>backend\models\ViaturaSearch</code></td></tr><tr><td>Controller Class</td><td><code>backend\controllers\ViaturaController</code></td></tr><tr><td>View Path</td><td><code>@backend/views/viatura</code></td></tr></table></div>
@@ -469,8 +512,9 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k26" aria-label="Passo 26 feito"><span class="num">26</span><span class="ttl">ACF: proteger um controlador com a permissão</span><span class="where">backend/controllers/ViaturaController.php</span></summary>
+<summary><input class="chk" type="checkbox" id="k26" checked aria-label="Passo 26 feito"><span class="num">26</span><span class="ttl">ACF: proteger um controlador com a permissão</span><span class="where">backend/controllers/ViaturaController.php</span></summary>
 <div class="body">
+<div class="check"><b>Estado no projeto: feito.</b> Cada controlador tem o bloco <code>access</code> com a permissão e a lista de <code>actions</code>. No <code>RequisicaoController</code> só <code>index</code> e <code>view</code> têm regra, por isso criar, editar e apagar dão 403 a toda a gente, e as vistas perderam esses botões (quem cria pedidos é o colaborador, no front-office).</div>
 <p>É o mesmo do passo 11 da Ficha 5. Em cada controlador gerado, acrescenta o <code>use</code> e o bloco <code>access</code> no <code>behaviors()</code>, <b>antes</b> do <code>verbs</code>:</p>
 <div class="codewrap"><div class="cap">use, no topo do ficheiro</div><pre data-src="c67"></pre></div>
 <div class="codewrap"><div class="cap">behaviors() do ViaturaController (adapta ao que o Gii gerou)</div><pre data-src="c68"></pre></div>
@@ -480,8 +524,9 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k27" aria-label="Passo 27 feito"><span class="num">27</span><span class="ttl">Entrada no back-office só com acederBackoffice</span><span class="where">backend/controllers/SiteController.php</span></summary>
+<summary><input class="chk" type="checkbox" id="k27" checked aria-label="Passo 27 feito"><span class="num">27</span><span class="ttl">Entrada no back-office só com acederBackoffice</span><span class="where">backend/controllers/SiteController.php</span></summary>
 <div class="body">
+<div class="check"><b>Estado no projeto: feito.</b> No <code>SiteController</code> a action <code>index</code> pede <code>acederBackoffice</code>, o <code>logout</code> fica para qualquer utilizador com login, e <code>login</code> e <code>error</code> continuam públicas. Um colaborador faz login mas recebe 403 no Dashboard.</div>
 <p>Hoje qualquer utilizador autenticado entra no back-office, incluindo o colaborador. Vamos separar. No <code>behaviors()</code> do <code>SiteController</code>, troca a segunda regra por duas:</p>
 <div class="codewrap"><div class="cap">SiteController do backend, no lugar da regra de logout e index</div><pre data-src="c69"></pre></div>
 <ul><li>O colaborador consegue fazer login no backend (a conta é a mesma), mas ao abrir <code>?r=site/index</code> recebe 403. Fica barrado à entrada.</li><li>Isto cumpre o RF-BO-01 (só estes três roles autenticam no back-office) e o RF-BO-04.</li><li>No <b>frontend</b> faz o mesmo para a área do colaborador: nos controladores <code>ViaturaController</code> e <code>RequisicaoController</code> do frontend, uma regra com <code>'roles' =&gt; ['acederFrontoffice']</code>.</li></ul>
@@ -489,19 +534,21 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 </div></details>
 
 <details class="step">
-<summary><input class="chk" type="checkbox" id="k28" aria-label="Passo 28 feito"><span class="num">28</span><span class="ttl">Menu do backend com can()</span><span class="where">backend/views/layouts/_header.php</span></summary>
+<summary><input class="chk" type="checkbox" id="k28" checked aria-label="Passo 28 feito"><span class="num">28</span><span class="ttl">Menu do backend com can()</span><span class="where">backend/views/layouts/_header.php</span></summary>
 <div class="body">
+<div class="check"><b>Estado no projeto: feito, noutro ficheiro.</b> O menu do backend (tema AdminLTE) está em <code>backend/views/layouts/sidebar.php</code> e não no <code>_header.php</code>. Cada item leva <code>'visible' =&gt; Yii::$app-&gt;user->can(...)</code>, e cada caixa do Dashboard fica dentro de um <code>if</code> com a mesma permissão. O Admin vê só o Dashboard (sem caixas) e os Utilizadores.</div>
 <p>No array <code>$items</code>, acrescenta um item por área, <b>depois</b> do <code>Home</code> e antes do <code>Login</code>. Cada um só aparece a quem tem a permissão:</p>
 <div class="codewrap"><div class="cap">backend/views/layouts/_header.php</div><pre data-src="c70"></pre></div>
 <ul><li><code>Yii::$app-&gt;user-&gt;can(...)</code> devolve <code>true</code> ou <code>false</code>. <code>visible</code> esconde o item se for <code>false</code>.</li><li>Isto <b>só esconde</b> o link. Quem escrever o URL à mão continua barrado pelo ACF. A segurança está no controlador, o menu é comodidade.</li><li>Acrescenta os outros itens do mesmo modo, um por área do mapa. O menu do frontend está em <code>frontend/views/layouts/_header.php</code>.</li><li>Não mexas no resto do ficheiro, a partir do <code>?&gt;</code>.</li></ul>
 </div></details>
 
-<h3>Fase 6: as funcionalidades, por ordem de prioridade</h3>
+<h3>Fase 6: as funcionalidades, por ordem de prioridade (por fazer; o 42 e o 44 em parte)</h3>
 <p>Daqui para a frente já não é copiar e colar: é programar a lógica de cada requisito. Para cada passo tens o que fazer, onde, e um <b>esqueleto</b> em código simples (o do guia do Yii). Adapta os nomes ao que o Gii gerou no teu projeto e confirma tudo com o professor, porque são ideias de implementação e não código oficial.</p>
 <div class="scroll"><table><tr><th>Prioridade</th><th>Funcionalidades</th><th>Passos</th></tr><tr><td><b>Alta</b></td><td>catálogo e disponibilidade, pedir, aprovar e atribuir, check-in/out, manutenção, utilizadores e permissões</td><td>29 a 33, 35, 39, 42</td></tr><tr><td><b>Média</b></td><td>cancelar, recusar, faturas, documentos e alertas, orçamentos, notificações, parâmetros, logs</td><td>restantes</td></tr><tr><td><b>Baixa</b></td><td>dashboard, mapa, QR</td><td>últimos</td></tr></table></div>
 <details class="step">
 <summary><input class="chk" type="checkbox" id="k29" aria-label="Passo 29 feito"><span class="num">29</span><span class="ttl">Catálogo e disponibilidade das viaturas</span><span class="where">frontend ViaturaController, common/models/Viatura.php</span></summary>
 <div class="body">
+<div class="check"><b>Estado no projeto: por fazer.</b> O aspeto do site já está (template Cental, com o carrossel na página inicial), mas o frontend só tem o <code>SiteController</code>: ainda não há <code>ViaturaController</code>, nem catálogo, nem o botão <b>Requisitar viatura</b> (RF-FO-04). Quando o fizeres, as páginas novas já herdam o menu, o rodapé e o banner do template.</div>
 <p><b>O que é:</b> o colaborador vê as viaturas, filtra por categoria, combustível ou texto, e vê quais estão livres num período. Requisitos RF-FO-04 e RF-FO-05, US1.</p>
 <div class="lbl">O que fazer</div>
 <ol><li>Gera o CRUD da <code>Viatura</code> no <b>frontend</b> (como no passo do CRUD, com <code>frontend\controllers\ViaturaController</code> e <code>@frontend/views/viatura</code>) e apaga o <code>create</code>, <code>update</code> e <code>delete</code>: o colaborador só vê.</li><li>Põe o ACF com <code>acederFrontoffice</code> e <code>verCatalogo</code> (duas regras, ou a regra com <code>'roles' =&gt; ['verCatalogo']</code>, que o colaborador tem).</li><li>Acrescenta ao modelo <code>Viatura</code> o método da disponibilidade, abaixo. É o coração do projeto: vai ser usado no pedido e na atribuição.</li></ol>
@@ -629,6 +676,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <details class="step">
 <summary><input class="chk" type="checkbox" id="k42" aria-label="Passo 42 feito"><span class="num">42</span><span class="ttl">Administração: utilizadores, roles e permissões</span><span class="where">backend UserController, PermissaoController</span></summary>
 <div class="body">
+<div class="check"><b>Estado no projeto: parcial.</b> Feito: o <code>UserController</code> com listar, ver, criar e editar; o campo <b>Role</b> no formulário (grava o utilizador, o perfil e a <code>auth_assignment</code> numa transação); o filtro por role na listagem; e <b>apagar = soft delete</b> (<code>status</code> a 0; reativar editando o Estado). O <code>perfil.nome</code> fica igual ao <code>username</code> até haver um ecrã de perfil. <b>Falta:</b> redefinir a palavra-passe (permissão <code>redefinirPassword</code>), gerir as permissões por role (<code>gerirPermissoes</code>) e desligar o registo do frontend.</div>
 <p><b>O que é:</b> o administrador cria e desativa contas, atribui o role e configura as permissões de cada role. RF-BO-45 a RF-BO-48, US20.</p>
 <div class="lbl">Criar um utilizador com perfil e role</div>
 <div class="codewrap"><div class="cap">backend/controllers/UserController.php</div><pre data-src="c89"></pre></div>
@@ -649,6 +697,7 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <details class="step">
 <summary><input class="chk" type="checkbox" id="k44" aria-label="Passo 44 feito"><span class="num">44</span><span class="ttl">Dashboard, mapa e código QR (prioridade baixa)</span><span class="where">backend DashboardController, MapaController</span></summary>
 <div class="body">
+<div class="check"><b>Estado no projeto: parcial.</b> O Dashboard existe com 4 caixas (viaturas, viaturas disponíveis, requisições pendentes e condutores), cada uma visível só a quem tem a permissão. Faltam a ocupação, as viaturas paradas, o mapa e o código QR.</div>
 <p><b>O que é:</b> indicadores e mapa para o coordenador. RF-BO-23, RF-BO-34, RF-BO-35, RF-BO-37, RF-BO-38. Faz-se por último, quando tudo o resto funciona.</p>
 <ul><li><b>Taxa de ocupação</b> (<code>verDashboard</code>): por viatura, dias atribuídos no período a dividir pelos dias do período. Por departamento, agrupa pelo <code>perfil.departamento</code> do colaborador do pedido.</li><li><b>Viaturas paradas:</b> viaturas sem atribuição há mais de <code>viatura_parada_dias</code> dias (parâmetro).</li><li><b>Mapa</b> (<code>verMapa</code>): a última <code>localizacao</code> de cada atribuição em curso e, para a rota, todos os pontos ordenados por <code>data_hora</code>. Usa uma biblioteca de mapas em JavaScript.</li><li><b>Código QR</b> (RF-BO-23): gera-se um texto único por viatura (por exemplo <code>FG-0003</code>, o formato dos exemplos da API) e guarda-se em <code>viatura.qr_code</code>. Desenhar a imagem do QR pede uma biblioteca.</li></ul>
 </div></details>
@@ -689,10 +738,10 @@ pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--fo
 <div class="qa"><b>O que é um alerta e o que é uma notificação?</b><p>O alerta é gerado pelo sistema sobre uma viatura (um documento a expirar). A notificação tem sempre um destinatário e pode vir de um alerta ou de uma requisição. É a notificação que se mostra na lista e se envia por push.</p></div>
 <div class="qa"><b>Porque é que o RbacController só se corre uma vez?</b><p>Porque cria linhas em <code>auth_item</code>, que tem chave primária. Correr outra vez dá "Duplicate entry". Para refazer, apagam-se as linhas de <code>auth_item</code> e depois as de <code>auth_rule</code>.</p></div>
 <h2 id="erros">Erros que podem acontecer</h2>
-<div class="scroll"><table><tr><th>Erro</th><th>Causa e solução</th></tr><tr><td><code>Call to a member function createPermission() on null</code></td><td>O <code>authManager</code> não está configurado ou está dentro do array do <code>cache</code>. Deve estar ao lado do <code>cache</code>, dentro de <code>'components'</code>.</td></tr><tr><td><code>Unknown database</code></td><td>O nome no <code>dsn</code> não existe no MySQL. Tem de ser <code>frotagest</code>.</td></tr><tr><td><code>Duplicate entry</code> ao correr <code>rbac/init</code></td><td>Já o correste antes. Apaga as linhas de <code>auth_item</code> e depois as de <code>auth_rule</code>, e corre outra vez.</td></tr><tr><td><code>Integrity constraint violation ... foreign key</code> ao migrar</td><td>Criaste uma tabela antes da que ela referencia. Faz <code>php yii migrate/down</code> e confirma a ordem das migrações (o nome começa pela data e hora).</td></tr><tr><td><code>Table ... doesn't exist</code> no Gii ou no browser</td><td>A migração dessa tabela não foi aplicada. Corre <code>php yii migrate</code> e confirma no phpMyAdmin.</td></tr><tr><td><code>Class "common\models\X" not found</code></td><td>Falta gerar o modelo no Gii, ou o namespace ficou <code>app\models</code>. Tem de ser <code>common\models</code>.</td></tr><tr><td><code>Class "backend\controllers\AccessControl" not found</code></td><td>Falta o <code>use yii\filters\AccessControl;</code> no controlador.</td></tr><tr><td><code>Call to undefined method ...::getRequisicao()</code></td><td>O nome da relação gerada é outro (por exemplo <code>getRequisicaos</code>) ou o modelo foi gerado antes de existir a tabela. Confirma no ficheiro e, se preciso, volta a gerar o modelo.</td></tr><tr><td>403 Forbidden num utilizador que devia poder</td><td>O role não está atribuído (<code>auth_assignment</code>), ou o nome da permissão no ACF difere do <code>RbacController</code> (maiúsculas), ou a permissão do role foi removida em <code>auth_item_child</code>.</td></tr><tr><td>403 numa permissão do dono mesmo sendo o dono</td><td>Chamaste o <code>can()</code> <b>sem</b> o segundo argumento <code>['requisicao' =&gt; $model]</code>, ou a coluna da regra não é <code>utilizador_id</code>.</td></tr><tr><td>"Incorrect username or password" logo depois de registar</td><td>O utilizador está inativo (<code>status</code> 9). Falta abrir o link do email em <code>frontend/runtime/mail/</code>, ou pôr o <code>status</code> a 10.</td></tr><tr><td>O menu não mostra uma entrada</td><td>O utilizador não tem a permissão do <code>visible</code>, ou editaste o <code>_header.php</code> do frontend em vez do do backend.</td></tr><tr><td><code>Getting unknown property</code> ao gravar</td><td>Escreveste uma coluna que não existe no modelo. Confirma o nome no diagrama (por exemplo <code>utilizador_id</code>, não <code>user_id</code>).</td></tr><tr><td>Os ficheiros enviados não aparecem</td><td>Falta a pasta <code>frontend/web/uploads/</code>, ou o formulário não tem <code>enctype =&gt; multipart/form-data</code>.</td></tr><tr><td>O Gii sobrescreveu o <code>User.php</code></td><td>Geraste o modelo da tabela <code>user</code>. Recupera o ficheiro do GitKraken (descartar alterações) e nunca geres a <code>user</code>.</td></tr><tr><td>Duas migrações apareceram pela ordem errada</td><td>Foram criadas no mesmo segundo e o Yii ordenou por nome. Cria as migrações uma de cada vez.</td></tr></table></div>
+<div class="scroll"><table><tr><th>Erro</th><th>Causa e solução</th></tr><tr><td><code>Call to a member function createPermission() on null</code></td><td>O <code>authManager</code> não está configurado ou está dentro do array do <code>cache</code>. Deve estar ao lado do <code>cache</code>, dentro de <code>'components'</code>.</td></tr><tr><td><code>Unknown database</code></td><td>O nome no <code>dsn</code> não existe no MySQL. Tem de ser <code>frotagest</code>.</td></tr><tr><td><code>Duplicate entry</code> ao correr <code>rbac/init</code></td><td>Já o correste antes. Apaga as linhas de <code>auth_item</code> e depois as de <code>auth_rule</code>, e corre outra vez.</td></tr><tr><td><code>Integrity constraint violation ... foreign key</code> ao migrar</td><td>Criaste uma tabela antes da que ela referencia. Faz <code>php yii migrate/down</code> e confirma a ordem das migrações (o nome começa pela data e hora).</td></tr><tr><td><code>Table ... doesn't exist</code> no Gii ou no browser</td><td>A migração dessa tabela não foi aplicada. Corre <code>php yii migrate</code> e confirma no phpMyAdmin.</td></tr><tr><td><code>Class "common\models\X" not found</code></td><td>Falta gerar o modelo no Gii, ou o namespace ficou <code>app\models</code>. Tem de ser <code>common\models</code>.</td></tr><tr><td><code>Class "backend\controllers\AccessControl" not found</code></td><td>Falta o <code>use yii\filters\AccessControl;</code> no controlador.</td></tr><tr><td><code>Call to undefined method ...::getRequisicao()</code></td><td>O nome da relação gerada é outro (por exemplo <code>getRequisicaos</code>) ou o modelo foi gerado antes de existir a tabela. Confirma no ficheiro e, se preciso, volta a gerar o modelo.</td></tr><tr><td>403 Forbidden num utilizador que devia poder</td><td>O role não está atribuído (<code>auth_assignment</code>), ou o nome da permissão no ACF difere do <code>RbacController</code> (maiúsculas), ou a permissão do role foi removida em <code>auth_item_child</code>.</td></tr><tr><td>403 numa permissão do dono mesmo sendo o dono</td><td>Chamaste o <code>can()</code> <b>sem</b> o segundo argumento <code>['requisicao' =&gt; $model]</code>, ou a coluna da regra não é <code>utilizador_id</code>.</td></tr><tr><td>"Incorrect username or password" logo depois de registar</td><td>O utilizador está inativo (<code>status</code> 9). Falta abrir o link do email em <code>frontend/runtime/mail/</code>, ou pôr o <code>status</code> a 10.</td></tr><tr><td>O menu não mostra uma entrada</td><td>O utilizador não tem a permissão do <code>visible</code>, ou editaste o <code>_header.php</code> do frontend em vez do do backend.</td></tr><tr><td><code>Getting unknown property</code> ao gravar</td><td>Escreveste uma coluna que não existe no modelo. Confirma o nome no diagrama (por exemplo <code>utilizador_id</code>, não <code>user_id</code>).</td></tr><tr><td>Os ficheiros enviados não aparecem</td><td>Falta a pasta <code>frontend/web/uploads/</code>, ou o formulário não tem <code>enctype =&gt; multipart/form-data</code>.</td></tr><tr><td>O Gii sobrescreveu o <code>User.php</code></td><td>Geraste o modelo da tabela <code>user</code>. Recupera o ficheiro do GitKraken (descartar alterações) e nunca geres a <code>user</code>.</td></tr><tr><td>Duas migrações apareceram pela ordem errada</td><td>Foram criadas no mesmo segundo e o Yii ordenou por nome. Cria as migrações uma de cada vez.</td></tr><tr><td>403 Forbidden no Admin depois de um <code>git pull</code> noutro PC</td><td>A base de dados não viaja no git: o role do Admin está na <code>auth_assignment</code> do outro PC. Nesse PC corre <code>php yii migrate</code>, <code>php yii rbac/init</code> (só se a <code>auth_item</code> estiver vazia) e <code>php yii seed/init</code>.</td></tr><tr><td><code>Only word characters and backslashes are allowed</code> ao correr o Gii</td><td>Usaste aspas duplas e o Git Bash apagou as barras invertidas. Põe as classes entre <b>aspas simples</b>.</td></tr><tr><td><code>The view file does not exist</code> depois de gerar um CRUD por comandos</td><td>O Gii correu na app de consola e as vistas ficaram em <code>console/views</code>. Move-as para <code>backend/views</code>.</td></tr><tr><td><code>Declaration of ... UserSearch::rules() must be compatible</code></td><td>O <code>UserSearch</code> estende o <code>User</code>, por isso o <code>rules()</code> tem de ter o mesmo tipo de retorno: <code>public function rules(): array</code>.</td></tr><tr><td>O campo Username do formulário vem preenchido</td><td>É o browser a preencher o login guardado. O campo leva <code>autocomplete="off"</code> e a password <code>autocomplete="new-password"</code>.</td></tr><tr><td>O Admin entra mas não vê Viaturas nem Condutores</td><td>É o esperado: o role <code>administrador</code> não herda o <code>coordenador</code>. Usa uma conta de coordenador para a frota.</td></tr><tr><td>Mudei um ficheiro do frontend e no browser nada muda</td><td>Ou não gravaste (Ctrl+S), ou editaste outro clone do projeto que não é o do WAMP, ou o browser usou a cache (Ctrl+F5).</td></tr><tr><td>404 na consola (F12) com <code>bootstrap.min.css.map</code></td><td>O CSS do template aponta para um ficheiro <code>.map</code> que não vem no ZIP. Só serve para depurar o CSS e não afeta nada.</td></tr></table></div>
 <h2 id="aberto">Pontos em aberto na especificação</h2>
 <p>Ao ler o relatório e o PDF para este manual encontrei coisas que convém <b>decidir com o grupo e com o professor</b>, ou corrigir antes da entrega (2027-02-06). O manual assume o que está indicado em cada ponto.</p>
-<div class="scroll"><table><tr><th>Assunto</th><th>O que se passa</th><th>O que o manual assume</th></tr><tr><td>Utilizadores</td><td>O diagrama tem <code>utilizador</code>, <code>role</code>, <code>permissao</code> e <code>role_permissao</code>; as aulas usam <code>user</code> e o RBAC do Yii.</td><td><code>user</code> do template, <code>perfil</code> para os dados extra e RBAC do Yii (decisão 1).</td></tr><tr><td>N.º de tabelas</td><td>O relatório diz 24 tabelas. Com o RBAC do Yii ficam 21 tabelas nossas mais as 4 <code>auth_*</code>.</td><td>Convém atualizar o texto e o diagrama (Figura 1).</td></tr><tr><td>Login por email</td><td>RF-FO-01 diz "email e palavra-passe". O template faz o login por <code>username</code>.</td><td>Mantém-se o <code>username</code>. Para mudar, o <code>LoginForm</code> e o <code>User::findByUsername</code> passam a procurar por <code>email</code>.</td></tr><tr><td>Um login só</td><td>RF-FO-01 pede uma entrada única para front e back-office, a encaminhar por role. O Advanced tem duas aplicações.</td><td>Dois logins por agora; o back-office barra quem não tem <code>acederBackoffice</code>.</td></tr><tr><td>Tabela 9, RF-BO-32</td><td>O PDF diz que os orçamentos são só do coordenador e "corrigir BO-32 na Tabela 9". Na Tabela 9 o técnico está marcado em BO-32.</td><td>Segue-se o PDF. Falta corrigir o relatório.</td></tr><tr><td>Tabela 9, RF-FO-02</td><td>Terminar sessão só está marcado para o colaborador.</td><td>Todos os roles podem terminar sessão. Corrigir a tabela.</td></tr><tr><td>"MACOLIS"</td><td>No relatório, a análise do Samsara fala no "núcleo do MACOLIS", que parece resto de outro projeto.</td><td>Trocar por FrotaGest.</td></tr><tr><td>Estados</td><td>A API fala em <code>atribuida</code>; o front-office em <code>em curso</code>. O diagrama não fixa os estados.</td><td>Texto: <code>pendente</code>, <code>aprovada</code>, <code>recusada</code>, <code>em curso</code>, <code>concluida</code>, <code>cancelada</code>. Decidir os da manutenção.</td></tr><tr><td>Técnico numa manutenção gerada</td><td>RF-BO-30 gera a manutenção para o técnico executar, mas o diagrama tem <code>tecnico_id</code> como chave estrangeira sem dizer se é obrigatória.</td><td><code>tecnico_id</code> opcional até um técnico assumir.</td></tr><tr><td>Parâmetros do sistema</td><td>RF-BO-49 lista os parâmetros mas não os nomes nem os valores.</td><td>Os 10 nomes do passo "Parâmetros iniciais", como sugestão.</td></tr><tr><td><code>orcamento_compra.viatura_id</code></td><td>O diagrama liga o orçamento a uma viatura, mas o texto fala em agrupar necessidades (que são de viaturas).</td><td>Mantém-se obrigatório. Se um orçamento puder abranger várias viaturas, passa a ser opcional.</td></tr></table></div>
+<div class="scroll"><table><tr><th>Assunto</th><th>O que se passa</th><th>O que o manual assume</th></tr><tr><td>Utilizadores</td><td>O diagrama tem <code>utilizador</code>, <code>role</code>, <code>permissao</code> e <code>role_permissao</code>; as aulas usam <code>user</code> e o RBAC do Yii.</td><td><code>user</code> do template, <code>perfil</code> para os dados extra e RBAC do Yii (decisão 1).</td></tr><tr><td>N.º de tabelas</td><td>O relatório diz 24 tabelas. Com o RBAC do Yii ficam 21 tabelas nossas mais as 4 <code>auth_*</code>.</td><td>Convém atualizar o texto e o diagrama (Figura 1).</td></tr><tr><td>Login por email</td><td>RF-FO-01 diz "email e palavra-passe". O template faz o login por <code>username</code>.</td><td>Mantém-se o <code>username</code>. Para mudar, o <code>LoginForm</code> e o <code>User::findByUsername</code> passam a procurar por <code>email</code>.</td></tr><tr><td>Um login só</td><td>RF-FO-01 pede uma entrada única para front e back-office, a encaminhar por role. O Advanced tem duas aplicações.</td><td>Dois logins por agora; o back-office barra quem não tem <code>acederBackoffice</code>.</td></tr><tr><td>Tabela 9, RF-BO-32</td><td>O PDF diz que os orçamentos são só do coordenador e "corrigir BO-32 na Tabela 9". Na Tabela 9 o técnico está marcado em BO-32.</td><td>Segue-se o PDF. Falta corrigir o relatório.</td></tr><tr><td>Tabela 9, RF-FO-02</td><td>Terminar sessão só está marcado para o colaborador.</td><td>Todos os roles podem terminar sessão. Corrigir a tabela.</td></tr><tr><td>"MACOLIS"</td><td>No relatório, a análise do Samsara fala no "núcleo do MACOLIS", que parece resto de outro projeto.</td><td>Trocar por FrotaGest.</td></tr><tr><td>Estados</td><td>A API fala em <code>atribuida</code>; o front-office em <code>em curso</code>. O diagrama não fixa os estados.</td><td>Texto: <code>pendente</code>, <code>aprovada</code>, <code>recusada</code>, <code>em curso</code>, <code>concluida</code>, <code>cancelada</code>. Decidir os da manutenção.</td></tr><tr><td>Técnico numa manutenção gerada</td><td>RF-BO-30 gera a manutenção para o técnico executar, mas o diagrama tem <code>tecnico_id</code> como chave estrangeira sem dizer se é obrigatória.</td><td><code>tecnico_id</code> opcional até um técnico assumir.</td></tr><tr><td>Parâmetros do sistema</td><td>RF-BO-49 lista os parâmetros mas não os nomes nem os valores.</td><td>Os 10 nomes do passo "Parâmetros iniciais", como sugestão.</td></tr><tr><td><code>orcamento_compra.viatura_id</code></td><td>O diagrama liga o orçamento a uma viatura, mas o texto fala em agrupar necessidades (que são de viaturas).</td><td>Mantém-se obrigatório. Se um orçamento puder abranger várias viaturas, passa a ser opcional.</td></tr><tr><td>Role do administrador</td><td>O PDF não deixa o <code>administrador</code> herdar o coordenador. Com isso o Admin não vê a frota.</td><td>Mantém-se como está. Para ver a frota, usa-se uma conta de coordenador.</td></tr><tr><td>Nome do perfil</td><td>A tabela <code>perfil</code> exige o <code>nome</code>, mas o formulário de utilizadores não o pede.</td><td>Fica igual ao <code>username</code> até haver um ecrã de perfil.</td></tr><tr><td>Role em duas tabelas</td><td>O role está em <code>perfil.role</code> e na <code>auth_assignment</code>.</td><td>Manda a <code>auth_assignment</code>; o <code>perfil.role</code> é só uma cópia. O formulário é o único sítio que escreve nas duas.</td></tr><tr><td>Soft delete</td><td>Falou-se em <code>deleted_at</code> e em <code>status</code>.</td><td>Ficou só o <code>status</code> a 0. Sem coluna nova.</td></tr><tr><td>Contas de teste</td><td>O <code>SeedController</code> cria contas com a password <code>12345678</code> no código.</td><td>Só para testes. Apagar o comando antes de qualquer utilização a sério.</td></tr><tr><td>Registo no frontend</td><td>O template deixa registar contas (a rota <code>site/signup</code> continua no <code>SiteController</code>), que ficam sem role. O relatório diz que só o administrador cria contas.</td><td>Desligar o registo mais tarde.</td></tr><tr><td>Texto do botão de login</td><td>O menu do frontend diz "Entrar"; o mockup da especificação diz "Iniciar sessão" (na página inicial já está assim).</td><td>Uniformizar com o grupo.</td></tr><tr><td>Testes do frontend</td><td>Os testes do Codeception (<code>HomeCest</code>, <code>ContactCest</code>…) ainda procuram os textos de exemplo do Yii.</td><td>Atualizar quando as páginas interiores estiverem traduzidas.</td></tr></table></div>
 
 </div>
 
