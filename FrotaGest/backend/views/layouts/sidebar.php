@@ -32,6 +32,7 @@ use yii\helpers\Url;
                     //a listagem de requisicoes ja filtrada pelo estado
                     ['label' => 'Requisições pendentes', 'icon' => 'clipboard-list', 'url' => ['/requisicao/index', 'RequisicaoSearch[estado]' => 'pendente']],
                     ['label' => 'Condutores', 'icon' => 'id-card', 'url' => ['/condutor/index']],
+                    ['label' => 'Utilizadores', 'icon' => 'users', 'url' => ['/user/index']],
                 ],
             ]) ?>
         </nav>
