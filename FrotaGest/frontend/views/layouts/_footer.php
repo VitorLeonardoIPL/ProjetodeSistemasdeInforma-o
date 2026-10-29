@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 use yii\helpers\Html;
 
-//email de contacto definido em common/config/params.php
 
 ?>
 <!-- Footer Start (copiado do index.html do Cental e adaptado ao Yii) -->
