@@ -14,6 +14,7 @@ $this->title = 'Dashboard';
 $this->params['breadcrumbs'] = [['label' => $this->title]];
 ?>
 <div class="row">
+<?php if (Yii::$app->user->can('gerirViaturas')): ?>
     <div class="col-lg-3 col-6">
         <?= SmallBox::widget([
             'title' => (string) viatura::find()->count(),
@@ -21,6 +22,8 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
             'icon' => 'fas fa-car',
         ]) ?>
     </div>
+<?php endif; ?>
+<?php if (Yii::$app->user->can('gerirViaturas')): ?>
     <div class="col-lg-3 col-6">
         <?= SmallBox::widget([
             'title' => (string) viatura::find()->where(['estado' => 'disponivel'])->count(),
@@ -29,6 +32,8 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
             'theme' => 'success',
         ]) ?>
     </div>
+<?php endif; ?>
+<?php if (Yii::$app->user->can('verRequisicao')): ?>
     <div class="col-lg-3 col-6">
         <?= SmallBox::widget([
             'title' => (string) requisicao::find()->where(['estado' => 'pendente'])->count(),
@@ -37,6 +42,8 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
             'theme' => 'warning',
         ]) ?>
     </div>
+<?php endif; ?>
+<?php if (Yii::$app->user->can('gerirCondutores')): ?>
     <div class="col-lg-3 col-6">
         <?= SmallBox::widget([
             'title' => (string) condutor::find()->count(),
@@ -45,4 +52,5 @@ $this->params['breadcrumbs'] = [['label' => $this->title]];
             'theme' => 'info',
         ]) ?>
     </div>
+<?php endif; ?>
 </div>

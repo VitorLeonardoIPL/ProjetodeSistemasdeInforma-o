@@ -25,14 +25,14 @@ use yii\helpers\Url;
         <nav class="mt-2">
             <?= Menu::widget([
                 'items' => [
-                    ['label' => 'Dashboard', 'icon' => 'tachometer-alt', 'url' => ['/site/index']],
-                    ['label' => 'Viaturas', 'icon' => 'car', 'url' => ['/viatura/index']],
+                    ['label' => 'Dashboard', 'icon' => 'tachometer-alt', 'url' => ['/site/index'], 'visible' => Yii::$app->user->can('acederBackoffice')],
+                    ['label' => 'Viaturas', 'icon' => 'car', 'url' => ['/viatura/index'], 'visible' => Yii::$app->user->can('gerirViaturas')],
                     //a mesma listagem de viaturas, ja filtrada pelo estado
-                    ['label' => 'Viaturas disponíveis', 'icon' => 'check', 'url' => ['/viatura/index', 'ViaturaSearch[estado]' => 'disponivel']],
+                    ['label' => 'Viaturas disponíveis', 'icon' => 'check', 'url' => ['/viatura/index', 'ViaturaSearch[estado]' => 'disponivel'], 'visible' => Yii::$app->user->can('gerirViaturas')],
                     //a listagem de requisicoes ja filtrada pelo estado
-                    ['label' => 'Requisições pendentes', 'icon' => 'clipboard-list', 'url' => ['/requisicao/index', 'RequisicaoSearch[estado]' => 'pendente']],
-                    ['label' => 'Condutores', 'icon' => 'id-card', 'url' => ['/condutor/index']],
-                    ['label' => 'Utilizadores', 'icon' => 'users', 'url' => ['/user/index']],
+                    ['label' => 'Requisições pendentes', 'icon' => 'clipboard-list', 'url' => ['/requisicao/index', 'RequisicaoSearch[estado]' => 'pendente'], 'visible' => Yii::$app->user->can('verRequisicao')],
+                    ['label' => 'Condutores', 'icon' => 'id-card', 'url' => ['/condutor/index'], 'visible' => Yii::$app->user->can('gerirCondutores')],
+                    ['label' => 'Utilizadores', 'icon' => 'users', 'url' => ['/user/index'], 'visible' => Yii::$app->user->can('gerirUtilizadores')],
                 ],
             ]) ?>
         </nav>

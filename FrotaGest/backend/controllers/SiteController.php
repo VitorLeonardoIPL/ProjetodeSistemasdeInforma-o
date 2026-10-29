@@ -31,9 +31,15 @@ class SiteController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+                    [
+                        //o dashboard e do backoffice
+                        'actions' => ['index'],
+                        'allow' => true,
+                        'roles' => ['acederBackoffice'],
                     ],
                 ],
             ],

@@ -15,6 +15,7 @@ use Yii;
  * @property string|null $n_carta
  * @property string|null $validade_carta
  * @property string|null $token_push
+ * @property string|null $role
  *
  * @property User $user
  */
@@ -36,10 +37,11 @@ class perfil extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['telemovel', 'departamento', 'n_carta', 'validade_carta', 'token_push'], 'default', 'value' => null],
+            [['telemovel', 'departamento', 'n_carta', 'validade_carta', 'token_push', 'role'], 'default', 'value' => null],
             [['user_id', 'nome'], 'required'],
             [['user_id'], 'integer'],
             [['validade_carta'], 'safe'],
+            [['role'], 'string', 'max' => 64],
             [['nome', 'telemovel', 'departamento', 'n_carta', 'token_push'], 'string', 'max' => 255],
             [['user_id'], 'unique'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
@@ -60,6 +62,7 @@ class perfil extends \yii\db\ActiveRecord
             'n_carta' => 'N Carta',
             'validade_carta' => 'Validade Carta',
             'token_push' => 'Token Push',
+            'role' => 'Role',
         ];
     }
 
