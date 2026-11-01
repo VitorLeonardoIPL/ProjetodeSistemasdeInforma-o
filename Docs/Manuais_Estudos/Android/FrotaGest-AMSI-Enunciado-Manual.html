@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="pt">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FrotaGest - AMSI Enunciado: manual</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: coluna de leitura unica; indice no topo; barra de progresso fixa; cada passo abre e fecha; checklists com caixas guardadas no browser */
+:root{
+  --bg:#f6f7f4; --surface:#ffffff; --fg:#1d2420; --muted:#5c665f; --line:#dfe3dc;
+  --accent:#1f6f5b; --accent-soft:#e1f0ea; --accent-fg:#ffffff;
+  --code-bg:#14201b; --code-fg:#e4efe9; --warn:#9a5b00; --warn-soft:#fbf0dc;
+  --font-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101613; --surface:#18211c; --fg:#e6ede8; --muted:#9aa89f; --line:#2a362f;
+    --accent:#4fc2a0; --accent-soft:#183328; --accent-fg:#06231a;
+    --code-bg:#0b110e; --code-fg:#dcebe3; --warn:#f0b45c; --warn-soft:#35280f;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101613; --surface:#18211c; --fg:#e6ede8; --muted:#9aa89f; --line:#2a362f;
+  --accent:#4fc2a0; --accent-soft:#183328; --accent-fg:#06231a;
+  --code-bg:#0b110e; --code-fg:#dcebe3; --warn:#f0b45c; --warn-soft:#35280f;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.6;padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:780px;margin-inline:auto}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:clamp(1.9rem,5vw,2.6rem);font-weight:700}
+h2{font-size:1.5rem;margin-block:52px 16px;scroll-margin-top:60px}
+h3{font-size:1.1rem;margin-block:20px 8px}
+p{margin:0 0 12px;max-width:68ch}
+a{color:var(--accent)}
+code{font-family:var(--font-mono);font-size:.88em;background:var(--accent-soft);padding:1px 6px;border-radius:4px;overflow-wrap:anywhere}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-16px;padding:10px 16px}
+.top-in{max-width:780px;margin-inline:auto;display:flex;align-items:center;gap:12px;font-size:.85rem;color:var(--muted)}
+.bar{flex:1;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+.hero{padding-block:36px 8px}
+.hero p{color:var(--muted);font-size:1.05rem;margin-top:12px}
+.toc{display:flex;flex-wrap:wrap;gap:6px 14px;margin:20px 0 0;padding:0;list-style:none;font-size:.88rem}
+.toc a{text-decoration:none;border-bottom:1px solid var(--line)}
+.toc a:hover{border-color:var(--accent)}
+.er{display:flex;flex-wrap:wrap;gap:12px 40px;align-items:center;margin-block:20px}
+.tbl{border:1px solid var(--line);background:var(--surface);border-radius:6px;min-width:190px;font-family:var(--font-mono);font-size:.82rem}
+.tbl b{display:block;padding:6px 12px;background:var(--accent-soft);font-weight:500;border-bottom:1px solid var(--line)}
+.tbl span{display:block;padding:2px 12px}
+.tbl span:last-child{padding-bottom:8px}
+.rel{font-size:.85rem;color:var(--muted);max-width:22ch}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px;margin-bottom:12px}
+.order{display:grid;gap:8px;counter-reset:o;padding:0;list-style:none;margin:0}
+.order li{counter-increment:o;display:flex;gap:12px;align-items:baseline}
+.order li::before{content:counter(o);font-family:var(--font-mono);font-size:.8rem;min-width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--accent);color:var(--accent-fg);flex:none}
+details.step{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin-bottom:12px}
+details.step[open]{border-color:var(--accent)}
+details.step>summary{list-style:none;cursor:pointer;display:flex;gap:12px;align-items:center;padding:14px 16px}
+details.step>summary::-webkit-details-marker{display:none}
+details.step>summary:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-family:var(--font-mono);font-size:.78rem;color:var(--muted);min-width:2.2em}
+.ttl{flex:1;min-width:0;font-weight:600}
+.where{font-family:var(--font-mono);font-size:.75rem;color:var(--muted);display:none}
+@media (min-width:660px){.where{display:block}}
+.chk{width:20px;height:20px;accent-color:var(--accent);flex:none}
+.body{padding:4px 16px 18px;border-top:1px solid var(--line)}
+.lbl{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin:18px 0 6px}
+.body ul,.body ol{margin:0 0 12px;padding-left:22px}
+.body li{margin-bottom:5px}
+.codewrap{position:relative;margin:8px 0 14px}
+pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--font-mono);font-size:.82rem;line-height:1.55;padding:14px 16px;border-radius:6px;overflow-x:auto;white-space:pre}
+.cap{font-family:var(--font-mono);font-size:.75rem;color:var(--muted);margin-bottom:4px}
+.copy{position:absolute;top:8px;right:8px;font:inherit;font-size:.72rem;padding:3px 9px;border-radius:4px;border:1px solid #3a4a41;background:#1f2e26;color:#cfe3d9;cursor:pointer}
+.copy:hover{background:#2a3d33}
+.note{background:var(--warn-soft);color:var(--fg);border-left:3px solid var(--warn);padding:10px 14px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.92rem}
+.note b{color:var(--warn)}
+.check{background:var(--accent-soft);padding:10px 14px;border-radius:6px;font-size:.92rem;margin-top:12px}
+.flow{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-family:var(--font-mono);font-size:.78rem;margin:10px 0 16px}
+.flow span{background:var(--surface);border:1px solid var(--line);padding:4px 10px;border-radius:5px}
+.flow i{color:var(--muted);font-style:normal}
+.qa{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:10px}
+.qa b{display:block;margin-bottom:4px}
+.qa p{margin:0;color:var(--muted)}
+.cl{list-style:none;padding:0;margin:0 0 12px;display:grid;gap:2px}
+.cl li{display:flex;gap:10px;align-items:flex-start;padding:6px 10px;border-radius:6px}
+.cl li:hover{background:var(--accent-soft)}
+.cl label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;width:100%}
+.cl .chk{margin-top:3px}
+.reset{margin-top:20px;font:inherit;font-size:.85rem;background:none;border:1px solid var(--line);color:var(--muted);padding:6px 12px;border-radius:6px;cursor:pointer}
+
+h3.part{font-size:.82rem;font-family:var(--font-mono);font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-block:40px 6px;padding-top:14px;border-top:1px solid var(--line)}
+.scroll table{min-width:520px}
+.gal{display:flex;gap:10px;overflow-x:auto;padding:4px 0 10px}
+.gal figure{margin:0;flex:none;width:150px}
+.gal img{width:150px;border:1px solid var(--line);border-radius:6px;display:block}
+.gal figcaption{font-size:.72rem;color:var(--muted);margin-top:4px;line-height:1.3}
+.sl{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 14px;margin:8px 0;font-size:.92rem}
+.sl b.n{font-family:var(--font-mono);color:var(--accent);margin-right:6px}
+</style>
+<div class="top"><div class="top-in"><span id="pt">0 de 0 itens</span><div class="bar"><i id="pb"></i></div></div></div>
+<div class="wrap">
+<header class="hero"><h1>AMSI, Enunciado do projeto: como cumprir cada requisito, passo a passo</h1><p>Cada requisito do enunciado de AMSI, ligado ao que o Word do FrotaGest já define, com <b>como fazer</b>, <b>onde fica</b> na app e <b>porquê</b>. Os exemplos de código seguem o estilo das aulas (Singleton, listeners, ViewBinding).</p><ul class="toc"><li><a href="#resumo">Em resumo</a></li><li><a href="#passos">Os passos</a></li><li><a href="#lista">Conformidade</a></li><li><a href="#duvidas">Perguntas</a></li><li><a href="#erros">Erros</a></li><li><a href="#aberto">Em aberto</a></li></ul></header>
+<h2 id="resumo">Em resumo</h2>
+<p>O enunciado de AMSI pede uma <b>app Android com webservice REST</b> e fixa requisitos técnicos concretos: 6 a 10 atividades (algumas fragmentos), Volley, CRUD, SharedPreferences, SQLite, master/detail, menu de configuração do servidor. Este manual pega em <b>cada requisito do enunciado</b>, vê no <b>Word do FrotaGest</b> o que já o cobre e explica <b>como fazer, onde e porquê</b>.</p>
+<div class="flow"><span>Enunciado</span><i>→</i><span>Word (RF-AM, US, serviços)</span><i>→</i><span>como fazer</span><i>→</i><span>onde fica na app</span><i>→</i><span>porquê</span></div>
+<div class="note"><b>Duas lacunas</b> no Word: não há <b>menu de configuração do servidor</b> (o enunciado exige) e não há a operação <b>alterar</b> (PUT) numa requisição para o Colaborador (o enunciado exige as 4 operações CRUD). Estão nos passos 4 e 8. A app Android deste manual é a do <b>Colaborador</b> (por agora, só este role usa a app).</div>
+<h2 id="passos">Os passos</h2>
+<p>Marca cada passo quando o tiveres feito. O progresso fica guardado no browser.</p>
+<h3 class="part">Parte A · Perceber o enunciado</h3>
+<details class="step" open>
+<summary><input class="chk" type="checkbox" id="k1" aria-label="Passo 1 feito"><span class="num">1</span><span class="ttl">O que é o projeto e como é avaliado</span><span class="where">Enunciado Projeto Pratico - AMSI - TeSP PSI - 2026_27.pdf</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<ul><li>O projeto prático de AMSI é uma <b>aplicação Android com acesso a um webservice REST/RESTful</b>, uma <b>apresentação intermédia</b> (Etapa 1) e as <b>defesas</b>: prova oral em grupo e teste prático individual.</li><li>Faz-se em <b>grupos de 3</b> (estudantes inscritos na UC de Projeto, como é o vosso caso). O FrotaGest tem 3 elementos.</li><li>O tema está sujeito a aprovação. A proposta em PDF devia ter sido submetida no Moodle até 17/10/2026.</li></ul>
+<div class="lbl">Como se avalia</div>
+<div class="scroll"><table><tr><th>Parte</th><th>Peso</th><th>Notas</th></tr><tr><td>Etapa 1: apresentação e documentação</td><td>20 %</td><td>Ver o manual da Etapa 1</td></tr><tr><td>Etapa 2: implementação e documentação</td><td>50 %</td><td>Prova oral obrigatória; o <b>teste prático individual</b> (0 a 100) multiplica pela nota do projeto</td></tr><tr><td>Duas provas escritas da UC</td><td>30 %</td><td>Fora do projeto</td></tr></table></div>
+<div class="lbl">Porquê perceber isto</div>
+<ul><li>O <b>teste prático individual multiplica</b> a nota do projeto. Se um elemento não souber mexer no código do grupo, baixa a nota <b>dele</b>. Todos têm de perceber a app toda.</li></ul>
+<div class="check">Verifica: sabes que a Etapa 2 pesa 50 % e que o teste individual multiplica a nota.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k2" aria-label="Passo 2 feito"><span class="num">2</span><span class="ttl">O mapa: requisito do enunciado ↔ Word do FrotaGest</span><span class="where">Enunciado · Especificação do SI</span></summary>
+<div class="body">
+<div class="lbl">O que é</div>
+<p>Esta tabela é o <b>mapa de tudo</b>. À esquerda o que o enunciado exige; à direita o que o Word do FrotaGest (RF-AM, US, serviços da secção 9) já cobre, e o que falta. Cada linha tem um passo deste manual.</p>
+<div class="scroll"><table><tr><th>Enunciado exige</th><th>O que o Word já tem</th><th>Falta / atenção</th><th>Passo</th></tr><tr><td>6 a 10 atividades (Activity/Fragment); algumas em fragmentos</td><td>10 ecrãs do Colaborador (Figuras 34 a 43)</td><td>Contar bem: não passar de 10</td><td>3</td></tr><tr><td>Menu de configuração com os dados do servidor</td><td>Não está nos 49 mockups</td><td><b>Criar</b> a Configuração do servidor</td><td>4</td></tr><tr><td>Volley; não bloquear a interface</td><td>RNF-13, RNF-19; serviços REST</td><td>Usar só Volley para a rede</td><td>5</td></tr><tr><td>≥2 atividades dinâmicas com dados do webservice</td><td>Lista, detalhe, viagem, notificações</td><td>—</td><td>6</td></tr><tr><td>Master/detail com serviços da API</td><td>RF-AM-07, US3</td><td>—</td><td>7</td></tr><tr><td>≥4 funcionalidades com CRUD no webservice; as 4 operações CRUD</td><td>POST/GET/DELETE em requisições</td><td><b>Falta o Update (PUT)</b> para o colaborador</td><td>8</td></tr><tr><td>≥2 atividades com introdução de dados</td><td>Novo pedido, checklist, login</td><td>—</td><td>9</td></tr><tr><td>SharedPreferences</td><td>US26 (acesso guardado)</td><td>Definir as chaves</td><td>10</td></tr><tr><td>SQLite (não Room)</td><td>RF-AM-14, RNF-05, US6 (offline)</td><td>—</td><td>11</td></tr><tr><td>Boas práticas: MVC, comentários, planeamento</td><td>RNF-20, RNF-21 (GitHub, Scrum)</td><td>Organizar pacotes</td><td>12</td></tr><tr><td>API no servidor da UC de Projeto</td><td>RNF-18</td><td>Confirmar o endereço</td><td>13</td></tr><tr><td>Etapa 2: relatório, projeto que compila, GitHub, servidor</td><td>—</td><td>Preparar</td><td>14</td></tr></table></div>
+<div class="lbl">Porquê</div>
+<ul><li>Mostra que o Word já cobre a maioria. As <b>linhas a negrito</b> são lacunas reais (configuração do servidor; Update do CRUD) e valem pontos.</li><li>O enunciado dá um <b>máximo de 10 atividades</b> e os mockups do Word têm 16 ecrãs (com os de coordenador e administrador). Como por agora só o Colaborador usa a app, a conta bate certo.</li></ul>
+<div class="check">Verifica: percebes que duas coisas têm de ser acrescentadas ao que o Word diz: configuração do servidor e a operação de alterar.</div>
+</div></details>
+
+<h3 class="part">Parte B · Requisitos técnicos, um a um</h3><p>Em cada passo: o que o enunciado exige, o que o Word já tem, como fazer, onde fica e porquê. Os exemplos de código seguem o estilo das aulas (Books: Singleton, listeners, ViewBinding).</p>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k3" aria-label="Passo 3 feito"><span class="num">3</span><span class="ttl">6 a 10 atividades, algumas em fragmentos</span><span class="where">app: ui/ · MenuMainActivity</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<p>"No mínimo 6 atividades (Activity e/ou Fragment) e um máximo recomendado de 10. Algumas funcionalidades têm de ser implementadas através de fragmentos."</p>
+<div class="lbl">O que o Word dá para o Colaborador</div>
+<div class="scroll"><table><tr><th>#</th><th>Ecrã</th><th>Tipo</th><th>Requisito</th></tr><tr><td>1</td><td>LoginActivity</td><td>Activity</td><td>RF-AM-01, 02</td></tr><tr><td>2</td><td>MenuMainActivity (menu hamburguer)</td><td>Activity</td><td>navegação</td></tr><tr><td>3</td><td>Pedidos (as minhas requisições)</td><td><b>Fragment</b></td><td>RF-AM-07</td></tr><tr><td>4</td><td>Novo pedido</td><td>Activity</td><td>RF-AM-06</td></tr><tr><td>5</td><td>Detalhe da requisição</td><td>Activity</td><td>RF-AM-07, 08</td></tr><tr><td>6</td><td>Receção e entrega (checklist)</td><td>Activity</td><td>RF-AM-10, 11, 12</td></tr><tr><td>7</td><td>Viagem em curso</td><td><b>Fragment</b></td><td>RF-AM-13, 16</td></tr><tr><td>8</td><td>Perfil</td><td><b>Fragment</b></td><td>RF-AM-03</td></tr><tr><td>9</td><td>Notificações</td><td>Activity</td><td>RF-AM-24</td></tr><tr><td>10</td><td>Configuração do servidor</td><td>Activity</td><td>enunciado</td></tr></table></div>
+<div class="lbl">Como fazer</div>
+<ol><li>Usa o <b>menu hamburguer</b> para trocar entre os <b>três fragmentos</b> (Pedidos, Viagem, Perfil) dentro do <code>fragmentContainer</code> da <code>MenuMainActivity</code> (passos 6 a 8 da Ficha 4).</li><li>As restantes (detalhe, novo pedido, checklist, notificações, configuração) são Activities abertas por <code>Intent</code>.</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>São <b>10</b>, o máximo recomendado, e 3 delas são fragmentos: cumpre "algumas através de fragmentos".</li><li>Se adicionares mais ecrãs (recuperar palavra-passe, catálogo), <b>ultrapassas 10</b>. Decide: ou os juntas a um existente (recuperar palavra-passe como diálogo no login), ou aceitas passar o recomendado.</li></ul>
+<div class="check">Verifica: a lista de ecrãs tem entre 6 e 10 itens e pelo menos 2 ou 3 são Fragments.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k4" aria-label="Passo 4 feito"><span class="num">4</span><span class="ttl">Menu de configuração do servidor</span><span class="where">ui/ConfiguracaoActivity.java · SharedPreferences</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<p>"A aplicação tem de conter um menu de configuração que possibilite a inserção dos dados do servidor onde está alojada a API."</p>
+<div class="lbl">O que o Word diz</div>
+<p><b>Nada.</b> Esta funcionalidade não aparece nos mockups, e é por isso que é uma lacuna a preencher.</p>
+<div class="lbl">Como fazer</div>
+<ol><li>Cria a <code>ConfiguracaoActivity</code> com um campo de texto para o endereço da API (por exemplo <code>http://172.22.21.10/frotagest/backend/web/api</code>) e os botões <b>Guardar</b> e <b>Repor</b>.</li><li>Abre-a pela roda dentada no <b>login</b> (antes de entrar já é preciso saber o servidor) e por um item do menu hamburguer.</li><li>Guarda o texto em <b>SharedPreferences</b>:</li></ol>
+<div class="cap">ConfiguracaoActivity.java (exemplo)</div><div class="codewrap"><pre data-src="src1"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>O endereço do servidor <b>muda</b> (o PC de cada um, o servidor da ESTG). Se estivesse escrito no código, tinhas de recompilar.</li><li><code>10.0.2.2</code> é o "localhost" do PC visto de dentro do emulador Android.</li><li>Pede-se <b>um menu</b> que permita inserir os dados: ter só o campo escondido no código não cumpre.</li></ul>
+<div class="check">Verifica: mudar o endereço no ecrã e voltar a abrir a app mantém o valor guardado.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k5" aria-label="Passo 5 feito"><span class="num">5</span><span class="ttl">Volley e não bloquear a interface</span><span class="where">app: pasta de rede/Singleton</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<ul><li>"Para o acesso ao webservice é <b>obrigatória a utilização da biblioteca Volley</b>. A utilização de outra biblioteca não será contabilizada para efeitos de avaliação."</li><li>"O acesso aos recursos do webservice <b>não pode bloquear a interface gráfica</b>."</li></ul>
+<div class="lbl">O que o Word dá</div>
+<p>Os 27 serviços REST da secção 9 (JSON, token no cabeçalho <code>Authorization: Bearer</code>, códigos 400/401/403/404/422).</p>
+<div class="lbl">Como fazer</div>
+<ol><li>Adiciona a dependência do Volley (<code>com.android.volley:volley</code>) e a permissão <code>INTERNET</code> no Manifest.</li><li>Cria <b>uma só fila de pedidos</b> num Singleton, no estilo do <code>SingletonGestorLivros</code> das aulas, e um método por serviço. O resultado chega por um <b>listener</b>:</li></ol>
+<div class="cap">SingletonFrotaGest.java (exemplo)</div><div class="codewrap"><pre data-src="src2"></pre></div>
+<div class="cap">LoginListener.java (a interface)</div><div class="codewrap"><pre data-src="src3"></pre></div>
+<p>A Activity implementa a interface, regista-se no Singleton (<code>setLoginListener(this)</code>) e chama <code>loginAPI(...)</code> no clique do botão.</p>
+<div class="lbl">Porquê</div>
+<ul><li>O Volley põe o pedido numa <b>fila</b> e executa-o noutra thread. A resposta só volta quando chega, por isso o ecrã <b>nunca fica parado</b>. Fazer rede na thread principal é proibido pelo Android (<code>NetworkOnMainThreadException</code>).</li><li>O <b>Singleton</b> garante uma só fila Volley e um só ponto onde estão os pedidos: é o padrão que as aulas usam nos livros.</li><li><b>Só</b> Volley para falar com a API. Qualquer outra biblioteca de rede (Retrofit, OkHttp direto) <b>não conta</b> para a nota.</li></ul>
+<div class="note"><b>Atenção:</b> para ler o JSON usa as classes do Android (<code>JSONObject</code>, <code>JSONArray</code>) como nas aulas. Evita acrescentar bibliotecas que não são precisas.</div>
+<div class="check">Verifica: o login chama a API, o ecrã continua a responder durante o pedido e a resposta chega ao listener.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k6" aria-label="Passo 6 feito"><span class="num">6</span><span class="ttl">≥2 atividades dinâmicas com dados do webservice</span><span class="where">RequisicoesFragment · Detalhe · Viagem · Notificações</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<p>"No mínimo 2 das atividades implementadas devem ser construídas de forma dinâmica, com os dados obtidos do webservice." (Dinâmico = o conteúdo vem da API, não está escrito no layout, como o <b>Livro Dinâmico</b> da Ficha.)</p>
+<div class="lbl">O que o Word dá</div>
+<div class="scroll"><table><tr><th>Ecrã dinâmico</th><th>Serviço</th><th>Requisito</th></tr><tr><td>Pedidos (lista)</td><td>GET /requisicoes</td><td>RF-AM-07</td></tr><tr><td>Detalhe da requisição</td><td>GET /requisicoes/{id}</td><td>RF-AM-07</td></tr><tr><td>Viagem em curso</td><td>GET /requisicoes (em curso) + faturas</td><td>RF-AM-16</td></tr><tr><td>Notificações</td><td>GET /notificacoes</td><td>RF-AM-24</td></tr></table></div>
+<div class="lbl">Como fazer</div>
+<ol><li>O Singleton tem um método <code>getRequisicoesAPI(...)</code> que faz o pedido, converte o JSON em objetos <code>Requisicao</code> e avisa o fragmento pelo listener:</li></ol>
+<div class="cap">SingletonFrotaGest.java (exemplo de lista)</div><div class="codewrap"><pre data-src="src4"></pre></div>
+<ol><li>No <code>RequisicoesFragment</code> mostra a lista num <code>ListView</code> com um adaptador, e atualiza-a quando o listener avisa (<code>onRefreshListaRequisicoes</code>).</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>Mostra que "o ecrã é construído com os dados da API": se a API muda, o ecrã muda sem mexer no código.</li><li>O <b>token vai no cabeçalho</b> de cada pedido (<code>getHeaders</code>); sem ele a API responde 401.</li></ul>
+<div class="check">Verifica: a lista de pedidos mostra os dados que estão na base de dados (e muda quando alguém cria um pedido).</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k7" aria-label="Passo 7 feito"><span class="num">7</span><span class="ttl">Master/detail</span><span class="where">RequisicoesFragment → RequisicaoDetalheActivity</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<p>"A aplicação deve conter, pelo menos, um relacionamento master/detail recorrendo aos serviços desenvolvidos na API."</p>
+<div class="lbl">O que o Word dá</div>
+<p><b>Já está definido.</b> O RF-AM-07 e a US3 descrevem a lista de requisições (master) e o ecrã de detalhe com viatura, quilómetros, faturas, checklists e fotografias (detail). O Word diz até que é a funcionalidade master-detail comum ao website e à app.</p>
+<div class="lbl">Como fazer</div>
+<ol><li>O <b>master</b> é a lista (<code>GET /requisicoes</code>). Ao tocar numa linha, abre o detalhe com o <code>id</code> escolhido:</li></ol>
+<div class="cap">RequisicoesFragment.java (clique numa linha)</div><div class="codewrap"><pre data-src="src5"></pre></div>
+<ol><li>O <b>detail</b> lê o id e pede à API o detalhe (<code>GET /requisicoes/{id}</code>):</li></ol>
+<div class="cap">RequisicaoDetalheActivity.java</div><div class="codewrap"><pre data-src="src6"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>Master/detail = uma lista de coisas e, ao escolher uma, o ecrã com tudo sobre essa coisa. A ligação entre os dois é o <b>id</b>.</li><li>Tem de usar <b>serviços da API</b> (não dados locais): por isso o detalhe faz o seu próprio pedido.</li></ul>
+<div class="check">Verifica: tocar numa requisição abre o detalhe dessa requisição, com dados vindos da API.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k8" aria-label="Passo 8 feito"><span class="num">8</span><span class="ttl">CRUD: 4 funcionalidades e as 4 operações</span><span class="where">serviços da API · Singleton</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<ul><li>"No mínimo, 4 das funcionalidades implementadas têm de aceder ao webservice para realização das operações CRUD (inserir, consultar, alterar e remover)."</li><li>"Será obrigatório a implementação das 4 operações CRUD sobre alguns dos dados acedidos pelo webservice."</li></ul>
+<div class="lbl">O que o Word dá (serviços do Colaborador)</div>
+<div class="scroll"><table><tr><th>Dados</th><th>Criar (POST)</th><th>Consultar (GET)</th><th>Alterar (PUT)</th><th>Remover (DELETE)</th></tr><tr><td>Requisição</td><td>POST /requisicoes</td><td>GET /requisicoes, /requisicoes/{id}</td><td><b>não existe</b></td><td>DELETE /requisicoes/{id}</td></tr><tr><td>Checklist</td><td>POST /requisicoes/{id}/checklists</td><td>no detalhe da requisição</td><td>—</td><td>—</td></tr><tr><td>Fatura</td><td>POST /requisicoes/{id}/faturas</td><td>no detalhe da requisição</td><td>—</td><td>—</td></tr><tr><td>Notificação</td><td>—</td><td>GET /notificacoes</td><td>PUT /notificacoes/{id}/lida</td><td>—</td></tr><tr><td>Dispositivo (push)</td><td>POST /dispositivos</td><td>—</td><td>—</td><td>—</td></tr></table></div>
+<div class="lbl">A lacuna</div>
+<p>As 4 operações têm de existir <b>sobre alguns dados</b>. Hoje, para o Colaborador, faltam o <b>alterar</b> das requisições. Propostas (decide com quem faz a API):</p>
+<ul><li><b>Requisição:</b> acrescentar <code>PUT /requisicoes/{id}</code> para <b>editar um pedido ainda pendente</b> (datas, motivo, destino). Com isso fica <b>C</b> (POST), <b>R</b> (GET), <b>U</b> (PUT) e <b>D</b> (DELETE) no mesmo recurso, o caso mais limpo.</li><li><b>Fatura:</b> acrescentar <code>GET</code>, <code>PUT</code> (corrigir litros/valor, que o RF-AM-13 diz serem editáveis) e <code>DELETE</code>. Seria a 2.ª funcionalidade com CRUD.</li><li><b>Notificação:</b> <code>GET</code> + <code>PUT lida</code> (+ <code>DELETE</code> opcional) como 3.ª.</li><li><b>Checklist:</b> <code>POST</code> + <code>GET</code> (+ <code>PUT</code> a corrigir o km) como 4.ª.</li></ul>
+<div class="lbl">Como fazer (exemplo de Alterar e Remover com Volley)</div>
+<div class="cap">SingletonFrotaGest.java (exemplo)</div><div class="codewrap"><pre data-src="src7"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>O CRUD é <b>obrigatório</b> e vale muito na avaliação do código. Convém <b>ter um recurso com as 4 operações completas</b>, e demonstrá-las na prova oral.</li><li>O Word fala em "cancelar" (DELETE), mas não em "alterar" o pedido: é a única operação em falta.</li></ul>
+<div class="note"><b>Atenção:</b> alterar uma requisição precisa também de ser feito <b>no website/API (Yii2)</b>. Avisa quem faz a API (SIS) cedo.</div>
+<div class="check">Verifica: há pelo menos 4 funcionalidades que usam o webservice com Criar/Consultar/Alterar/Remover e um recurso tem as 4 operações.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k9" aria-label="Passo 9 feito"><span class="num">9</span><span class="ttl">≥2 atividades com introdução de dados</span><span class="where">NovoPedidoActivity · ChecklistActivity</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<p>"No mínimo, 2 das atividades implementadas devem permitir introdução de dados pelo utilizador."</p>
+<div class="lbl">O que o Word dá</div>
+<div class="scroll"><table><tr><th>Ecrã</th><th>Dados introduzidos</th><th>Requisito</th></tr><tr><td>Novo pedido</td><td>datas, categoria, destino, motivo</td><td>RF-AM-06</td></tr><tr><td>Receção e entrega</td><td>quilómetros, estado geral, documentos, fotografias</td><td>RF-AM-10, 11, 12</td></tr><tr><td>Login</td><td>email e palavra-passe</td><td>RF-AM-01</td></tr><tr><td>Configuração do servidor</td><td>endereço da API</td><td>enunciado</td></tr><tr><td>Fatura (diálogo)</td><td>litros e valor</td><td>RF-AM-13</td></tr></table></div>
+<div class="lbl">Como fazer</div>
+<ul><li>Valida sempre <b>antes</b> de chamar a API (como no <code>onClickLogin</code> do Books): campo vazio ou formato errado → <code>setError(...)</code> no campo e <code>return</code>.</li><li>No Novo pedido: o motivo é obrigatório e a data de fim não pode ser antes da de início. No checklist: exige o km e as 4 fotografias.</li><li>Depois envia por Volley (POST).</li></ul>
+<div class="lbl">Porquê</div>
+<ul><li>São 5 ecrãs com entrada de dados, o dobro do mínimo.</li><li>A validação local poupa pedidos e dá mensagens claras (RNF-03).</li></ul>
+<div class="check">Verifica: os formulários não deixam submeter dados inválidos e mostram o erro no campo.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k10" aria-label="Passo 10 feito"><span class="num">10</span><span class="ttl">SharedPreferences (obrigatório)</span><span class="where">util · ConfiguracaoActivity · LoginActivity</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<p>"É obrigatório utilizar SharedPreferences para o armazenamento de dados em ficheiros locais."</p>
+<div class="lbl">O que o Word dá</div>
+<p>A US26 diz que "o acesso fica guardado no dispositivo para não ser necessário iniciar sessão a cada utilização". É exatamente o que as SharedPreferences fazem.</p>
+<div class="lbl">O que guardar</div>
+<div class="scroll"><table><tr><th>Chave</th><th>Valor</th><th>Para quê</th></tr><tr><td>URL_API</td><td>endereço do servidor</td><td>menu de configuração</td></tr><tr><td>TOKEN</td><td>token devolvido no login</td><td>cabeçalho Authorization de cada pedido</td></tr><tr><td>EMAIL / NOME / ROLE</td><td>dados do utilizador</td><td>cabeçalho do menu e perfil</td></tr></table></div>
+<div class="cap">exemplo: guardar a sessao depois do login</div><div class="codewrap"><pre data-src="src8"></pre></div>
+<div class="lbl">Porquê</div>
+<ul><li>Fica num ficheiro privado da app, mesmo depois de fechar. É para dados <b>pequenos</b> (texto), não para listas grandes nem para registos offline (isso é o SQLite).</li><li>Ao abrir a app, o <code>LoginActivity</code> vê se já existe <code>TOKEN</code>; se sim, salta para o menu.</li></ul>
+<div class="check">Verifica: fechar e reabrir a app não pede o login; terminar sessão volta a pedi-lo.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k11" aria-label="Passo 11 feito"><span class="num">11</span><span class="ttl">SQLite (obrigatório) e modo offline</span><span class="where">offline/FilaOffline.java</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<p>"SQLite para o armazenamento numa base de dados local. <b>Não serão contabilizadas implementações que utilizem alternativas ao SQLite, nomeadamente a biblioteca Room.</b>"</p>
+<div class="lbl">O que o Word dá</div>
+<ul><li>RF-AM-14: guardar localmente fotografias, quilómetros, checklist e pedidos preenchidos sem ligação e sincronizá-los quando houver ligação, indicando os registos por sincronizar.</li><li>RNF-05 e US6: sem perda de dados. Serviço <code>POST /sincronizacao</code> (envio em lote, cada registo com <code>id_local</code>).</li></ul>
+<div class="lbl">Como fazer</div>
+<ol><li>Cria uma classe que estende <code>SQLiteOpenHelper</code> (<b>não</b> uses Room) com uma tabela de registos pendentes:</li></ol>
+<div class="cap">FilaOffline.java (exemplo)</div><div class="codewrap"><pre data-src="src9"></pre></div>
+<ol><li>Quando não há rede (ou o pedido falha por falta de ligação), <b>guarda aqui</b> em vez de falhar.</li><li>Quando a rede volta, lê a tabela, envia tudo em <code>POST /sincronizacao</code> e <b>apaga só os registos que a API confirmou</b>.</li><li>No Perfil mostra "N registos por sincronizar" (a contagem das linhas).</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>O Room <b>não conta</b>. Usar <code>SQLiteOpenHelper</code> é o que as aulas ensinam e o que se avalia.</li><li>O <code>id_local</code> evita registos duplicados se o envio for repetido.</li></ul>
+<div class="check">Verifica: em modo avião o checklist fica guardado; ao voltar a rede é enviado e desaparece da lista de pendentes.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k12" aria-label="Passo 12 feito"><span class="num">12</span><span class="ttl">Boas práticas: MVC, comentários e planeamento</span><span class="where">estrutura do projeto · GitHub</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<p>"Será valorizada a utilização de planeamento, regras para coordenação entre elementos do grupo e implementação que siga as boas práticas (utilização de padrão MVC, comentários, etc.)."</p>
+<div class="lbl">Como fazer</div>
+<div class="scroll"><table><tr><th>Letra</th><th>O que é</th><th>Onde fica na app</th></tr><tr><td><b>M</b>odel</td><td>os dados (classes simples)</td><td>pacote <code>modelo</code>: <code>Requisicao</code>, <code>Notificacao</code>, <code>Fatura</code>…</td></tr><tr><td><b>V</b>iew</td><td>o que se vê</td><td><code>res/layout</code> (XML) e menus</td></tr><tr><td><b>C</b>ontroller</td><td>a lógica entre os dois</td><td>Activities/Fragments e o <code>SingletonFrotaGest</code> (pedidos Volley)</td></tr></table></div>
+<ul><li><b>Comentários</b> curtos nas partes que não são óbvias (como o Books faz: "//Como nao preciso de retornar nada, uso o startActivity").</li><li><b>Nomes</b> coerentes, em português, no padrão das aulas (<code>etEmail</code>, <code>tvTitulo</code>, <code>btnLogin</code>).</li><li><b>GitHub:</b> commits regulares de todos os elementos (RNF-20), um ramo por tarefa e juntar por revisão.</li><li><b>Planeamento:</b> Scrum, sprints quinzenais (RNF-21), com as tarefas (US) por elemento.</li></ul>
+<div class="lbl">Porquê</div>
+<ul><li>É o que "será valorizado": o código arrumado e a prova de que o trabalho foi dividido (os commits mostram quem fez o quê).</li><li>O MVC facilita o teste individual: cada elemento sabe onde está cada coisa.</li></ul>
+<div class="check">Verifica: o projeto tem pacotes modelo / ui / (rede) e os commits dos três elementos aparecem no GitHub.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k13" aria-label="Passo 13 feito"><span class="num">13</span><span class="ttl">A API no servidor da UC de Projeto</span><span class="where">servidor · Configuração</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<p>"A API terá de estar disponível no servidor disponibilizado pela UC de Projeto."</p>
+<div class="lbl">O que o Word diz</div>
+<p>O RNF-18 já diz: o sistema é executado no <b>servidor de produção da ESTG</b>, com uma única base de dados partilhada entre a aplicação web e a móvel.</p>
+<div class="lbl">Como fazer</div>
+<ol><li>Em desenvolvimento, a app fala com o WAMP: no emulador, <code>http://10.0.2.2/…</code>; num telemóvel real, o IP do PC na mesma rede Wi-Fi.</li><li>Quando a API estiver no servidor da ESTG, só é preciso <b>mudar o endereço</b> no menu de configuração (passo 4).</li><li>Antes da entrega, testa a app contra o <b>servidor real</b> (não só o WAMP).</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>Na Etapa 2 entrega-se o <b>link do servidor</b>. Se a app só funcionar no PC de um elemento, não é avaliável.</li></ul>
+<div class="check">Verifica: a app funciona com o endereço do servidor da UC.</div>
+</div></details>
+
+<h3 class="part">Parte C · Etapa 2 e provas</h3>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k14" aria-label="Passo 14 feito"><span class="num">14</span><span class="ttl">O que entregar na Etapa 2</span><span class="where">enunciado: Etapa 2</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<ul><li><b>Relatório de projeto em PDF.</b></li><li><b>Projeto Android Studio pronto a compilar e executar, sem erros de compilação. Se não compilar, a classificação é 0 valores.</b></li><li><b>Link de acesso ao GitHub</b> e ao <b>servidor</b> onde está alojada a API/projeto.</li><li>É <b>obrigatório o GitHub</b>, com os <b>docentes adicionados como membros da equipa</b> para verem os commits: David Safadinho, Sónia Luz, Cátia Ledesma e Guilherme Pereira.</li></ul>
+<div class="lbl">Como fazer</div>
+<ol><li><b>Compilar do zero:</b> apaga a pasta <code>build</code>, faz <i>Build → Clean Project</i> e <i>Rebuild Project</i>. Corre num emulador novo.</li><li><b>Relatório</b> (o enunciado não define o índice; proposta): capa; introdução; requisitos e user stories; arquitetura; ecrãs com capturas; serviços Volley e a tabela CRUD; SharedPreferences e SQLite; testes; planeamento e contribuição de cada elemento; conclusões; links.</li><li><b>GitHub:</b> repositório com o projeto Android, README de como correr, e os 4 docentes como colaboradores.</li><li>Entrega no Moodle até <b>16/01/2027 às 23h59</b>.</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>O "0 valores se não compilar" é a regra mais dura do enunciado. Compila sempre antes de entregar.</li><li>Os docentes usam o GitHub para ver <b>quem fez o quê</b>.</li></ul>
+<div class="check">Verifica: Rebuild Project sem erros; o GitHub tem os docentes; o relatório está em PDF.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k15" aria-label="Passo 15 feito"><span class="num">15</span><span class="ttl">Prova oral e teste prático individual</span><span class="where">20 a 22/01/2027</span></summary>
+<div class="body">
+<div class="lbl">O que diz o enunciado</div>
+<ul><li><b>Prova oral</b> em sala: 20 e 21/01/2027 (provisório).</li><li><b>Teste prático individual</b>: 22/01/2027, com valor de 0 a 100 que <b>multiplica pela nota do projeto</b>.</li></ul>
+<div class="lbl">Como preparar</div>
+<ol><li>Cada elemento sabe <b>explicar e alterar</b> qualquer parte: o login, o Singleton, a lista, o CRUD, o SharedPreferences, o SQLite.</li><li>Treina pequenas alterações ao vivo: acrescentar um campo ao Novo pedido, mudar um texto do menu, fazer um pedido GET novo com Volley.</li><li>Usa este manual e o das fichas como <b>guia de estudo</b>; o código segue o estilo das aulas, por isso encontras os mesmos padrões.</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>O teste individual pode baixar muito a nota se não souberes mexer no código. É individual: ninguém te salva.</li><li>As explicações de "porquê" deste manual servem para responder na oral.</li></ul>
+<div class="check">Verifica: cada elemento consegue fazer, sozinho, uma alteração simples na app.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k16" aria-label="Passo 16 feito"><span class="num">16</span><span class="ttl">Calendário</span><span class="where">enunciado</span></summary>
+<div class="body">
+<div class="lbl">Datas do enunciado (provisórias, a validar no calendário de avaliação)</div>
+<div class="scroll"><table><tr><th>Data</th><th>O que acontece</th></tr><tr><td>17/10/2026</td><td>Limite de submissão da proposta do projeto (PDF) no Moodle (já passou)</td></tr><tr><td>07/11/2026 23h59</td><td>Entrega da Etapa 1 (PPTX ou PDF). O enunciado escreve 2025 por engano</td></tr><tr><td>09 a 13/11/2026</td><td>Prova oral da Etapa 1, em aula</td></tr><tr><td>16/01/2027 23h59</td><td>Entrega da Etapa 2: aplicação móvel, relatório e apresentação</td></tr><tr><td>20 e 21/01/2027</td><td>Prova oral do projeto</td></tr><tr><td>22/01/2027</td><td>Teste prático individual da Etapa 2</td></tr></table></div>
+<div class="check">Verifica: tens estas datas num calendário partilhado do grupo.</div>
+</div></details>
+
+<h2 id="lista">Checklist de conformidade com o enunciado</h2>
+<ul class="cl">
+<li><label><input class="chk" type="checkbox" id="c1"><span>6 a 10 atividades, algumas Fragments (passo 3)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c2"><span>Menu de configuração do servidor, guardado em SharedPreferences (passo 4)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c3"><span>Todo o acesso ao webservice por Volley, sem bloquear a interface (passo 5)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c4"><span>≥2 ecrãs dinâmicos com dados da API (passo 6)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c5"><span>Master/detail: Pedidos → Detalhe (passo 7)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c6"><span>≥4 funcionalidades com CRUD e as 4 operações num recurso (passo 8)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c7"><span>≥2 ecrãs com introdução de dados e validação (passo 9)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c8"><span>SharedPreferences para sessão e configuração (passo 10)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c9"><span>SQLite (SQLiteOpenHelper, sem Room) para o modo offline (passo 11)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c10"><span>MVC, comentários, GitHub com commits de todos (passo 12)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c11"><span>API no servidor da UC; app testada contra ele (passo 13)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c12"><span>Projeto compila sem erros (Rebuild Project) e o GitHub tem os 4 docentes (passo 14)</span></label></li>
+</ul>
+<h2 id="duvidas">Perguntas para o estudo</h2>
+<div class="qa"><b>Posso usar outra biblioteca além do Volley?</b><p>Para aceder ao webservice não conta para a avaliação. Para ler JSON usa as classes do Android (<code>JSONObject</code>, <code>JSONArray</code>), como nas aulas.</p></div>
+<div class="qa"><b>Posso usar Room em vez de SQLite?</b><p>Não: "não serão contabilizadas implementações que utilizem alternativas ao SQLite, nomeadamente a biblioteca Room". Usa <code>SQLiteOpenHelper</code>.</p></div>
+<div class="qa"><b>O que é uma atividade "construída de forma dinâmica"?</b><p>Aquela cujo conteúdo vem do webservice em execução, e não escrito no layout (como o Livro Dinâmico da ficha).</p></div>
+<div class="qa"><b>Qual a diferença entre SharedPreferences e SQLite aqui?</b><p>SharedPreferences: poucos dados simples (endereço, token). SQLite: registos mais estruturados e em número variável (os pendentes do modo offline).</p></div>
+<div class="qa"><b>O que torna uma funcionalidade um CRUD?</b><p>Fazer, por serviços da API, as quatro operações: inserir (POST), consultar (GET), alterar (PUT) e remover (DELETE).</p></div>
+<div class="qa"><b>Se o código não compilar na entrega?</b><p>A classificação é 0 valores no projeto. Compila e testa num emulador limpo antes de entregar.</p></div>
+<div class="qa"><b>Preciso mesmo de ter menu de configuração?</b><p>Sim, é obrigatório. É por onde se escreve o endereço do servidor, que depois fica nas SharedPreferences.</p></div>
+<h2 id="erros">Erros que podem acontecer</h2>
+<div class="qa"><b>Passa de 10 atividades</b><p>O recomendado é 10 no máximo. Junta ecrãs (diálogos em vez de Activities) para ficares dentro.</p></div>
+<div class="qa"><b>"NetworkOnMainThreadException"</b><p>Foi feito um pedido de rede na thread principal. Usa o Volley (assíncrono), nunca <code>HttpURLConnection</code> direto.</p></div>
+<div class="qa"><b>401 em todos os pedidos</b><p>Falta o cabeçalho <code>Authorization: Bearer token</code> no <code>getHeaders()</code>, ou o token não foi guardado.</p></div>
+<div class="qa"><b>Cleartext HTTP traffic not permitted</b><p>Servidor em http: acrescenta <code>android:usesCleartextTraffic="true"</code> no Manifest (só para desenvolvimento; em produção, HTTPS).</p></div>
+<div class="qa"><b>Registos duplicados depois do modo offline</b><p>Falta o <code>id_local</code> único por registo ou apagas da fila registos que a API não confirmou.</p></div>
+<div class="qa"><b>A app só funciona no PC de um elemento</b><p>O endereço da API não está configurável. Usa o menu de configuração e o servidor da UC.</p></div>
+<h2 id="aberto">Pontos em aberto</h2>
+<div class="qa"><b>Alterar (PUT) uma requisição</b><p>Não existe nos 27 serviços. Combinar com SIS: <code>PUT /requisicoes/{id}</code> para pedidos pendentes (passo 8).</p></div>
+<div class="qa"><b>Configuração do servidor</b><p>Não está nos mockups do Word. Acrescentar o ecrã e a referência (passo 4).</p></div>
+<div class="qa"><b>Mockups com barra de separadores</b><p>O Word mostra barra inferior; a app usa menu hamburguer (Ficha 4). Atualizar os mockups.</p></div>
+<div class="qa"><b>Catálogo de viaturas e calendário (RF-AM-04/05)</b><p>Têm requisito e serviço mas não têm ecrã nos mockups. Decidir onde entram sem passar de 10 ecrãs.</p></div>
+<div class="qa"><b>Estrutura do relatório da Etapa 2</b><p>O enunciado só diz "Relatório de projeto em PDF". O índice deste manual é uma proposta.</p></div>
+<div class="qa"><b>Datas provisórias</b><p>O enunciado diz que devem ser validadas no calendário de avaliação. O ano da Etapa 1 no enunciado (2025) é gralha.</p></div>
+<div class="qa"><b>Roles na app</b><p>O Word ainda dá app ao Coordenador e ao Administrador; por agora só o Colaborador. O Word será corrigido mais tarde.</p></div>
+<button class="reset" id="reset" type="button">Limpar todo o progresso</button>
+</div>
+<script type="text/plain" id="src1">// guardar o endereco do servidor
+SharedPreferences prefs = getSharedPreferences("FROTAGEST", MODE_PRIVATE);
+SharedPreferences.Editor editor = prefs.edit();
+editor.putString("URL_API", etUrl.getText().toString().trim());
+editor.apply();
+
+// ler o endereco (com um valor por omissao)
+String url = prefs.getString("URL_API", "http://10.0.2.2/frotagest/backend/web/api");</script>
+<script type="text/plain" id="src2">public class SingletonFrotaGest {
+
+    private static SingletonFrotaGest instance = null;
+    private static RequestQueue volleyQueue = null;
+    private LoginListener loginListener;
+
+    // devolve sempre a mesma instancia
+    public static synchronized SingletonFrotaGest getInstance(Context context) {
+        if (instance == null) {
+            instance = new SingletonFrotaGest();
+            volleyQueue = Volley.newRequestQueue(context);
+        }
+        return instance;
+    }
+
+    public void setLoginListener(LoginListener loginListener) {
+        this.loginListener = loginListener;
+    }
+
+    public void loginAPI(String email, String password, Context context) {
+        String url = getUrlApi(context) + "/auth/login";
+
+        JSONObject corpo = new JSONObject();
+        try {
+            corpo.put("username", email);
+            corpo.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest pedido = new JsonObjectRequest(Request.Method.POST, url, corpo,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // aqui chega a resposta; a interface nao ficou parada a espera
+                        if (loginListener != null) {
+                            loginListener.onValidateLogin(response);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context, "Erro no login", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        volleyQueue.add(pedido);
+    }
+}</script>
+<script type="text/plain" id="src3">public interface LoginListener {
+    void onValidateLogin(JSONObject resposta);
+}</script>
+<script type="text/plain" id="src4">public void getRequisicoesAPI(Context context) {
+    String url = getUrlApi(context) + "/requisicoes";
+
+    JsonObjectRequest pedido = new JsonObjectRequest(Request.Method.GET, url, null,
+            new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    requisicoes = new ArrayList<>();
+                    try {
+                        JSONArray lista = response.getJSONArray("data");
+                        for (int i = 0; i < lista.length(); i++) {
+                            JSONObject r = lista.getJSONObject(i);
+                            requisicoes.add(new Requisicao(r.getInt("id"),
+                                    r.getString("estado"), r.getString("data_inicio")));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (requisicoesListener != null) {
+                        requisicoesListener.onRefreshListaRequisicoes(requisicoes);
+                    }
+                }
+            },
+            new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(context, "Erro ao obter requisições", Toast.LENGTH_SHORT).show();
+                }
+            }) {
+        @Override
+        public Map<String, String> getHeaders() {
+            Map<String, String> h = new HashMap<>();
+            h.put("Authorization", "Bearer " + getToken(context));   // RNF-09
+            return h;
+        }
+    };
+    volleyQueue.add(pedido);
+}</script>
+<script type="text/plain" id="src5">Intent intent = new Intent(getContext(), RequisicaoDetalheActivity.class);
+intent.putExtra("ID_REQUISICAO", requisicao.getId());
+startActivity(intent);</script>
+<script type="text/plain" id="src6">int id = getIntent().getIntExtra("ID_REQUISICAO", 0);
+SingletonFrotaGest.getInstance(this).getRequisicaoAPI(id, this);   // GET /requisicoes/{id}</script>
+<script type="text/plain" id="src7">// ALTERAR (PUT) um pedido pendente
+public void editarRequisicaoAPI(int id, JSONObject corpo, Context context) {
+    String url = getUrlApi(context) + "/requisicoes/" + id;
+    JsonObjectRequest pedido = new JsonObjectRequest(Request.Method.PUT, url, corpo,
+            response -> Toast.makeText(context, "Pedido alterado", Toast.LENGTH_SHORT).show(),
+            error -> Toast.makeText(context, "Erro ao alterar", Toast.LENGTH_SHORT).show());
+    volleyQueue.add(pedido);   // lembrar: precisa do cabecalho Authorization
+}
+
+// REMOVER (DELETE) um pedido pendente
+public void removerRequisicaoAPI(int id, Context context) {
+    String url = getUrlApi(context) + "/requisicoes/" + id;
+    JsonObjectRequest pedido = new JsonObjectRequest(Request.Method.DELETE, url, null,
+            response -> Toast.makeText(context, "Pedido cancelado", Toast.LENGTH_SHORT).show(),
+            error -> Toast.makeText(context, "Erro ao cancelar", Toast.LENGTH_SHORT).show());
+    volleyQueue.add(pedido);
+}</script>
+<script type="text/plain" id="src8">SharedPreferences prefs = getSharedPreferences("FROTAGEST", MODE_PRIVATE);
+SharedPreferences.Editor editor = prefs.edit();
+editor.putString("TOKEN", token);
+editor.putString("EMAIL", email);
+editor.apply();
+
+// terminar sessao: apagar o que foi guardado
+prefs.edit().remove("TOKEN").remove("EMAIL").apply();</script>
+<script type="text/plain" id="src9">public class FilaOffline extends SQLiteOpenHelper {
+
+    private static final String BD = "frotagest_offline.db";
+    private static final int VERSAO = 1;
+
+    public FilaOffline(Context context) {
+        super(context, BD, null, VERSAO);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE pendente (" +
+                "id_local TEXT PRIMARY KEY, " +
+                "tipo TEXT NOT NULL, " +          // checklist, fatura, localizacao
+                "requisicao_id INTEGER, " +
+                "dados TEXT NOT NULL)");          // o JSON do registo
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int antiga, int nova) {
+        db.execSQL("DROP TABLE IF EXISTS pendente");
+        onCreate(db);
+    }
+
+    public void guardar(String idLocal, String tipo, int requisicaoId, String dados) {
+        ContentValues v = new ContentValues();
+        v.put("id_local", idLocal);
+        v.put("tipo", tipo);
+        v.put("requisicao_id", requisicaoId);
+        v.put("dados", dados);
+        getWritableDatabase().insert("pendente", null, v);
+    }
+}</script>
+<script>
+(function(){
+  // preencher cada bloco de codigo a partir do seu <script type="text/plain">, sem escapar nada
+  document.querySelectorAll('pre[data-src]').forEach(function(pre){
+    var src = document.getElementById(pre.getAttribute('data-src'));
+    var code = document.createElement('code');
+    code.style.cssText = 'background:none;padding:0;font-size:inherit;color:inherit';
+    code.textContent = src ? src.textContent : '';
+    pre.appendChild(code);
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copy'; b.textContent = 'Copiar';
+    b.addEventListener('click', function(){
+      var txt = code.textContent;
+      var ok = function(){ b.textContent = 'Copiado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 1500); };
+      var fail = function(){
+        var r = document.createRange(); r.selectNodeContents(code);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        b.textContent = 'Selecionado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 1500);
+      };
+      try { navigator.clipboard.writeText(txt).then(ok, fail); } catch(e){ fail(); }
+    });
+    pre.parentNode.appendChild(b);
+  });
+
+  // progresso: caixas guardadas no browser (so uma comodidade, a pagina funciona sem isto)
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.chk'));
+  var KEY = 'frotagest-amsi-enunciado-v1';
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } }
+  function save(){
+    var o = {}; boxes.forEach(function(c){ if (c.checked) o[c.id] = 1; });
+    try { localStorage.setItem(KEY, JSON.stringify(o)); } catch(e){}
+  }
+  function paint(){
+    var n = boxes.filter(function(c){ return c.checked; }).length;
+    document.getElementById('pt').textContent = n + ' de ' + boxes.length + ' itens';
+    document.getElementById('pb').style.width = (n / boxes.length * 100) + '%';
+  }
+  var saved = load();
+  boxes.forEach(function(c){
+    if (saved[c.id]) c.checked = true;
+    // clicar na caixa de um passo nao deve abrir/fechar o passo
+    c.addEventListener('click', function(e){ e.stopPropagation(); });
+    c.addEventListener('change', function(){ save(); paint(); });
+  });
+  document.getElementById('reset').addEventListener('click', function(){
+    boxes.forEach(function(c){ c.checked = false; }); save(); paint();
+  });
+  paint();
+})();
+</script>
+
+</html>
