@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="pt">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FrotaGest - AMSI Etapa 1: manual</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: coluna de leitura unica; indice no topo; barra de progresso fixa; cada passo abre e fecha; checklists com caixas guardadas no browser */
+:root{
+  --bg:#f6f7f4; --surface:#ffffff; --fg:#1d2420; --muted:#5c665f; --line:#dfe3dc;
+  --accent:#1f6f5b; --accent-soft:#e1f0ea; --accent-fg:#ffffff;
+  --code-bg:#14201b; --code-fg:#e4efe9; --warn:#9a5b00; --warn-soft:#fbf0dc;
+  --font-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#101613; --surface:#18211c; --fg:#e6ede8; --muted:#9aa89f; --line:#2a362f;
+    --accent:#4fc2a0; --accent-soft:#183328; --accent-fg:#06231a;
+    --code-bg:#0b110e; --code-fg:#dcebe3; --warn:#f0b45c; --warn-soft:#35280f;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#101613; --surface:#18211c; --fg:#e6ede8; --muted:#9aa89f; --line:#2a362f;
+  --accent:#4fc2a0; --accent-soft:#183328; --accent-fg:#06231a;
+  --code-bg:#0b110e; --code-fg:#dcebe3; --warn:#f0b45c; --warn-soft:#35280f;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:16px;line-height:1.6;padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:780px;margin-inline:auto}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:clamp(1.9rem,5vw,2.6rem);font-weight:700}
+h2{font-size:1.5rem;margin-block:52px 16px;scroll-margin-top:60px}
+h3{font-size:1.1rem;margin-block:20px 8px}
+p{margin:0 0 12px;max-width:68ch}
+a{color:var(--accent)}
+code{font-family:var(--font-mono);font-size:.88em;background:var(--accent-soft);padding:1px 6px;border-radius:4px;overflow-wrap:anywhere}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-16px;padding:10px 16px}
+.top-in{max-width:780px;margin-inline:auto;display:flex;align-items:center;gap:12px;font-size:.85rem;color:var(--muted)}
+.bar{flex:1;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+.hero{padding-block:36px 8px}
+.hero p{color:var(--muted);font-size:1.05rem;margin-top:12px}
+.toc{display:flex;flex-wrap:wrap;gap:6px 14px;margin:20px 0 0;padding:0;list-style:none;font-size:.88rem}
+.toc a{text-decoration:none;border-bottom:1px solid var(--line)}
+.toc a:hover{border-color:var(--accent)}
+.er{display:flex;flex-wrap:wrap;gap:12px 40px;align-items:center;margin-block:20px}
+.tbl{border:1px solid var(--line);background:var(--surface);border-radius:6px;min-width:190px;font-family:var(--font-mono);font-size:.82rem}
+.tbl b{display:block;padding:6px 12px;background:var(--accent-soft);font-weight:500;border-bottom:1px solid var(--line)}
+.tbl span{display:block;padding:2px 12px}
+.tbl span:last-child{padding-bottom:8px}
+.rel{font-size:.85rem;color:var(--muted);max-width:22ch}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px;margin-bottom:12px}
+.order{display:grid;gap:8px;counter-reset:o;padding:0;list-style:none;margin:0}
+.order li{counter-increment:o;display:flex;gap:12px;align-items:baseline}
+.order li::before{content:counter(o);font-family:var(--font-mono);font-size:.8rem;min-width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--accent);color:var(--accent-fg);flex:none}
+details.step{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin-bottom:12px}
+details.step[open]{border-color:var(--accent)}
+details.step>summary{list-style:none;cursor:pointer;display:flex;gap:12px;align-items:center;padding:14px 16px}
+details.step>summary::-webkit-details-marker{display:none}
+details.step>summary:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-family:var(--font-mono);font-size:.78rem;color:var(--muted);min-width:2.2em}
+.ttl{flex:1;min-width:0;font-weight:600}
+.where{font-family:var(--font-mono);font-size:.75rem;color:var(--muted);display:none}
+@media (min-width:660px){.where{display:block}}
+.chk{width:20px;height:20px;accent-color:var(--accent);flex:none}
+.body{padding:4px 16px 18px;border-top:1px solid var(--line)}
+.lbl{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin:18px 0 6px}
+.body ul,.body ol{margin:0 0 12px;padding-left:22px}
+.body li{margin-bottom:5px}
+.codewrap{position:relative;margin:8px 0 14px}
+pre{margin:0;background:var(--code-bg);color:var(--code-fg);font-family:var(--font-mono);font-size:.82rem;line-height:1.55;padding:14px 16px;border-radius:6px;overflow-x:auto;white-space:pre}
+.cap{font-family:var(--font-mono);font-size:.75rem;color:var(--muted);margin-bottom:4px}
+.copy{position:absolute;top:8px;right:8px;font:inherit;font-size:.72rem;padding:3px 9px;border-radius:4px;border:1px solid #3a4a41;background:#1f2e26;color:#cfe3d9;cursor:pointer}
+.copy:hover{background:#2a3d33}
+.note{background:var(--warn-soft);color:var(--fg);border-left:3px solid var(--warn);padding:10px 14px;border-radius:0 6px 6px 0;margin:12px 0;font-size:.92rem}
+.note b{color:var(--warn)}
+.check{background:var(--accent-soft);padding:10px 14px;border-radius:6px;font-size:.92rem;margin-top:12px}
+.flow{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-family:var(--font-mono);font-size:.78rem;margin:10px 0 16px}
+.flow span{background:var(--surface);border:1px solid var(--line);padding:4px 10px;border-radius:5px}
+.flow i{color:var(--muted);font-style:normal}
+.qa{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:10px}
+.qa b{display:block;margin-bottom:4px}
+.qa p{margin:0;color:var(--muted)}
+.cl{list-style:none;padding:0;margin:0 0 12px;display:grid;gap:2px}
+.cl li{display:flex;gap:10px;align-items:flex-start;padding:6px 10px;border-radius:6px}
+.cl li:hover{background:var(--accent-soft)}
+.cl label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;width:100%}
+.cl .chk{margin-top:3px}
+.reset{margin-top:20px;font:inherit;font-size:.85rem;background:none;border:1px solid var(--line);color:var(--muted);padding:6px 12px;border-radius:6px;cursor:pointer}
+
+h3.part{font-size:.82rem;font-family:var(--font-mono);font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-block:40px 6px;padding-top:14px;border-top:1px solid var(--line)}
+.scroll table{min-width:520px}
+.gal{display:flex;gap:10px;overflow-x:auto;padding:4px 0 10px}
+.gal figure{margin:0;flex:none;width:150px}
+.gal img{width:150px;border:1px solid var(--line);border-radius:6px;display:block}
+.gal figcaption{font-size:.72rem;color:var(--muted);margin-top:4px;line-height:1.3}
+.sl{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 14px;margin:8px 0;font-size:.92rem}
+.sl b.n{font-family:var(--font-mono);color:var(--accent);margin-right:6px}
+</style>
+<div class="top"><div class="top-in"><span id="pt">0 de 0 itens</span><div class="bar"><i id="pb"></i></div></div></div>
+<div class="wrap">
+<header class="hero"><h1>AMSI, Etapa 1: como preparar a apresentação, passo a passo</h1><p>O que entregar, o que mostrar e como defender, para cada um dos cinco critérios da Etapa 1 (Projeto_Critérios_Avaliação_Etapa1.pdf). Cada passo diz <b>o que fazer</b>, <b>onde</b> vai (que slide, que parte do Word) e <b>porquê</b>.</p><ul class="toc"><li><a href="#criterios">Em resumo</a></li><li><a href="#passos">Os passos</a></li><li><a href="#lista">Checklist final</a></li><li><a href="#duvidas">Perguntas</a></li><li><a href="#erros">Erros</a></li><li><a href="#aberto">Em aberto</a></li></ul></header>
+<h2 id="criterios">Em resumo</h2>
+<p>A Etapa 1 vale <b>20 %</b> do projeto. Entrega-se no Moodle até <b>07/11/2026 às 23h59</b> e apresenta-se em aula entre <b>09/11 e 13/11</b>: <b>10 minutos + 5 de discussão</b>, com os <b>três</b> elementos a falar. Avaliam-se cinco critérios: contexto (10 %), requisitos + mockups (25 %), planeamento por elemento (20 %), apresentação oral (15 %) e justificações (30 %).</p>
+<div class="flow"><span>Contexto</span><i>→</i><span>Requisitos e mockups</span><i>→</i><span>Planeamento</span><i>→</i><span>Justificações</span><i>→</i><span>Oral</span></div>
+<p>Este manual foi feito a partir de <code>Projeto_Critérios_Avaliação_Etapa1.pdf</code> e do <code>Enunciado Projeto Pratico - AMSI</code>, e a informação dos slides vem da <b>Especificação do SI</b> (Word). Para saber como cumprir os requisitos técnicos da <b>Etapa 2</b>, vê o manual do enunciado.</p>
+<h2 id="passos">Os passos</h2>
+<p>Marca cada passo quando o tiveres feito. O progresso fica guardado no browser.</p>
+<h3 class="part">Parte A · Perceber a Etapa 1</h3>
+<details class="step" open>
+<summary><input class="chk" type="checkbox" id="k1" aria-label="Passo 1 feito"><span class="num">1</span><span class="ttl">O que é a Etapa 1 e como é avaliada</span><span class="where">Projeto_Critérios_Avaliação_Etapa1.pdf</span></summary>
+<div class="body">
+<div class="lbl">O que é</div>
+<p>A Etapa 1 é a <b>apresentação intermédia</b> do projeto de AMSI: o grupo mostra, em slides, a ideia, os requisitos, os mockups e o planeamento. Vale <b>20 % da nota do projeto</b> (a Etapa 2, a aplicação pronta, vale 50 %). O PDF dos critérios define as cinco coisas que o júri avalia e quanto vale cada uma:</p>
+<div class="scroll"><table><tr><th>Critério</th><th>Peso</th><th>O que o PDF pede</th><th>O que tens de mostrar</th></tr><tr><td>Contextualização do projeto</td><td>10 %</td><td>Contextualização do Projeto</td><td>O problema, a solução, quem usa, o que já existe no mercado</td></tr><tr><td>Levantamento de requisitos</td><td>25 %</td><td>Análise e definição de requisitos: <b>mockups da UI</b> e <b>requisitos</b></td><td>Requisitos funcionais e não funcionais da app + os ecrãs desenhados</td></tr><tr><td>Planeamento do projeto</td><td>20 %</td><td>Tarefas, previsão de tempo e elemento do grupo a desenvolver, <b>por elemento</b></td><td>Quem faz o quê e quando, até 16/01/2027</td></tr><tr><td>Apresentação oral</td><td>15 %</td><td>Todos os elementos participam, 10 min</td><td>Falar bem, a horas, os três a apresentar</td></tr><tr><td>Justificações</td><td><b>30 %</b></td><td>Justificação de opções/ideias; dificuldades esperadas e soluções propostas</td><td>O <b>porquê</b> de cada escolha e o que pode correr mal</td></tr></table></div>
+<div class="lbl">Porquê saber isto primeiro</div>
+<ul><li>As <b>Justificações valem mais do que tudo (30 %)</b>. Não basta dizer "usamos Volley": é preciso dizer porquê. O manual repete isto em cada passo.</li><li>Requisitos + mockups juntos valem <b>25 %</b>, mais do que o planeamento (20 %).</li><li>A oral são 15 %: um slide bom lido mal perde pontos, e um elemento calado perde-os para o grupo.</li></ul>
+<div class="check">Verifica: sabes de cabeça os cinco critérios e o peso de cada um (10, 25, 20, 15, 30).</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k2" aria-label="Passo 2 feito"><span class="num">2</span><span class="ttl">Regras de entrega e de apresentação</span><span class="where">Moodle · enunciado e critérios</span></summary>
+<div class="body">
+<div class="lbl">O que dizem os documentos</div>
+<ul><li><b>Entrega no Moodle</b>, no link do respetivo turno prático, até <b>07/11/2026 às 23h59</b> (o ficheiro da apresentação, em <b>PPTX ou PDF</b>).</li><li><b>Apresentação em aula</b>, de <b>09/11 a 13/11/2026</b>, usando o <b>mesmo documento</b> que submeteram. A ordem sai no Moodle.</li><li><b>10 minutos</b> de apresentação + <b>5 minutos</b> de discussão. <b>Todos os elementos têm de participar</b> e de apresentar.</li><li>A apresentação é apoiada por <b>diapositivos</b>.</li><li>O <b>planeamento</b> tem de estar <b>no documento</b>: "não serão aceites links externos". Ou seja, nada de "o nosso Jira está aqui".</li></ul>
+<div class="lbl">Porquê atenção a isto</div>
+<ul><li>O ficheiro entregue é o que se apresenta: <b>não se muda depois do prazo</b>. O que não estiver nos slides, não conta.</li><li>O planeamento num link (Jira, Trello) é <b>ignorado</b>. O vosso ficheiro <code>jira_user_stories.csv</code> serve de fonte, mas a informação tem de estar copiada para os slides.</li><li>Quem falta ou não fala perde nota na oral (15 %).</li></ul>
+<div class="note"><b>Atenção:</b> o enunciado diz <b>07/11/2025</b> para a Etapa 1, mas os critérios dizem <b>7/11/2026</b>. É gralha: o ano letivo é 2026/27. Confirma a data no Moodle.</div>
+<div class="check">Verifica: tens apontados: prazo 07/11 23h59, formato PPTX/PDF, 10+5 minutos, planeamento dentro do documento.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k3" aria-label="Passo 3 feito"><span class="num">3</span><span class="ttl">O plano dos dias que faltam</span><span class="where">calendário</span></summary>
+<div class="body">
+<div class="lbl">O que é</div>
+<p>Hoje é <b>01/11/2026</b>. O prazo é daqui a <b>6 dias</b> (sábado, 07/11). Um plano realista, para três elementos (é uma <b>sugestão</b>, ajusta ao vosso horário):</p>
+<div class="scroll"><table><tr><th>Dia</th><th>O que fazer</th><th>Passo do manual</th></tr><tr><td>Dom 01/11</td><td>Reunião: ler os critérios e o enunciado, dividir os slides pelos três, escolher o formato</td><td>1, 2, 12</td></tr><tr><td>Seg 02/11 e Ter 03/11</td><td>Fazer os slides de contexto, requisitos e mockups</td><td>5, 6, 7</td></tr><tr><td>Qua 04/11</td><td>Fazer planeamento, justificações e dificuldades</td><td>9, 10, 11</td></tr><tr><td>Qui 05/11</td><td>Revisão cruzada (cada um revê o slide de outro); atualizar os mockups para o menu hamburguer</td><td>7</td></tr><tr><td>Sex 06/11</td><td><b>Ensaio cronometrado</b> (10 min), exportar o PDF e <b>submeter no Moodle</b></td><td>12, 13</td></tr><tr><td>Sáb 07/11</td><td>Margem de segurança até às 23h59 (só se algo falhar)</td><td>13</td></tr><tr><td>09 a 13/11</td><td>Apresentação em aula (dia na lista do Moodle)</td><td>14</td></tr></table></div>
+<div class="lbl">Porquê</div>
+<ul><li>Submeter na <b>sexta</b>, e não no último minuto de sábado, deixa margem para o Moodle falhar, o ficheiro não abrir ou alguém ter esquecido um slide.</li><li>O ensaio cronometrado é o que descobre que 12 slides não cabem em 10 minutos.</li></ul>
+<div class="check">Verifica: o grupo tem este calendário combinado e um responsável por cada dia.</div>
+</div></details>
+
+<h3 class="part">Parte B · Construir os slides</h3><p>A apresentação segue a ordem dos critérios: contexto → requisitos e mockups → planeamento → justificações e dificuldades. Cada slide leva uma linha de "porquê".</p>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k4" aria-label="Passo 4 feito"><span class="num">4</span><span class="ttl">A estrutura dos slides e o tempo de cada um</span><span class="where">apresentação (PPTX)</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<p>Proposta de <b>13 slides</b> para 10 minutos. O tempo de cada bloco segue o peso do critério (as justificações têm de ter tempo):</p>
+<div class="scroll"><table><tr><th>#</th><th>Slide</th><th>Critério</th><th>Tempo</th></tr><tr><td>1</td><td>Capa: nome, grupo, elementos</td><td>—</td><td>0:20</td></tr><tr><td>2</td><td>O problema e a solução</td><td>Contexto 10 %</td><td>0:50</td></tr><tr><td>3</td><td>Quem usa a app (role) e o que já existe</td><td>Contexto 10 %</td><td>0:40</td></tr><tr><td>4</td><td>Arquitetura: app + API + base de dados</td><td>Requisitos / Justificações</td><td>0:40</td></tr><tr><td>5</td><td>Requisitos funcionais da app</td><td>Requisitos 25 %</td><td>1:00</td></tr><tr><td>6</td><td>Requisitos não funcionais</td><td>Requisitos 25 %</td><td>0:40</td></tr><tr><td>7</td><td>Mockups (1/2): login, pedidos, novo pedido</td><td>Requisitos 25 %</td><td>0:50</td></tr><tr><td>8</td><td>Mockups (2/2): detalhe, checklist, viagem, perfil</td><td>Requisitos 25 %</td><td>0:50</td></tr><tr><td>9</td><td>Planeamento por elemento (tarefas, SP)</td><td>Planeamento 20 %</td><td>1:00</td></tr><tr><td>10</td><td>Calendário e sprints até 16/01</td><td>Planeamento 20 %</td><td>0:40</td></tr><tr><td>11</td><td>Justificações das opções técnicas</td><td>Justificações 30 %</td><td>1:30</td></tr><tr><td>12</td><td>Dificuldades esperadas e soluções</td><td>Justificações 30 %</td><td>1:00</td></tr><tr><td>13</td><td>Conclusão e próximos passos</td><td>—</td><td>0:20</td></tr></table></div>
+<div class="lbl">Porquê</div>
+<ul><li>Soma <b>10 minutos</b>. O enunciado dá 10 min máximo; passar disso é cortado.</li><li>Os slides 11 e 12 (justificações e dificuldades) usam <b>2:30</b>: o critério vale 30 %, é onde mais se ganha.</li><li>Evita ter mais de uma ideia por slide. Texto pouco, quadros e imagens muito.</li></ul>
+<div class="check">Verifica: o deck tem 13 slides, na ordem dos critérios, e cada slide tem um tempo.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k5" aria-label="Passo 5 feito"><span class="num">5</span><span class="ttl">Contextualização do projeto (slides 1 a 3)</span><span class="where">Word: secções 1, 2, 3 e 4</span></summary>
+<div class="body">
+<div class="lbl">O que pôr em cada slide</div>
+<ul><li><b>Slide 2, problema e solução.</b> Hoje os pedidos de viatura fazem-se por telefone ou papel. O FrotaGest substitui isso por um fluxo estruturado: o colaborador pede, a gestão de frota aprova e atribui uma viatura, regista-se tudo (km, combustível, fotos). <i>Fonte: secção 1 e 2 do Word.</i></li><li><b>Slide 3, quem usa.</b> O sistema tem 3 componentes sobre <b>uma só base de dados MySQL</b>: website Yii2 (PSI), API REST (SIS) e <b>app Android (AMSI)</b>. <b>Por agora só o Colaborador usa a app</b>; os outros roles usam o website. <i>Fonte: Tabela 5.</i></li><li><b>Concorrência</b> (na parte de baixo do slide 3): Fleetster (carsharing corporativo), Samsara (telemetria/GPS) e BookCars (reservas open-source). Nenhum junta aprovação interna + manutenção + check-in com fotografias; é isso que o FrotaGest faz. <i>Fonte: secção 4.</i></li></ul>
+<div class="lbl">Como fazer</div>
+<ol><li>Copia a <b>frase do objetivo</b> da secção 1 do Word ("digitalização do processo de requisição…") e resume-a em <b>duas linhas</b>.</li><li>Faz um esquema simples do slide 3: <i>Colaborador → App → API → Base de dados ← Website ← Coordenador/Técnico/Administrador</i>.</li><li>Põe a tabela de concorrência da secção 4 em 3 colunas (sistema, o que tem, o que falta).</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>O critério de Contextualização (10 %) quer saber se percebeste <b>o problema</b> e o <b>que já existe</b>. A análise concorrencial já está no Word: é só reaproveitar.</li><li>Dizer logo que a app é do Colaborador evita perguntas do tipo "e o coordenador?" (responde: usa o website, e a app crescerá depois).</li></ul>
+<div class="check">Verifica: os 3 slides de contexto cabem em 2 minutos e têm a fonte no Word.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k6" aria-label="Passo 6 feito"><span class="num">6</span><span class="ttl">Requisitos funcionais e não funcionais (slides 5 e 6)</span><span class="where">Word: secção 5, Tabelas 8 e 10</span></summary>
+<div class="body">
+<div class="lbl">O que é</div>
+<p>O Word tem <b>28 requisitos funcionais da app</b> (RF-AM-01 a 28) e 21 não funcionais (RNF-01 a 21). <b>Não os leias todos</b>: agrupa-os. Os do <b>Colaborador</b> (a app, por agora) organizam-se assim:</p>
+<div class="scroll"><table><tr><th>Grupo</th><th>Requisitos da app</th><th>Ideia</th></tr><tr><td>Conta</td><td>RF-AM-01 (login), 02 (recuperar palavra-passe), 03 (perfil, terminar sessão)</td><td>Entrar e sair</td></tr><tr><td>Pedidos</td><td>RF-AM-04 (catálogo), 05 (calendário), 06 (submeter), 07 (lista e detalhe), 08 (cancelar)</td><td>Fazer e acompanhar requisições</td></tr><tr><td>Utilização</td><td>RF-AM-09 (QR), 10 e 11 (check-in/out com 4 fotos), 12 (km), 13 (fatura), 16 (viagem em curso)</td><td>Levantar, usar e entregar a viatura</td></tr><tr><td>Sem rede e GPS</td><td>RF-AM-14 (guardar offline e sincronizar), 15 (enviar localização)</td><td>Funcionar sem ligação</td></tr><tr><td>Avisos</td><td>RF-AM-17 (push), 24 (lista de notificações), 28 (enviar erros ao log)</td><td>Ser avisado</td></tr></table></div>
+<p>Requisitos não funcionais que mais interessam à app (slide 6):</p>
+<div class="scroll"><table><tr><th>RNF</th><th>O que diz</th></tr><tr><td>RNF-01</td><td>Submeter uma requisição em no máximo 5 passos</td></tr><tr><td>RNF-02</td><td>Ecrãs adaptados a vários tamanhos, legíveis ao ar livre</td></tr><tr><td>RNF-05</td><td>Guardar localmente sem rede e sincronizar sem perder dados</td></tr><tr><td>RNF-09</td><td>Token de acesso em cada pedido e comunicações HTTPS</td></tr><tr><td>RNF-11</td><td>Localização só enquanto a viatura está em uso (RGPD)</td></tr><tr><td>RNF-13</td><td>API a responder em menos de 2 segundos</td></tr><tr><td>RNF-17</td><td>Android, com câmara e localização</td></tr><tr><td>RNF-19 / 20 / 21</td><td>REST + JSON; código no GitHub; Scrum com sprints quinzenais</td></tr></table></div>
+<div class="lbl">Como fazer</div>
+<ol><li>No slide 5 mostra <b>o quadro dos 5 grupos</b> (não os 28 itens). Se perguntarem, tens o Word.</li><li>No slide 6 mostra 5 ou 6 RNF, os que ajudam a <b>justificar</b> as escolhas (token, offline, REST, GitHub).</li><li>Põe sempre o código do requisito entre parêntesis (RF-AM-06): mostra que o slide vem do Word.</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>O critério quer "Requisitos" (25 %), mas ninguém consegue ler 49 linhas em 1 minuto. Agrupar mostra que percebes a lógica do sistema.</li><li>Os RNF servem de <b>ponte para as Justificações</b>: "usamos SQLite porque o RNF-05 pede modo offline".</li></ul>
+<div class="note"><b>Atenção:</b> a atribuição de cada RF-AM ao Colaborador baseia-se no texto de cada requisito ("ao Colaborador"). A Tabela 9 do Word tem a coluna exata por role: confirma lá antes de fechar o slide.</div>
+<div class="check">Verifica: o slide 5 tem 5 grupos e o slide 6 tem até 8 RNF, todos com código.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k7" aria-label="Passo 7 feito"><span class="num">7</span><span class="ttl">Mockups da interface (slides 7 e 8)</span><span class="where">Word: secção 8, Figuras 34 a 43 · pasta mockups/</span></summary>
+<div class="body">
+<div class="lbl">O que é</div>
+<p>O critério dos requisitos inclui os <b>mockups da UI</b>. O Word já tem os desenhos dos ecrãs da app (Figuras 34 a 49). Para o Colaborador usam-se estas 10, que extraí do Word para a pasta <code>Android/mockups/</code> (clica para ver grande):</p>
+<div class="gal"><figure><a href="mockups/figura-34-login.png"><img src="mockups/figura-34-login.png" alt="Fig. 34 Login" loading="lazy"></a><figcaption>Fig. 34 Login</figcaption></figure><figure><a href="mockups/figura-35-recuperar-password.png"><img src="mockups/figura-35-recuperar-password.png" alt="Fig. 35 Recuperar palavra-passe" loading="lazy"></a><figcaption>Fig. 35 Recuperar palavra-passe</figcaption></figure><figure><a href="mockups/figura-36-requisicoes.png"><img src="mockups/figura-36-requisicoes.png" alt="Fig. 36 As minhas requisições" loading="lazy"></a><figcaption>Fig. 36 As minhas requisições</figcaption></figure><figure><a href="mockups/figura-37-notificacoes.png"><img src="mockups/figura-37-notificacoes.png" alt="Fig. 37 Notificações" loading="lazy"></a><figcaption>Fig. 37 Notificações</figcaption></figure><figure><a href="mockups/figura-38-novo-pedido.png"><img src="mockups/figura-38-novo-pedido.png" alt="Fig. 38 Novo pedido" loading="lazy"></a><figcaption>Fig. 38 Novo pedido</figcaption></figure><figure><a href="mockups/figura-39-novo-pedido-periodo-sugerido.png"><img src="mockups/figura-39-novo-pedido-periodo-sugerido.png" alt="Fig. 39 Período sugerido" loading="lazy"></a><figcaption>Fig. 39 Período sugerido</figcaption></figure><figure><a href="mockups/figura-40-detalhe-requisicao.png"><img src="mockups/figura-40-detalhe-requisicao.png" alt="Fig. 40 Detalhe" loading="lazy"></a><figcaption>Fig. 40 Detalhe</figcaption></figure><figure><a href="mockups/figura-41-rececao-entrega.png"><img src="mockups/figura-41-rececao-entrega.png" alt="Fig. 41 Receção e entrega" loading="lazy"></a><figcaption>Fig. 41 Receção e entrega</figcaption></figure><figure><a href="mockups/figura-42-viagem-em-curso.png"><img src="mockups/figura-42-viagem-em-curso.png" alt="Fig. 42 Viagem em curso" loading="lazy"></a><figcaption>Fig. 42 Viagem em curso</figcaption></figure><figure><a href="mockups/figura-43-perfil.png"><img src="mockups/figura-43-perfil.png" alt="Fig. 43 Perfil" loading="lazy"></a><figcaption>Fig. 43 Perfil</figcaption></figure></div>
+<div class="lbl">Como fazer</div>
+<ol><li><b>Slide 7:</b> Login (34), Pedidos (36) e Novo pedido (38), lado a lado. Em cada uma, uma frase: "o colaborador entra / vê os pedidos / faz um pedido".</li><li><b>Slide 8:</b> Detalhe (40), Receção e entrega (41), Viagem (42) e Perfil (43).</li><li>As figuras 35, 37 e 39 ficam de reserva (para o caso de perguntarem pela recuperação de palavra-passe, notificações e período sugerido).</li><li><b>Atualiza os mockups ao menu hamburguer.</b> Os desenhos do Word têm uma <b>barra de separadores em baixo</b> (Pedidos, Viagem, Perfil); a app que estás a fazer usa <b>menu hamburguer</b> (Ficha 4). Redesenha a barra de cima com o ícone das três linhas e mostra o menu aberto num dos slides (login → menu).</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>Mockups que não batem com a app <b>geram perguntas difíceis</b> na discussão. Se os desenhos mostram uma coisa e a app outra, tens de justificar: "seguimos a ficha de navegação lateral".</li><li>Um mockup por slide é ilegível; 3 ou 4 numa fila, mais pequenos, deixa ver o fluxo.</li><li>Os RF-AM de cada ecrã (por exemplo RF-AM-06 no Novo pedido) ligam o desenho ao requisito, e é isso que o critério quer.</li></ul>
+<div class="note"><b>Atenção:</b> o menu hamburguer do projeto já está feito (login e menu). Podes tirar uma captura do emulador para o slide, que prova que o desenho existe na app.</div>
+<div class="check">Verifica: os slides 7 e 8 mostram 7 ou 8 ecrãs do Colaborador, com o RF de cada um, e o menu hamburguer aparece num dos mockups.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k8" aria-label="Passo 8 feito"><span class="num">8</span><span class="ttl">Arquitetura (slide 4)</span><span class="where">Word: secções 2, 7 e 9</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<p>Um só desenho, simples:</p>
+<div class="flow"><span>App Android (Java, Volley)</span><i>→ HTTPS + JSON + token →</i><span>API REST (Yii2)</span><i>→</i><span>MySQL (24 tabelas)</span><i>←</i><span>Website Yii2</span></div>
+<ul><li>A app só fala com a <b>API</b>; nunca com a base de dados diretamente (RNF-09, RNF-19).</li><li>Duas coisas ficam <b>no telemóvel</b>: SharedPreferences (endereço do servidor, sessão) e SQLite (registos feitos sem rede).</li><li>A API tem 27 serviços (secção 9 do Word); os do Colaborador são cerca de 14.</li></ul>
+<div class="lbl">Porquê</div>
+<ul><li>Mostra a divisão entre as UC (PSI = website, SIS = API, AMSI = app) e que a base de dados é <b>partilhada</b> (RNF-18).</li><li>Prepara a justificação das tecnologias (slide 11).</li></ul>
+<div class="check">Verifica: o slide 4 tem o esquema e cita SharedPreferences e SQLite.</div>
+</div></details>
+
+<h3 class="part">Parte C · Planeamento e justificações</h3>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k9" aria-label="Passo 9 feito"><span class="num">9</span><span class="ttl">Planeamento por elemento (slides 9 e 10)</span><span class="where">Word: user stories · jira_user_stories.csv</span></summary>
+<div class="body">
+<div class="lbl">O que é</div>
+<p>O critério pede: <b>tarefas, previsão de tempo e elemento do grupo</b> a fazer cada uma. O Word já tem as <b>user stories com story points (SP)</b>. As da app para o Colaborador são:</p>
+<div class="scroll"><table><tr><th>US</th><th>Tarefa da app</th><th>SP</th></tr><tr><td>US26</td><td>Login na app (e acesso guardado no dispositivo)</td><td>2</td></tr><tr><td>US25</td><td>Recuperar a palavra-passe</td><td>3</td></tr><tr><td>US1</td><td>Catálogo e disponibilidade de viaturas</td><td>3</td></tr><tr><td>US2</td><td>Submeter requisição de viatura</td><td>5</td></tr><tr><td>US3</td><td>Estado dos pedidos e histórico, com detalhe (master-detail)</td><td>3</td></tr><tr><td>US4</td><td>Quilómetros e fotografias no check-in/check-out</td><td>5</td></tr><tr><td>US5</td><td>Anexar fatura de combustível</td><td>2</td></tr><tr><td>US6</td><td>Modo offline e QR</td><td>5</td></tr><tr><td>US27</td><td>Notificações</td><td>3</td></tr><tr><td></td><td><b>Total</b></td><td><b>31</b></td></tr></table></div>
+<div class="lbl">Como fazer</div>
+<ol><li><b>Repartir os 31 SP</b> pelos três elementos (cerca de 10 SP cada). Faz uma tabela com as colunas: <i>US, tarefa, elemento, SP, sprint</i>. <b>Os nomes e a divisão são decisão do grupo</b>: o Word não os define.</li><li><b>Sprints.</b> O RNF-21 manda usar Scrum com sprints quinzenais. Entre 09/11 e a entrega da Etapa 2 (16/01/2027) cabem cerca de 5. Sugestão: S1 09/11 a 20/11; S2 23/11 a 04/12; S3 07/12 a 18/12; S4 21/12 a 08/01 (Natal); S5 11/01 a 16/01 (testes e entrega).</li><li><b>Ordem.</b> Primeiro o que desbloqueia o resto: login e configuração do servidor, depois lista e detalhe, pedido, checklist e fotos, e por fim offline, QR e notificações (os mais difíceis).</li><li><b>Regras de coordenação</b> (o enunciado valoriza): reunião semanal, GitHub com um ramo por elemento, commits regulares de todos (RNF-20), revisão antes de juntar.</li><li>Copia a tabela para os slides. <b>Não ponhas um link</b> para o Jira.</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>O critério é "por elemento do grupo": se a tabela não tem nomes, perde-se pontos.</li><li>Usar os SP do Word dá um planeamento <b>consistente com a especificação</b>.</li><li>Cada elemento tem de poder defender a sua parte na oral e no teste prático individual (22/01/2027).</li></ul>
+<div class="note"><b>Atenção:</b> o planeamento deve ser honesto: ponham tempo para ligar a app à API, que depende do trabalho de SIS. Se a API atrasar, a app fica parada.</div>
+<div class="check">Verifica: há uma tabela com todas as tarefas, a quem pertencem, os SP e o sprint, e um calendário até 16/01.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k10" aria-label="Passo 10 feito"><span class="num">10</span><span class="ttl">Justificações das opções (slide 11) · 30 %</span><span class="where">Word, enunciado e fichas</span></summary>
+<div class="body">
+<div class="lbl">O que é</div>
+<p>É o critério com mais peso. Para <b>cada escolha técnica</b>, dizes o que escolheste e <b>porquê</b>. Faz uma tabela de três colunas. Sugestão de linhas (as que são <b>obrigatórias</b> estão marcadas; as outras são propostas do grupo que deves confirmar):</p>
+<div class="scroll"><table><tr><th>Opção</th><th>Porquê</th><th>Fonte</th></tr><tr><td>App Android em Java</td><td>É a tecnologia da UC e do enunciado (aplicação para dispositivos Android)</td><td>Enunciado, RNF-17</td></tr><tr><td><b>Volley</b> para o webservice (obrigatório)</td><td>O enunciado diz que outra biblioteca não conta para a avaliação. Faz pedidos assíncronos e não bloqueia o ecrã</td><td>Enunciado</td></tr><tr><td>API REST com JSON</td><td>Pedido pelo enunciado (REST/RESTful) e pelo RNF-19; serve também o website</td><td>Enunciado, RNF-19</td></tr><tr><td>Token + HTTPS</td><td>Só quem iniciou sessão acede aos dados; a palavra-passe não anda em claro</td><td>RNF-09</td></tr><tr><td><b>SharedPreferences</b> (obrigatório)</td><td>Guarda o endereço do servidor e a sessão, sem pedir login a cada uso</td><td>Enunciado, US26</td></tr><tr><td><b>SQLite</b> (obrigatório), não Room</td><td>Guarda os registos feitos sem rede até haver ligação; o Room não é contabilizado</td><td>Enunciado, RNF-05, US6</td></tr><tr><td>Menu hamburguer + fragmentos</td><td>O enunciado exige fragmentos; a navegação lateral é a da Ficha 4</td><td>Enunciado, Ficha 4</td></tr><tr><td>Só o Colaborador usa a app (por agora)</td><td>Os outros roles trabalham melhor no website; a app foca o uso no terreno</td><td>Decisão do grupo</td></tr><tr><td>Câmara e QR</td><td>Para identificar a viatura e fotografar o estado ao levantar e entregar</td><td>US4, US6, RF-AM-09</td></tr><tr><td>Localização GPS</td><td>Para o coordenador ver a viatura no mapa, só enquanto está em uso</td><td>US15, RNF-11</td></tr><tr><td>Notificações push (FCM)</td><td>Avisar o colaborador sem ele abrir a app</td><td>RF-AM-17</td></tr></table></div>
+<div class="lbl">Como fazer</div>
+<ol><li>Para cada linha escreve <b>uma frase com "porque"</b> e a fonte. Se não consegues justificar, discute no grupo se vale a pena manter.</li><li>Treina a resposta curta: "Escolhi X porque Y, e a alternativa Z não serve porque W".</li><li>Mostra no slide só as 6 ou 7 mais importantes; as restantes ficam preparadas para a discussão.</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>Os docentes não avaliam só o que escolheste, mas se <b>sabes defender</b> a escolha.</li><li>As linhas "obrigatório" nem precisam de justificação técnica longa: o enunciado impõe-nas. Dizê-lo mostra que leste o enunciado.</li></ul>
+<div class="check">Verifica: cada opção técnica tem um "porque" e uma fonte (enunciado, RNF, US ou ficha).</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k11" aria-label="Passo 11 feito"><span class="num">11</span><span class="ttl">Dificuldades esperadas e soluções (slide 12)</span><span class="where">critérios: "Apresentação de dificuldades esperadas e soluções propostas"</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<p>O PDF pede-o expressamente. Mostra um quadro <b>dificuldade → solução</b>:</p>
+<div class="scroll"><table><tr><th>Dificuldade esperada</th><th>Solução proposta</th></tr><tr><td>A API ainda não está feita e a app depende dela (três UC diferentes)</td><td>Combinar os serviços e os nomes dos campos com SIS cedo; começar pelos ecrãs e pelo login; usar dados de exemplo até a API responder</td></tr><tr><td>Modo offline: não perder registos e não duplicar</td><td>Fila em SQLite com id local por registo; enviar só quando há rede e apagar apenas o que a API confirmou</td></tr><tr><td>Fotografias grandes lentas de enviar</td><td>Reduzir a imagem (cerca de 1280 px) antes do envio</td></tr><tr><td>Câmara, localização e notificações pedem permissões</td><td>Pedir cada uma só no ecrã onde é preciso e tratar o caso de o utilizador recusar</td></tr><tr><td>Localização gasta bateria e levanta privacidade (RGPD)</td><td>Enviar só enquanto a viatura está em uso e em intervalos de 30 s</td></tr><tr><td>Configurar notificações push (Firebase) é demorado</td><td>Deixar para o fim do planeamento; o resto da app não depende dele</td></tr><tr><td>Três pessoas a mexer no mesmo código</td><td>GitHub com um ramo por elemento, pedidos de junção e commits frequentes</td></tr><tr><td>Prazo curto até à entrega de 16/01/2027</td><td>Sprints quinzenais e as funcionalidades mais difíceis (offline, QR) começadas cedo</td></tr></table></div>
+<div class="lbl">Porquê</div>
+<ul><li>Mostra que o grupo <b>pensou nos riscos</b>. Faz parte dos 30 % das justificações.</li><li>Cada dificuldade com solução concreta soa a planeamento a sério.</li></ul>
+<div class="check">Verifica: o quadro tem 6 a 8 dificuldades, cada uma com uma solução.</div>
+</div></details>
+
+<h3 class="part">Parte D · Apresentar e entregar</h3>
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k12" aria-label="Passo 12 feito"><span class="num">12</span><span class="ttl">Dividir a oral pelos três e ensaiar</span><span class="where">ensaio</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<ol><li><b>Dividir:</b> elemento 1 → slides 1 a 4 (contexto e arquitetura); elemento 2 → slides 5 a 8 (requisitos e mockups); elemento 3 → slides 9 a 13 (planeamento, justificações, dificuldades). Cada um fala cerca de 3:20. Todos falam, como exige o enunciado.</li><li><b>Guião curto por slide:</b> uma frase que diz o essencial e uma frase de "porquê". Sem ler os slides.</li><li><b>Ensaiar com cronómetro</b> pelo menos duas vezes, a passar de um elemento para outro sem pausas.</li><li><b>Cada um sabe o slide dos outros.</b> Na discussão (5 min) qualquer um pode ser chamado a responder sobre qualquer parte.</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>A oral vale 15 % e as justificações 30 %, e ambas se perdem a hesitar.</li><li>A discussão testa se o grupo <b>percebe o projeto todo</b>, e não só a sua parte. Isto prepara também a prova oral e o teste individual da Etapa 2.</li></ul>
+<div class="check">Verifica: o ensaio completo termina em 10 minutos ou menos.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k13" aria-label="Passo 13 feito"><span class="num">13</span><span class="ttl">Exportar e submeter no Moodle</span><span class="where">Moodle</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<ol><li>Acaba os slides e <b>exporta para PDF</b> (ou guarda o PPTX). O PDF mantém os tipos de letra e as imagens em qualquer computador.</li><li><b>Abre o ficheiro exportado</b> e confirma: 13 slides, imagens visíveis, nenhum link externo no planeamento.</li><li>Entra no Moodle e procura <b>o link do <u>vosso turno prático</u></b> (o critério diz "no link do respetivo turno prático"). Submeter no sítio errado equivale a não entregar.</li><li>Submete na <b>sexta, 06/11</b>, e confirma que aparece "submetido". Um só elemento pode submeter (confirmem quem).</li></ol>
+<div class="lbl">Porquê</div>
+<ul><li>Um erro de upload no último minuto é a forma mais tola de perder os 20 % da Etapa 1.</li><li>Apresenta-se o <b>mesmo documento</b> entregue: leva uma cópia no computador e em PDF numa pen.</li></ul>
+<div class="check">Verifica: o Moodle mostra o ficheiro como entregue e o PDF abre sem erros.</div>
+</div></details>
+
+<details class="step">
+<summary><input class="chk" type="checkbox" id="k14" aria-label="Passo 14 feito"><span class="num">14</span><span class="ttl">O dia da apresentação e a discussão</span><span class="where">aula (09 a 13/11)</span></summary>
+<div class="body">
+<div class="lbl">O que fazer</div>
+<ul><li>Chega cedo, testa o computador ou o projetor e abre o ficheiro entregue.</li><li>Segue a ordem do guião e o tempo. Se o tempo acabar, termina no slide das justificações em vez de saltar o planeamento.</li><li>Na discussão responde com calma e <b>diz "não sei" se não souberes</b>, em vez de inventar.</li></ul>
+<div class="lbl">Perguntas prováveis (prepara resposta)</div>
+<ul><li>Porque é que a app só tem o role Colaborador? E os outros?</li><li>Porquê o menu hamburguer e não uma barra de separadores como nos mockups?</li><li>Porque escolheram SQLite e SharedPreferences? O que guardam?</li><li>Como funciona o modo offline? E se o mesmo registo for enviado duas vezes?</li><li>Que operações CRUD fazem e em que dados? (ver o outro manual)</li><li>Quem faz o quê? Como dividiram a API e a app?</li><li>O que acontece se a API estiver em baixo?</li></ul>
+<div class="check">Verifica: cada elemento tem uma resposta preparada para as 7 perguntas.</div>
+</div></details>
+
+<h2 id="lista">Checklist final antes de submeter</h2>
+<ul class="cl">
+<li><label><input class="chk" type="checkbox" id="c1"><span>13 slides, por esta ordem, e 10 minutos cronometrados</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c2"><span>Os 5 critérios estão cobertos (contexto, requisitos+mockups, planeamento, justificações, oral)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c3"><span>Todos os requisitos citados têm o código (RF-AM, RNF)</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c4"><span>Mockups do Colaborador atualizados ao menu hamburguer</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c5"><span>Planeamento com elemento, SP, sprint e datas, sem links externos</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c6"><span>Cada opção técnica tem um "porque"</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c7"><span>Cada elemento fala e conhece os slides dos outros</span></label></li>
+<li><label><input class="chk" type="checkbox" id="c8"><span>PDF exportado e aberto, submetido no link do turno certo até 07/11 às 23h59</span></label></li>
+</ul>
+<h2 id="duvidas">Perguntas para o estudo</h2>
+<div class="qa"><b>Qual é o critério que vale mais?</b><p>As <b>Justificações</b>, com 30 %. Por isso cada slide técnico tem uma linha de "porquê".</p></div>
+<div class="qa"><b>Posso pôr o planeamento num link do Jira?</b><p>Não. O enunciado diz que links externos não são aceites: o planeamento tem de estar dentro do documento entregue.</p></div>
+<div class="qa"><b>Têm de falar os três?</b><p>Sim, "todos os elementos do grupo têm de participar na apresentação". Quem não fala perde nota na oral.</p></div>
+<div class="qa"><b>Que ficheiro se entrega e que ficheiro se apresenta?</b><p>É o mesmo: o documento (PPTX ou PDF) entregue no Moodle é o que se mostra em aula.</p></div>
+<div class="qa"><b>Posso mostrar a app a funcionar?</b><p>A Etapa 1 pede ideia, mockups, requisitos e planeamento; a app pronta é a Etapa 2. Uma captura do login e do menu pode apoiar um slide, mas não substitui os mockups.</p></div>
+<div class="qa"><b>Os mockups do Word servem?</b><p>Servem como base, mas a app usa menu hamburguer e os desenhos têm barra de separadores. Atualiza para não haver contradições.</p></div>
+<h2 id="erros">Erros que podem acontecer</h2>
+<div class="qa"><b>Datas diferentes entre documentos</b><p>O enunciado escreve 07/11/<b>2025</b> e os critérios 7/11/<b>2026</b>. Vale 2026 (ano letivo 2026/27). Confirma no Moodle.</p></div>
+<div class="qa"><b>O ficheiro não abre noutro computador</b><p>Exporta para PDF antes de entregar; os tipos de letra do PPTX podem faltar.</p></div>
+<div class="qa"><b>A apresentação passa dos 10 minutos</b><p>Corta texto, não slides de justificações. Ensaia com cronómetro.</p></div>
+<div class="qa"><b>Um elemento ficou sem falar</b><p>Reparte os slides à partida (passo 12) e ensaia a ordem de passagem.</p></div>
+<div class="qa"><b>Submetido no sítio errado do Moodle</b><p>Usa o link do <b>teu turno prático</b> e confirma o estado "submetido".</p></div>
+<h2 id="aberto">Pontos em aberto</h2>
+<div class="qa"><b>Quem faz o quê</b><p>O Word não tem a divisão do trabalho: o grupo decide e põe os nomes no planeamento.</p></div>
+<div class="qa"><b>Datas das sprints</b><p>São uma sugestão: ajusta ao calendário do grupo e às datas de avaliação do curso.</p></div>
+<div class="qa"><b>Papel dos outros roles na app</b><p>A Tabela 5 do Word ainda dá app ao Coordenador e ao Administrador. O grupo decidiu, por agora, só o Colaborador; o Word será corrigido mais tarde. Nos slides diz "por agora".</p></div>
+<div class="qa"><b>Mockups a refazer</b><p>Menu hamburguer em vez de barra de separadores.</p></div>
+<div class="qa"><b>Enunciado: duas datas para o mesmo</b><p>Etapa 1 com ano 2025 no enunciado: gralha. Etapa 2: 16/01/2027 (enunciado) e 06/02/2027 (capa do relatório do Word, de outras UC): confirmar qual vale para AMSI.</p></div>
+<button class="reset" id="reset" type="button">Limpar todo o progresso</button>
+</div>
+<script>
+(function(){
+  // preencher cada bloco de codigo a partir do seu <script type="text/plain">, sem escapar nada
+  document.querySelectorAll('pre[data-src]').forEach(function(pre){
+    var src = document.getElementById(pre.getAttribute('data-src'));
+    var code = document.createElement('code');
+    code.style.cssText = 'background:none;padding:0;font-size:inherit;color:inherit';
+    code.textContent = src ? src.textContent : '';
+    pre.appendChild(code);
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'copy'; b.textContent = 'Copiar';
+    b.addEventListener('click', function(){
+      var txt = code.textContent;
+      var ok = function(){ b.textContent = 'Copiado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 1500); };
+      var fail = function(){
+        var r = document.createRange(); r.selectNodeContents(code);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        b.textContent = 'Selecionado'; setTimeout(function(){ b.textContent = 'Copiar'; }, 1500);
+      };
+      try { navigator.clipboard.writeText(txt).then(ok, fail); } catch(e){ fail(); }
+    });
+    pre.parentNode.appendChild(b);
+  });
+
+  // progresso: caixas guardadas no browser (so uma comodidade, a pagina funciona sem isto)
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('.chk'));
+  var KEY = 'frotagest-amsi-etapa1-v1';
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } }
+  function save(){
+    var o = {}; boxes.forEach(function(c){ if (c.checked) o[c.id] = 1; });
+    try { localStorage.setItem(KEY, JSON.stringify(o)); } catch(e){}
+  }
+  function paint(){
+    var n = boxes.filter(function(c){ return c.checked; }).length;
+    document.getElementById('pt').textContent = n + ' de ' + boxes.length + ' itens';
+    document.getElementById('pb').style.width = (n / boxes.length * 100) + '%';
+  }
+  var saved = load();
+  boxes.forEach(function(c){
+    if (saved[c.id]) c.checked = true;
+    // clicar na caixa de um passo nao deve abrir/fechar o passo
+    c.addEventListener('click', function(e){ e.stopPropagation(); });
+    c.addEventListener('change', function(){ save(); paint(); });
+  });
+  document.getElementById('reset').addEventListener('click', function(){
+    boxes.forEach(function(c){ c.checked = false; }); save(); paint();
+  });
+  paint();
+})();
+</script>
+
+</html>

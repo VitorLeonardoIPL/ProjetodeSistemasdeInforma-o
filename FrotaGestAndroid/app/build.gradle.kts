@@ -3,15 +3,20 @@ plugins {
 }
 
 android {
-    namespace = "com.example.frotagest"
+    namespace = "com.example.frotagestandroid"
     compileSdk {
-        version = release(37)
+        version = release(36) {
+            minorApiLevel = 1
+        }
     }
 
+//So fazer uma vez e a seguir sync
+    buildFeatures { viewBinding=true }
+
     defaultConfig {
-        applicationId = "com.example.frotagest"
+        applicationId = "com.example.frotagestandroid"
         minSdk = 27
-        targetSdk = 37
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 

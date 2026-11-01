@@ -22,5 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "FrotaGest"
+rootProject.name = "FrotaGestAndroid"
 include(":app")
+ 
