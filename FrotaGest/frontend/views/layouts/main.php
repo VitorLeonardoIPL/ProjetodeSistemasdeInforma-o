@@ -31,7 +31,7 @@ $this->render('_head');
 <?= $this->render('_header') ?>
 
 <main id="main" role="main">
-    
+
     <?php //a pagina inicial usa $this->params['semBanner'] = true; -> sem banner e conteudo a toda a largura ?>
     <?php if (empty($this->params['semBanner'])): ?>
         <!-- Header Start: banner escuro com o titulo e os breadcrumbs (copiado do about.html do Cental) -->
