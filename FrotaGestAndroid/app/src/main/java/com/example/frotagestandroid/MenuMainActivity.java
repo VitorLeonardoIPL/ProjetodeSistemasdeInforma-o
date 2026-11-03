@@ -1,6 +1,7 @@
 package com.example.frotagestandroid;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -44,6 +45,13 @@ public class MenuMainActivity extends AppCompatActivity {
         String role=getIntent().getStringExtra("ROLE");
         boolean isCoordenador="coordenador".equals(role);
         binding.navigationView.getMenu().setGroupVisible(R.id.grupoCoordenador, isCoordenador);
+    }
+
+    //sino das notificacoes no canto direito da toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        return true;
     }
 
     private void carregarToolbar() {

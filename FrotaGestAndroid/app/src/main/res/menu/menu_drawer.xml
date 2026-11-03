@@ -6,9 +6,9 @@
 
     <group android:id="@+id/grupoConsultas">
         <item
-            android:id="@+id/navNotificacoes"
-            android:title="@string/nav_notificacoes"
-            android:icon="@drawable/ic_nav_notificacoes"/>
+            android:id="@+id/navViaturas"
+            android:title="@string/nav_viaturas"
+            android:icon="@drawable/ic_nav_viaturas"/>
         <item
             android:id="@+id/navHistorico"
             android:title="@string/nav_historico"
