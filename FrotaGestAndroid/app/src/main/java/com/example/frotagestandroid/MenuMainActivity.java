@@ -24,6 +24,7 @@ public class MenuMainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         carregarToolbar();
         carregarCabecalho();
+        carregarMenuCoordenador();
     }
 
     //para preencher com o email
@@ -35,6 +36,14 @@ public class MenuMainActivity extends AppCompatActivity {
             NavHeaderMainBinding headerBinding=NavHeaderMainBinding.bind(headerView);
             headerBinding.tvEmail.setText(email);
         }
+    }
+
+    //os itens do coordenador so aparecem a quem tem esse role
+    //o role ainda nao vem do login (API da Etapa 2), por isso fica escondido
+    private void carregarMenuCoordenador() {
+        String role=getIntent().getStringExtra("ROLE");
+        boolean isCoordenador="coordenador".equals(role);
+        binding.navigationView.getMenu().setGroupVisible(R.id.grupoCoordenador, isCoordenador);
     }
 
     private void carregarToolbar() {

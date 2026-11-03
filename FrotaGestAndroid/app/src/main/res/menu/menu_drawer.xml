@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    tools:showIn="navigation_view">
+
+    <group android:id="@+id/grupoConsultas">
+        <item
+            android:id="@+id/navNotificacoes"
+            android:title="@string/nav_notificacoes"
+            android:icon="@drawable/ic_nav_notificacoes"/>
+        <item
+            android:id="@+id/navHistorico"
+            android:title="@string/nav_historico"
+            android:icon="@drawable/ic_nav_historico"/>
+    </group>
+
+    <group android:id="@+id/grupoAplicacao">
+        <item
+            android:id="@+id/navServidor"
+            android:title="@string/nav_servidor"
+            android:icon="@drawable/ic_nav_servidor"/>
+    </group>
+
+    <!-- Só visível para o coordenador de frota -->
+    <group android:id="@+id/grupoCoordenador">
+        <item
+            android:id="@+id/navPendentes"
+            android:title="@string/nav_pendentes"
+            android:icon="@drawable/ic_nav_pendentes"/>
+        <item
+            android:id="@+id/navCondutores"
+            android:title="@string/nav_condutores"
+            android:icon="@drawable/ic_nav_condutores"/>
+    </group>
+
+    <group android:id="@+id/grupoSessao">
+        <item
+            android:id="@+id/navLogout"
+            android:title="@string/nav_logout"
+            android:icon="@drawable/ic_nav_logout"/>
+    </group>
+</menu>
