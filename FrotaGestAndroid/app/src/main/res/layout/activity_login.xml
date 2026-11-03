@@ -33,7 +33,7 @@
         android:hint="@string/email"
         android:autofillHints="emailAddress"
         android:inputType="textEmailAddress"
-        android:text="gato@ulo.pt"/>
+        android:text="user@ulo.pt"/>
 
     <EditText
         android:id="@+id/etPassword"
