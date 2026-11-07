@@ -18,7 +18,7 @@
         android:scaleType="fitCenter"
         android:contentDescription="@null"
         android:importantForAccessibility="no"
-        app:srcCompat="@drawable/ic_logo" />
+        app:srcCompat="@drawable/logo_login" />
 
     <Space
         android:layout_width="match_parent"
