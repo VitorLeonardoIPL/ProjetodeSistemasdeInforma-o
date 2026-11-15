@@ -89,6 +89,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+<<<<<<< HEAD
             //back-office protegido: quem so tem acesso ao front-office nao fica com a sessao aberta
             if (!Yii::$app->user->can('acederBackoffice')) {
                 Yii::$app->user->logout();
@@ -96,6 +97,9 @@ class SiteController extends Controller
             } else {
                 return $this->goBack();
             }
+=======
+            return $this->goBack();
+>>>>>>> origin/main
         }
 
         $model->password = '';

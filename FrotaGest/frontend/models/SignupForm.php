@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace frontend\models;
 
+<<<<<<< HEAD
 use common\models\perfil;
+=======
+>>>>>>> origin/main
 use common\models\User;
 use Yii;
 use yii\base\Model;
@@ -64,6 +67,7 @@ class SignupForm extends Model
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
 
+<<<<<<< HEAD
         if (!$user->save()) {
             return false;
         }
@@ -77,6 +81,9 @@ class SignupForm extends Model
         $auth->assign($auth->getRole('colaborador'), $user->id);
 
         return $this->sendEmail($mailer, $user, $supportEmail, $appName);
+=======
+        return $user->save() && $this->sendEmail($mailer, $user, $supportEmail, $appName);
+>>>>>>> origin/main
     }
 
     /**
