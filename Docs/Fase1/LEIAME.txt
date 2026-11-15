@@ -1,0 +1,57 @@
+FrotaGest - Fase 1
+Projeto de Sistemas de Informacao (TeSP PSI - IPLeiria)
+
+Como instalar e testar
+
+1. Instalar as dependencias (na pasta FrotaGest_Fase1):
+
+   composer install
+
+2. Criar a base de dados vazia "frotagest" no MySQL (phpMyAdmin).
+   A ligacao esta em common/config/main-local.php
+   (host localhost, utilizador root, sem password).
+
+3. Criar as tabelas (na pasta FrotaGest_Fase1):
+
+   php yii migrate --migrationPath=@yii/rbac/migrations
+   php yii migrate
+
+4. Criar os roles e as permissoes do RBAC (correr so uma vez):
+
+   php yii rbac/init
+
+5. Criar os utilizadores de teste:
+
+   php yii seed/init
+
+Utilizadores de teste (password de todos: 12345678)
+
+   Admin        - role administrador
+   coordenador  - role coordenador
+   tecnico      - role tecnico
+   colaborador  - role colaborador
+
+Enderecos (com o WampServer)
+
+   Front-office: http://localhost/<pasta>/FrotaGest_Fase1/frontend/web/
+   Back-office:  http://localhost/<pasta>/FrotaGest_Fase1/backend/web/
+
+O que esta feito na Fase 1
+
+   - RBAC com 4 roles e as permissoes (php yii rbac/init)
+   - Registo no front-office: o novo utilizador fica com o role colaborador
+   - Gestao de utilizadores no back-office (CRUD) com Soft Delete
+     (apagar so muda o estado para "Apagado")
+   - Back-office protegido: o colaborador nao entra (so coordenador,
+     tecnico e administrador)
+   - Front-office com o template Cental
+   - Back-office com o AdminLTE (dashboard e menu)
+
+Nota sobre o registo (front-office)
+
+   O novo utilizador fica inativo ate confirmar o email. O email nao e
+   enviado, fica gravado num ficheiro em frontend/runtime/mail.
+   Abrir esse ficheiro, copiar o link de verificacao para o browser e so
+   depois fazer login.
+
+Equipa: ver Membros_Equipa.txt
