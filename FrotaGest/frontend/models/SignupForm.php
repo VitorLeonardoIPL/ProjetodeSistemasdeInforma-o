@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace frontend\models;
 
+use common\models\perfil;
 use common\models\User;
 use Yii;
 use yii\base\Model;
@@ -63,7 +64,19 @@ class SignupForm extends Model
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
 
-        return $user->save() && $this->sendEmail($mailer, $user, $supportEmail, $appName);
+        if (!$user->save()) {
+            return false;
+        }
+
+        //perfil com o role colaborador e o mesmo role no RBAC
+        $perfil = new perfil(['user_id' => $user->id, 'nome' => $this->username]);
+        $perfil->role = 'colaborador';
+        $perfil->save();
+
+        $auth = Yii::$app->authManager;
+        $auth->assign($auth->getRole('colaborador'), $user->id);
+
+        return $this->sendEmail($mailer, $user, $supportEmail, $appName);
     }
 
     /**
