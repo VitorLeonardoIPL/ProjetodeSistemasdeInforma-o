@@ -1,0 +1,24 @@
+/* estilos proprios do backend (o resto vem do AdminLTE) */
+
+.not-set {
+    color: #dc3545;
+    font-style: italic;
+}
+
+.grid-view th {
+    white-space: nowrap;
+}
+
+.hint-block {
+    display: block;
+    margin-top: 5px;
+    color: #6c757d;
+}
+
+.error-summary {
+    color: #721c24;
+    background: #f8d7da;
+    border-left: 3px solid #f5c6cb;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}
